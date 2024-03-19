@@ -1,0 +1,26 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient y2="0%" x2="100%" y1="0%" x1="0%" id="gradient">
+   <stop stop-color="#0A85ED" offset="0%"/>
+   <stop stop-color="#07C8F9" offset="100%"/>
+  </linearGradient>
+  <linearGradient y2="0%" x2="100%" y1="0%" x1="0%" id="revgradient">
+   <stop stop-color="#07C8F9" offset="0%"/>
+   <stop stop-color="#0A85ED" offset="100%"/>
+  </linearGradient>
+  <linearGradient y2="0%" x2="100%" y1="0%" x1="0%" id="darkgradient">
+   <stop stop-color="#0D41E1" offset="0%"/>
+   <stop stop-color="#0A85ED" offset="100%"/>
+  </linearGradient>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_14" d="m14,90c0,-38.03653 31.96347,-70 70,-70l332,0c38.03653,0 70,31.96347 70,70l0,332c0,38.03653 -31.96347,70 -70,70l-332,0c-38.03653,0 -70,-31.96347 -70,-70l0,-332z" opacity="undefined" stroke-width="20" stroke="url(#gradient)" fill="white"/>
+  <ellipse fill="none" stroke="#0D41E1" cx="130" cy="256" id="svg_1" rx="60" ry="60" stroke-width="25"/>
+  <rect id="svg_9" height="1" width="120" y="256" x="210" stroke-width="25" stroke="url(#darkgradient)" fill="none"/>
+  <path d="m333,107a70,70 0 0 0 -70,70l0,160a70,70 0 0 0 70,70" fill="none" stroke="url(#revgradient)" id="svg_7" stroke-width="26"/>
+  <ellipse fill="none" stroke="#0A85ED" cx="392" cy="110" id="svg_2" rx="50" ry="50" stroke-width="25"/>
+  <ellipse fill="none" stroke="#0A85ED" cx="392" cy="256" id="svg_3" rx="50" ry="50" stroke-width="25"/>
+  <ellipse fill="none" stroke="#0A85ED" cx="392" cy="402" id="svg_4" rx="50" ry="50" stroke-width="25"/>
+ </g>
+</svg>
