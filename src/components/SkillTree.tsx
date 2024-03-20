@@ -1,7 +1,8 @@
 import { Ref, useRef } from "react";
 import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeNodeEventCallback } from "react-d3-tree";
-import { Button, Flex, Input } from "antd";
-import { NodeExpandOutlined, NodeCollapseOutlined } from '@ant-design/icons';
+import { Button, Flex, Input, Popover } from "antd";
+import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
+import NumEdit from "./NumEdit"; // replaces InputNumber
 
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
@@ -13,51 +14,62 @@ declare module 'react-d3-tree' {
 class SkillTreeClass extends Tree {
   /**
    * Handles the node click event:
-   * 1) toggles expand/collapse
-   * 2) changes title
-   * 3) TODO: enters edit mode
+   * 1) toggles expand/collapse.
+   * 2) changes title.
+   * 3) TODO: enters edit mode.
    */
   handleNodeChange = ((node, event) => {
-    const findNodeInTree = (currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): TreeNodeDatum | null => {
-      if (currentNode.__rd3t.id == targetNode.__rd3t.id) {
-        return currentNode;
-      }
-      if (currentNode.children) {
-        for (let child of currentNode.children) {
-          const res = findNodeInTree(child, targetNode);
-          if (res) return res;
-        }
-      }
-      return null;
-    }
+    console.log(event)
 
     const dataClone = [...this.state.data]
-    const nodeDatum = findNodeInTree(dataClone[0], node.data)!;
+    const nodeDatum = SkillTreeClass.findNodeInTree(dataClone[0], node.data)!;
 
-    if (event.type == 'click') {
-      SkillTreeClass.handleNodeSubtreeToggle(nodeDatum)
-    } else if (event.type == 'change') {
-      SkillTreeClass.handleNodeNameChange(nodeDatum, (event.target as HTMLInputElement).value)
+    switch (event.type) {
+      case 'toggleNode':
+        if (nodeDatum.__rd3t.collapsed) {
+          SkillTreeClass.expandNode(nodeDatum);
+        } else {
+          SkillTreeClass.collapseNode(nodeDatum);
+        }
+        break;
+
+      case 'changePercent':
+        nodeDatum.progressPercent = parseInt((event.target as HTMLInputElement).value)
+        break;
+
+      case 'changeName':
+        nodeDatum.name = (event.target as HTMLInputElement).value;
+        break;
+
+      default:
+        break;
     }
 
     this.setState({ data: dataClone })
 
   }) as TreeNodeEventCallback;
 
-  static handleNodeSubtreeToggle(nodeDatum: TreeNodeDatum) {
-    if (nodeDatum.__rd3t.collapsed) {
-      SkillTreeClass.expandNode(nodeDatum);
-    } else {
-      SkillTreeClass.collapseNode(nodeDatum);
+  /**
+   * Finds the target node in the designated subtree.
+   * @param currentNode root node of current subtree
+   * @param targetNode target node to find
+   * @returns node if found, null if not found
+   */
+  static findNodeInTree(currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): TreeNodeDatum | null {
+    if (currentNode.__rd3t.id == targetNode.__rd3t.id) {
+      return currentNode;
     }
-  }
-
-  static handleNodeNameChange(nodeDatum: TreeNodeDatum, newName: string) {
-    nodeDatum.name = newName;
+    if (currentNode.children) {
+      for (let child of currentNode.children) {
+        const res = SkillTreeClass.findNodeInTree(child, targetNode);
+        if (res) return res;
+      }
+    }
+    return null;
   }
 
   /**
-   * Expands recursively at the target node
+   * Expands recursively at the target node.
    * @param nodeDatum target node
    */
   static override expandNode(nodeDatum: TreeNodeDatum): void {
@@ -66,39 +78,99 @@ class SkillTreeClass extends Tree {
   }
 
   /**
-   * Generates custom node based on props
+   * Generates custom node based on props.
    * @param param0 custom node props
    * @returns svg for the custom node
    */
   static renderRectNode({ nodeDatum, onNodeClick }: CustomNodeElementProps): JSX.Element {
+    const width = 180;
+    const height = 65;
+
     return (
       <g>
-        <rect width={150} height={50} x={-75} y={-25} fill="white" stroke="none" />
-        <rect width={nodeDatum.progressPercent / 100 * 150} height={50} x={-75} y={-25} fill="#9cec5b" stroke="none" />
-        <foreignObject x={-60} y={-14.5} width={90} height={30}>
-          <Flex justify="center" align="center">
-            <Input variant="outlined" defaultValue={nodeDatum.name} onChange={onNodeClick} width={80} height={20} />
+        {/* Background */}
+        <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="white" stroke="none" />
+
+        {/* Progress Bar */}
+        <rect width={nodeDatum.progressPercent / 100 * width} height={height} x={-width / 2} y={-height / 2} fill="#9cec5b" stroke="none" />
+
+        {/* Title */}
+        <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={90} height={30}>
+          <Flex justify="flex-start" align="center">
+            <b>{nodeDatum.name}</b>
+            <Popover
+              content={
+                <Flex justify="space-between" align="center">
+                  <b style={{ marginRight: 10 }}>Name:</b>
+                  <Input
+                    defaultValue={nodeDatum.name}
+                    style={{ width: 120 }}
+                    onChange={(event) => {
+                      event.type = 'changeName';
+                      onNodeClick(event);
+                    }}
+                  />
+                </Flex>
+              }
+              trigger="click"
+            >
+              <Button type="link" size="middle" icon={<EditOutlined />} />
+            </Popover>
           </Flex>
         </foreignObject>
-        <text x={50} y={15} fill="black" strokeWidth={0.2} fontSize={10}>
-          {Math.round(nodeDatum.progressPercent)}%
-        </text>
-        <rect width={150} height={50} x={-75} y={-25} fill="none" stroke="black" />
-        {nodeDatum.children && <foreignObject x={80} y={-14.5} width={50} height={50}>
-          <Button
-            type="primary"
-            shape="circle"
-            icon={nodeDatum.__rd3t.collapsed ? <NodeExpandOutlined /> : <NodeCollapseOutlined />}
-            onClick={onNodeClick}
-          />
-        </foreignObject>}
+
+        {/* Percentage */}
+        <foreignObject x={width / 2 - 50} y={height / 2 - 30} width={40} height={20}>
+          <Flex justify="space-between" align="center">
+            <p style={{ width: 30, fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
+            <Popover
+              placement="bottom"
+              content={
+                <Flex justify="space-between" align="center">
+                  <b style={{ marginRight: 10 }}>Progress:</b>
+                  <NumEdit
+                    min={0}
+                    max={100}
+                    defaultValue={nodeDatum.progressPercent}
+                    style={{ width: 65 }}
+                    onChange={(event) => {
+                      event.type = 'changePercent'
+                      onNodeClick(event)
+                    }}
+                  />
+                </Flex>
+              }
+              trigger="click"
+            >
+              <Button type="link" size="small" icon={<EditOutlined />} />
+            </Popover>
+          </Flex>
+        </foreignObject>
+
+        {/* Border */}
+        <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="none" stroke="black" />
+
+        {/* Expand / Collapse Btn */}
+        {nodeDatum.children &&
+          <foreignObject x={width / 2 + 5} y={-16} width={50} height={50}>
+            <Button
+              type="primary"
+              shape="circle"
+              icon={nodeDatum.__rd3t.collapsed ? <NodeExpandOutlined /> : <NodeCollapseOutlined />}
+              onClick={(event) => {
+                event.type = 'toggleNode';
+                onNodeClick(event);
+              }}
+            />
+          </foreignObject>
+        }
       </g>
     )
   }
 }
 
 function SkillTree({ data }: { data: RawNodeDatum }) {
-  const tree: Ref<SkillTreeClass> = useRef(null)
+  const tree: Ref<SkillTreeClass> = useRef(null);
 
   return (
     <SkillTreeClass
