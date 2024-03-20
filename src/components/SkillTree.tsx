@@ -1,5 +1,5 @@
 import { Ref, useRef } from "react";
-import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeNodeEventCallback } from "react-d3-tree";
+import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeProps } from "react-d3-tree";
 import { Button, Flex, Input, Popover } from "antd";
 import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
 import NumEdit from "./NumEdit"; // replaces InputNumber
@@ -7,7 +7,7 @@ import NumEdit from "./NumEdit"; // replaces InputNumber
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
   export interface RawNodeDatum {
-    progressPercent: number
+    progressPercent: number;
   }
 }
 
@@ -18,10 +18,8 @@ class SkillTreeClass extends Tree {
    * 2) changes title.
    * 3) TODO: enters edit mode.
    */
-  handleNodeChange = ((node, event) => {
-    console.log(event)
-
-    const dataClone = [...this.state.data]
+  handleNodeChange: TreeProps['onNodeClick'] = ((node, event) => {
+    const dataClone = [...this.state.data];
     const nodeDatum = SkillTreeClass.findNodeInTree(dataClone[0], node.data)!;
 
     switch (event.type) {
@@ -34,7 +32,7 @@ class SkillTreeClass extends Tree {
         break;
 
       case 'changePercent':
-        nodeDatum.progressPercent = parseInt((event.target as HTMLInputElement).value)
+        nodeDatum.progressPercent = Number((event.target as HTMLInputElement).value);
         break;
 
       case 'changeName':
@@ -45,9 +43,9 @@ class SkillTreeClass extends Tree {
         break;
     }
 
-    this.setState({ data: dataClone })
+    this.setState({ data: dataClone });
 
-  }) as TreeNodeEventCallback;
+  });
 
   /**
    * Finds the target node in the designated subtree.
@@ -74,7 +72,7 @@ class SkillTreeClass extends Tree {
    */
   static override expandNode(nodeDatum: TreeNodeDatum): void {
     super.expandNode(nodeDatum);
-    nodeDatum.children?.forEach(child => SkillTreeClass.expandNode(child))
+    nodeDatum.children?.forEach(child => SkillTreeClass.expandNode(child));
   }
 
   /**
@@ -96,7 +94,7 @@ class SkillTreeClass extends Tree {
 
         {/* Title */}
         <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={90} height={30}>
-          <Flex justify="flex-start" align="center">
+          <Flex align="center">
             <b>{nodeDatum.name}</b>
             <Popover
               content={
@@ -121,7 +119,7 @@ class SkillTreeClass extends Tree {
 
         {/* Percentage */}
         <foreignObject x={width / 2 - 50} y={height / 2 - 30} width={40} height={20}>
-          <Flex justify="space-between" align="center">
+          <Flex align="center">
             <p style={{ width: 30, fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
             <Popover
               placement="bottom"
@@ -134,8 +132,8 @@ class SkillTreeClass extends Tree {
                     defaultValue={nodeDatum.progressPercent}
                     style={{ width: 65 }}
                     onChange={(event) => {
-                      event.type = 'changePercent'
-                      onNodeClick(event)
+                      event.type = 'changePercent';
+                      onNodeClick(event);
                     }}
                   />
                 </Flex>
@@ -165,11 +163,11 @@ class SkillTreeClass extends Tree {
           </foreignObject>
         }
       </g>
-    )
+    );
   }
 }
 
-function SkillTree({ data }: { data: RawNodeDatum }) {
+function SkillTree({ data }: { data: RawNodeDatum; }) {
   const tree: Ref<SkillTreeClass> = useRef(null);
 
   return (
@@ -177,11 +175,11 @@ function SkillTree({ data }: { data: RawNodeDatum }) {
       ref={tree}
       data={data}
       renderCustomNodeElement={SkillTreeClass.renderRectNode}
-      onNodeClick={(...params) => tree.current?.handleNodeChange(...params)}
+      onNodeClick={(...params) => tree.current?.handleNodeChange?.(...params)}
       pathFunc="step"
       depthFactor={350}
     />
-  )
+  );
 }
 
 export default SkillTree;

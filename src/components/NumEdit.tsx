@@ -1,13 +1,13 @@
 import { useState, Ref, useRef, CSSProperties } from "react";
-import { InputNumber } from "antd"
+import { InputNumber } from "antd";
 import { SyntheticEventHandler } from "react-d3-tree";
 
 interface NumEditProps {
-  min: number,
-  max: number,
-  defaultValue: number,
-  onChange: SyntheticEventHandler,
-  style: CSSProperties
+  min: number;
+  max: number;
+  defaultValue: number;
+  onChange: SyntheticEventHandler;
+  style: CSSProperties;
 }
 
 function NumEdit({ min, max, defaultValue, onChange, style }: NumEditProps) {
@@ -20,10 +20,10 @@ function NumEdit({ min, max, defaultValue, onChange, style }: NumEditProps) {
       <input type="number" ref={inputRef} hidden={true} value={value} onClick={onChange} readOnly />
       <InputNumber min={min} max={max} defaultValue={value} style={style} onChange={(value) => {
         setValue(value ?? 0);
-        setTimeout(() => inputRef.current!.click()) // manually trigger event
+        setTimeout(() => inputRef.current!.click()); // manually trigger event
       }} />
     </>
-  )
+  );
 }
 
 NumEdit.defaultProps = {
