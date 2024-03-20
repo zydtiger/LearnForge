@@ -1,5 +1,6 @@
 import { Ref, useRef } from "react";
 import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeNodeEventCallback } from "react-d3-tree";
+import { Flex, Input } from "antd";
 
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
@@ -12,11 +13,10 @@ class SkillTreeClass extends Tree {
   /**
    * Handles the node click event:
    * 1) toggles expand/collapse
-   * 2) TODO: changes title
+   * 2) changes title
    * 3) TODO: enters edit mode
    */
-  handleNodeClick = ((node, event) => {
-
+  handleNodeChange = ((node, event) => {
     const findNodeInTree = (currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): TreeNodeDatum | null => {
       if (currentNode.__rd3t.id == targetNode.__rd3t.id) {
         return currentNode;
@@ -33,15 +33,27 @@ class SkillTreeClass extends Tree {
     const dataClone = [...this.state.data]
     const nodeDatum = findNodeInTree(dataClone[0], node.data)!;
 
+    if (event.type == 'click') {
+      SkillTreeClass.handleNodeSubtreeToggle(nodeDatum)
+    } else if (event.type == 'change') {
+      SkillTreeClass.handleNodeNameChange(nodeDatum, (event.target as HTMLInputElement).value)
+    }
+
+    this.setState({ data: dataClone })
+
+  }) as TreeNodeEventCallback;
+
+  static handleNodeSubtreeToggle(nodeDatum: TreeNodeDatum) {
     if (nodeDatum.__rd3t.collapsed) {
       SkillTreeClass.expandNode(nodeDatum);
     } else {
       SkillTreeClass.collapseNode(nodeDatum);
     }
-    
-    this.setState({ data: dataClone })
+  }
 
-  }) as TreeNodeEventCallback;
+  static handleNodeNameChange(nodeDatum: TreeNodeDatum, newName: string) {
+    nodeDatum.name = newName;
+  }
 
   /**
    * Expands recursively at the target node
@@ -62,10 +74,12 @@ class SkillTreeClass extends Tree {
       <g onClick={onNodeClick}>
         <rect width={150} height={50} x={-75} y={-25} fill="white" stroke="none" />
         <rect width={nodeDatum.progressPercent / 100 * 150} height={50} x={-75} y={-25} fill="#9cec5b" stroke="none" />
-        <text x={-60} y={6} fill="black" strokeWidth={1}>
-          {nodeDatum.name}
-        </text>
-        <text x={50} y={15} fill="black" strokeWidth={1} fontSize={10}>
+        <foreignObject x={-60} y={-14.5} width={90} height={30}>
+          <Flex justify="center" align="center">
+            <Input variant="outlined" defaultValue={nodeDatum.name} onChange={onNodeClick} width={80} height={20} />
+          </Flex>
+        </foreignObject>
+        <text x={50} y={15} fill="black" strokeWidth={0.2} fontSize={10}>
           {Math.round(nodeDatum.progressPercent)}%
         </text>
         <rect width={150} height={50} x={-75} y={-25} fill="none" stroke="black" />
@@ -74,7 +88,7 @@ class SkillTreeClass extends Tree {
   }
 }
 
-function SkillTree({data}: {data: RawNodeDatum}) {
+function SkillTree({ data }: { data: RawNodeDatum }) {
   const tree: Ref<SkillTreeClass> = useRef(null)
 
   return (
@@ -82,7 +96,7 @@ function SkillTree({data}: {data: RawNodeDatum}) {
       ref={tree}
       data={data}
       renderCustomNodeElement={SkillTreeClass.renderRectNode}
-      onNodeClick={(...params) => tree.current?.handleNodeClick(...params)}
+      onNodeClick={(...params) => tree.current?.handleNodeChange(...params)}
       pathFunc="step"
       depthFactor={350}
     />
