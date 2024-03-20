@@ -1,6 +1,7 @@
 import { Ref, useRef } from "react";
 import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeNodeEventCallback } from "react-d3-tree";
-import { Flex, Input } from "antd";
+import { Button, Flex, Input } from "antd";
+import { NodeExpandOutlined, NodeCollapseOutlined } from '@ant-design/icons';
 
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
@@ -71,7 +72,7 @@ class SkillTreeClass extends Tree {
    */
   static renderRectNode({ nodeDatum, onNodeClick }: CustomNodeElementProps): JSX.Element {
     return (
-      <g onClick={onNodeClick}>
+      <g>
         <rect width={150} height={50} x={-75} y={-25} fill="white" stroke="none" />
         <rect width={nodeDatum.progressPercent / 100 * 150} height={50} x={-75} y={-25} fill="#9cec5b" stroke="none" />
         <foreignObject x={-60} y={-14.5} width={90} height={30}>
@@ -83,6 +84,14 @@ class SkillTreeClass extends Tree {
           {Math.round(nodeDatum.progressPercent)}%
         </text>
         <rect width={150} height={50} x={-75} y={-25} fill="none" stroke="black" />
+        {nodeDatum.children && <foreignObject x={80} y={-14.5} width={50} height={50}>
+          <Button
+            type="primary"
+            shape="circle"
+            icon={nodeDatum.__rd3t.collapsed ? <NodeExpandOutlined /> : <NodeCollapseOutlined />}
+            onClick={onNodeClick}
+          />
+        </foreignObject>}
       </g>
     )
   }
