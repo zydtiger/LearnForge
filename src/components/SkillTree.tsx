@@ -33,6 +33,7 @@ class SkillTreeClass extends Tree {
 
       case 'changePercent':
         nodeDatum.progressPercent = Number((event.target as HTMLInputElement).value);
+        SkillTreeClass.updatePercentages(dataClone[0]); // triggers update cascade
         break;
 
       case 'changeName':
@@ -46,6 +47,23 @@ class SkillTreeClass extends Tree {
     this.setState({ data: dataClone });
 
   });
+
+  /**
+ * Updates percentages at node by calling
+ * the recursive inner function.
+ */
+  static updatePercentages(nodeDatum: TreeNodeDatum) {
+    const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
+      if (nodeDatum.children) {
+        const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
+          return acc + generatePercentagesAtNode(current);
+        }, 0);
+        nodeDatum.progressPercent = childrenPercentageSum / nodeDatum.children.length;
+      }
+      return nodeDatum.progressPercent;
+    };
+    generatePercentagesAtNode(nodeDatum);
+  }
 
   /**
    * Finds the target node in the designated subtree.
@@ -118,30 +136,34 @@ class SkillTreeClass extends Tree {
         </foreignObject>
 
         {/* Percentage */}
-        <foreignObject x={width / 2 - 50} y={height / 2 - 30} width={40} height={20}>
-          <Flex align="center">
-            <p style={{ width: 30, fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
-            <Popover
-              placement="bottom"
-              content={
-                <Flex justify="space-between" align="center">
-                  <b style={{ marginRight: 10 }}>Progress:</b>
-                  <NumEdit
-                    min={0}
-                    max={100}
-                    defaultValue={nodeDatum.progressPercent}
-                    style={{ width: 65 }}
-                    onChange={(event) => {
-                      event.type = 'changePercent';
-                      onNodeClick(event);
-                    }}
-                  />
-                </Flex>
-              }
-              trigger="click"
-            >
-              <Button type="link" size="small" icon={<EditOutlined />} />
-            </Popover>
+        <foreignObject x={width / 2 - 55} y={height / 2 - 30} width={50} height={20}>
+          <Flex justify="flex-end" align="center">
+            <p style={{ fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
+            {/* Only allow percentage change if at leaf node */}
+            {!nodeDatum.children ?
+              <Popover
+                placement="bottom"
+                content={
+                  <Flex justify="space-between" align="center">
+                    <b style={{ marginRight: 10 }}>Progress:</b>
+                    <NumEdit
+                      min={0}
+                      max={100}
+                      defaultValue={nodeDatum.progressPercent}
+                      style={{ width: 65 }}
+                      onChange={(event) => {
+                        event.type = 'changePercent';
+                        onNodeClick(event);
+                      }}
+                    />
+                  </Flex>
+                }
+                trigger="click"
+              >
+                <Button type="link" size="small" icon={<EditOutlined />} />
+              </Popover> :
+              <div style={{width: 10}}></div> // placeholder for aligning percentage label
+            }
           </Flex>
         </foreignObject>
 
