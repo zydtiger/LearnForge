@@ -1,5 +1,5 @@
-import { Ref, useRef } from "react";
-import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeProps } from "react-d3-tree";
+import { Ref, useRef, useState } from "react";
+import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeProps, Point } from "react-d3-tree";
 import { Button, Flex, Input, Popover } from "antd";
 import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
 import NumEdit from "./NumEdit"; // replaces InputNumber
@@ -170,15 +170,35 @@ class SkillTreeClass extends Tree {
 function SkillTree({ data }: { data: RawNodeDatum; }) {
   const tree: Ref<SkillTreeClass> = useRef(null);
 
+  const initialZoom = 1;
+  const [zoom, setZoom] = useState(initialZoom);
+  const initialTranslate: Point = { x: 0, y: 0 };
+  const [translate, setTranslate] = useState(initialTranslate);
+
   return (
-    <SkillTreeClass
-      ref={tree}
-      data={data}
-      renderCustomNodeElement={SkillTreeClass.renderRectNode}
-      onNodeClick={(...params) => tree.current?.handleNodeChange?.(...params)}
-      pathFunc="step"
-      depthFactor={350}
-    />
+    <>
+      <SkillTreeClass
+        ref={tree}
+        data={data}
+        renderCustomNodeElement={SkillTreeClass.renderRectNode}
+        onNodeClick={(...params) => tree.current?.handleNodeChange?.(...params)}
+        onUpdate={({ zoom, translate }) => {
+          // HACK: the internal d3 state emits default values after component update, filtering out the bad case
+          if (zoom != initialZoom || translate.x != initialTranslate.x || translate.y != initialTranslate.y) {
+            setZoom(zoom);
+            setTranslate(translate);
+          }
+        }}
+        pathFunc="step"
+        depthFactor={350}
+      />
+      {/* Add text showing current zoom level and translation */}
+      <Flex align="center" style={{ position: 'absolute', bottom: 12, right: 25, fontSize: 13, color: 'gray' }}>
+        <p style={{ textAlign: 'right' }}>{Math.round(zoom * 100)}%</p>
+        <code style={{ width: 20, textAlign: 'center' }}>:</code>
+        <p style={{ width: 80, textAlign: 'right' }}>{`(${-Math.round(translate.x)}, ${-Math.round(translate.y)})`}</p>
+      </Flex>
+    </>
   );
 }
 
