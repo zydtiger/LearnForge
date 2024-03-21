@@ -4,10 +4,12 @@ import { UnorderedListOutlined, SisternodeOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillLayerList from './components/SkillLayerList';
 
-/* Use mock data for UI design */
-import skillset from './assets/mock.json';
+import { useAppSelector } from './redux/hooks';
+import { selectSkillset } from './redux/slices/skillsetSlice';
 
 function App() {
+  const skillset = useAppSelector(selectSkillset);
+
   const ports = {
     tree: {
       Icon: <UnorderedListOutlined />,

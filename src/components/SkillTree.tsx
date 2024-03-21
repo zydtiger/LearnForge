@@ -1,26 +1,46 @@
 import { Ref, useRef, useState } from "react";
+import { useAppDispatch } from "../redux/hooks";
+import { setSkillset } from "../redux/slices/skillsetSlice";
 import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeProps, Point } from "react-d3-tree";
 import { Button, Flex, Input, Popover } from "antd";
 import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
 import NumEdit from "./NumEdit"; // replaces InputNumber
 
-/* Augment the node datum to contain progress percentage */
-declare module 'react-d3-tree' {
-  export interface RawNodeDatum {
-    progressPercent: number;
-  }
+interface CollapseState {
+  collapsed: boolean;
+  children?: CollapseState[];
 }
 
 class SkillTreeClass extends Tree {
+  private isFrozen = false;
+ 
+  /**
+   * Freezes / unfreezes the rendering process.
+   * @param frozen whether the tree should be frozen
+   */
+  setFrozen(frozen: boolean) {
+    this.isFrozen = frozen;
+  }
+
+  /**
+   * Determines whether the class component can re-render.
+   * @returns whether the component can re-render
+   */
+  shouldComponentUpdate(): boolean {
+    return !this.isFrozen;
+  }
+
   /**
    * Handles the node click event:
    * 1) toggles expand/collapse.
    * 2) changes title.
-   * 3) TODO: enters edit mode.
+   * 3) changes percentage.
    */
-  handleNodeChange: TreeProps['onNodeClick'] = ((node, event) => {
+  handleNodeChange: TreeProps['onNodeClick'] = (node, event): RawNodeDatum | null => {
     const dataClone = [...this.state.data];
     const nodeDatum = SkillTreeClass.findNodeInTree(dataClone[0], node.data)!;
+
+    let isTreeDataModified = true;
 
     switch (event.type) {
       case 'toggleNode':
@@ -29,6 +49,7 @@ class SkillTreeClass extends Tree {
         } else {
           SkillTreeClass.collapseNode(nodeDatum);
         }
+        isTreeDataModified = false;
         break;
 
       case 'changePercent':
@@ -44,9 +65,13 @@ class SkillTreeClass extends Tree {
         break;
     }
 
-    this.setState({ data: dataClone });
+    if (isTreeDataModified) {
+      return dataClone[0]; // expose altered root node for re-rendering
+    }
 
-  });
+    this.setState({ data: dataClone });
+    return null;
+  };
 
   /**
  * Updates percentages at node by calling
@@ -82,6 +107,44 @@ class SkillTreeClass extends Tree {
       }
     }
     return null;
+  }
+
+  /**
+   * Sets the collapse state of the current tree.
+   * @param collapseState collapse state to match
+   */
+  setCollapseState(collapseState: CollapseState) {
+    const setCollapsedState = (node: TreeNodeDatum, currentState: CollapseState) => {
+      node.__rd3t.collapsed = currentState.collapsed;
+      if (node.children) {
+        for (let i = 0; i < node.children.length; i++) {
+          setCollapsedState(node.children[i], currentState.children![i]);
+        }
+      }
+    };
+
+    const dataClone = [...this.state.data];
+    setCollapsedState(dataClone[0], collapseState);
+    this.setState({ data: dataClone });
+  }
+
+  /**
+   * Gets the collapse state of the current tree.
+   * @returns current collapse state
+   */
+  geteCollapseState(): CollapseState {
+    const getCollapsedState = (node: TreeNodeDatum): CollapseState => {
+      const state: CollapseState = {
+        collapsed: node.__rd3t.collapsed
+      };
+      if (node.children) {
+        state.children = node.children.map((value) => getCollapsedState(value));
+      }
+      return state;
+    };
+
+    const rootNode = this.state.data[0];
+    return getCollapsedState(rootNode);
   }
 
   /**
@@ -190,6 +253,7 @@ class SkillTreeClass extends Tree {
 }
 
 function SkillTree({ data }: { data: RawNodeDatum; }) {
+  const dispatch = useAppDispatch();
   const tree: Ref<SkillTreeClass> = useRef(null);
 
   const initialZoom = 1;
@@ -203,7 +267,18 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         ref={tree}
         data={data}
         renderCustomNodeElement={SkillTreeClass.renderRectNode}
-        onNodeClick={(...params) => tree.current?.handleNodeChange?.(...params)}
+        onNodeClick={(node, event) => {
+          const newTreeData = tree.current!.handleNodeChange!(node, event);
+          if (newTreeData) {
+            const oldCollapseState = tree.current!.geteCollapseState();
+            tree.current!.setFrozen(true); // freeze rendering before update finished
+            dispatch(setSkillset(newTreeData));
+            setTimeout(() => {
+              tree.current!.setCollapseState(oldCollapseState);
+              tree.current!.setFrozen(false); // allow rendering to continue
+            });
+          }
+        }}
         onUpdate={({ zoom, translate }) => {
           // HACK: the internal d3 state emits default values after component update, filtering out the bad case
           if (zoom != initialZoom || translate.x != initialTranslate.x || translate.y != initialTranslate.y) {
