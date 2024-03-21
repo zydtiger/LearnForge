@@ -4,7 +4,7 @@ import { setSkillset } from "../redux/slices/skillsetSlice";
 import Tree, { RawNodeDatum, TreeNodeDatum, CustomNodeElementProps, TreeProps, Point } from "react-d3-tree";
 import { Button, Flex, Input, Popover } from "antd";
 import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
-import NumEdit from "./NumEdit"; // replaces InputNumber
+import SliderNum from "./SliderNum"; // replaces standard antd components
 
 interface CollapseState {
   collapsed: boolean;
@@ -38,7 +38,11 @@ class SkillTreeClass extends Tree {
    */
   handleNodeChange: TreeProps['onNodeClick'] = (node, event): RawNodeDatum | null => {
     const dataClone = [...this.state.data];
-    const nodeDatum = SkillTreeClass.findNodeInTree(dataClone[0], node.data)!;
+    const nodeDatum = SkillTreeClass.findNodeInTree(dataClone[0], node.data);
+
+    if (!nodeDatum) {
+      return null;
+    }
 
     let isTreeDataModified = true;
 
@@ -179,17 +183,14 @@ class SkillTreeClass extends Tree {
             <b>{nodeDatum.name}</b>
             <Popover
               content={
-                <Flex justify="space-between" align="center">
-                  <b style={{ marginRight: 10 }}>Name:</b>
-                  <Input
-                    defaultValue={nodeDatum.name}
-                    style={{ width: 120 }}
-                    onChange={(event) => {
-                      event.type = 'changeName';
-                      onNodeClick(event);
-                    }}
-                  />
-                </Flex>
+                <Input
+                  defaultValue={nodeDatum.name}
+                  style={{ width: 120 }}
+                  onChange={(event) => {
+                    event.type = 'changeName';
+                    onNodeClick(event);
+                  }}
+                />
               }
               trigger="click"
             >
@@ -207,25 +208,25 @@ class SkillTreeClass extends Tree {
               <Popover
                 placement="bottom"
                 content={
-                  <Flex justify="space-between" align="center">
-                    <b style={{ marginRight: 10 }}>Progress:</b>
-                    <NumEdit
-                      min={0}
-                      max={100}
-                      defaultValue={nodeDatum.progressPercent}
-                      style={{ width: 65 }}
-                      onChange={(event) => {
-                        event.type = 'changePercent';
-                        onNodeClick(event);
-                      }}
-                    />
-                  </Flex>
+                  <SliderNum
+                    min={0}
+                    max={100}
+                    defaultValue={nodeDatum.progressPercent}
+                    style={{
+                      slider: { width: 100 },
+                      input: { width: 65 }
+                    }}
+                    onChange={(event) => {
+                      event.type = 'changePercent';
+                      onNodeClick(event);
+                    }}
+                  />
                 }
                 trigger="click"
               >
                 <Button type="link" size="small" icon={<EditOutlined />} />
               </Popover> :
-              <div style={{width: 10}}></div> // placeholder for aligning percentage label
+              <div style={{ width: 10 }}></div> // placeholder for aligning percentage label
             }
           </Flex>
         </foreignObject>
