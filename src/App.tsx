@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FloatButton } from 'antd';
 import { UnorderedListOutlined, SisternodeOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
-import SkillLayerList from './components/SkillLayerList';
+import SkillList from './components/SkillList';
 
 import { useAppSelector } from './redux/hooks';
 import { selectSkillset } from './redux/slices/skillsetSlice';
@@ -17,7 +17,7 @@ function App() {
     },
     list: {
       Icon: <SisternodeOutlined />,
-      Component: <SkillLayerList data={skillset} />
+      Component: <SkillList data={skillset} />
     }
   };
   const [viewMode, setViewMode] = useState('tree' as keyof typeof ports);

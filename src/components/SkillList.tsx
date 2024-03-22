@@ -93,11 +93,11 @@ function findNode(siblings: SkillListDataNode[], key: React.Key): [SkillListData
   return null;
 };
 
-function SkillLayerList({ data }: { data: RawNodeDatum; }) {
+function SkillList({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
   const listData = convertToListData(data);
 
-  const handleTreeOnDrop: TreeProps['onDrop'] = (info) => {
+  const handleOnDrop: TreeProps['onDrop'] = (info) => {
     const dropKey = info.node.key;
     const dragKey = info.dragNode.key;
     // the global index of the drop node (e.g. 0-0-0-0)
@@ -145,11 +145,11 @@ function SkillLayerList({ data }: { data: RawNodeDatum; }) {
           blockNode
           defaultExpandAll
           treeData={listData}
-          onDrop={handleTreeOnDrop}
+          onDrop={handleOnDrop}
         />
       </div>
     </ConfigProvider>
   );
 };
 
-export default SkillLayerList;
+export default SkillList;
