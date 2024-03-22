@@ -5,6 +5,7 @@ import { RawNodeDatum, Point } from "react-d3-tree";
 import { Flex, FloatButton } from "antd";
 import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
+import SkillTreeNode from "./SkillTreeNode";
 
 /* Gets tauri window size to center tree */
 import { appWindow } from '@tauri-apps/api/window';
@@ -26,7 +27,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
       <SkillTreeInner
         ref={tree}
         data={data}
-        renderCustomNodeElement={SkillTreeInner.renderRectNode}
+        renderCustomNodeElement={SkillTreeNode}
         onNodeClick={(node, event) => {
           const newTreeData = tree.current!.handleNodeChange!(node, event);
           if (newTreeData) {
