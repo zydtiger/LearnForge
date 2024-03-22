@@ -6,6 +6,12 @@ import { Button, Flex, Input, Popover } from "antd";
 import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
 import SliderNum from "./SliderNum"; // replaces standard antd components
 
+/* Gets tauri window size to center tree */
+import { appWindow } from '@tauri-apps/api/window';
+const scaleFactor = await appWindow.scaleFactor();
+const physicalWindowSize = await appWindow.innerSize();
+const windowSize = physicalWindowSize.toLogical(scaleFactor);
+
 interface CollapseState {
   collapsed: boolean;
   children?: CollapseState[];
@@ -13,7 +19,7 @@ interface CollapseState {
 
 class SkillTreeClass extends Tree {
   private isFrozen = false;
- 
+
   /**
    * Freezes / unfreezes the rendering process.
    * @param frozen whether the tree should be frozen
@@ -257,9 +263,9 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
   const tree: Ref<SkillTreeClass> = useRef(null);
 
-  const initialZoom = 1;
+  const initialZoom = 0.8;
   const [zoom, setZoom] = useState(initialZoom);
-  const initialTranslate: Point = { x: 0, y: 0 };
+  const initialTranslate: Point = { x: 200, y: windowSize.height / 2 };
   const [translate, setTranslate] = useState(initialTranslate);
 
   return (
@@ -287,14 +293,18 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
             setTranslate(translate);
           }
         }}
+        zoom={zoom}
+        translate={translate}
         pathFunc="step"
         depthFactor={350}
       />
       {/* Add text showing current zoom level and translation */}
       <Flex align="center" style={{ position: 'absolute', bottom: 12, right: 25, fontSize: 13, color: 'gray' }}>
-        <p style={{ textAlign: 'right' }}>{Math.round(zoom * 100)}%</p>
+        <p style={{ textAlign: 'right' }}>{Math.round(zoom / initialZoom * 100)}%</p>
         <code style={{ width: 20, textAlign: 'center' }}>:</code>
-        <p style={{ width: 80, textAlign: 'right' }}>{`(${-Math.round(translate.x)}, ${-Math.round(translate.y)})`}</p>
+        <p style={{ width: 80, textAlign: 'right' }}>
+          {`(${-Math.round(translate.x - initialTranslate.x)}, ${-Math.round(translate.y - initialTranslate.y)})`}
+        </p>
       </Flex>
     </>
   );
