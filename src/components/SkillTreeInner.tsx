@@ -30,7 +30,7 @@ class SkillTreeInner extends Tree {
    * 2) changes title.
    * 3) changes percentage.
    */
-  handleNodeChange: TreeProps['onNodeClick'] = (node, event): RawNodeDatum | null => {
+  handleNodeChange: TreeProps['onNodeClick'] = (node, event): TreeNodeDatum | null => {
     const dataClone = [...this.state.data];
     const nodeDatum = SkillTreeInner.findNodeInTree(dataClone[0], node.data);
 

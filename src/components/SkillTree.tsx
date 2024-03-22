@@ -7,6 +7,8 @@ import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
 import SkillTreeNode from "./SkillTreeNode";
 
+import { convertToRaw } from "../lib/skillTree";
+
 /* Gets tauri window size to center tree */
 import { appWindow } from '@tauri-apps/api/window';
 const scaleFactor = await appWindow.scaleFactor();
@@ -33,7 +35,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
           if (newTreeData) {
             const oldCollapseState = tree.current!.geteCollapseState();
             tree.current!.setFrozen(true); // freeze rendering before update finished
-            dispatch(setSkillset(newTreeData));
+            dispatch(setSkillset(convertToRaw(newTreeData)));
             setTimeout(() => {
               tree.current!.setCollapseState(oldCollapseState);
               tree.current!.setFrozen(false); // allow rendering to continue
