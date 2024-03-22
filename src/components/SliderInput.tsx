@@ -2,7 +2,7 @@ import { useState, Ref, useRef, CSSProperties } from "react";
 import { Slider, InputNumber, Flex } from "antd";
 import { SyntheticEventHandler } from "react-d3-tree";
 
-interface NumEditProps {
+interface SliderInputProps {
   min: number;
   max: number;
   defaultValue: number;
@@ -21,7 +21,7 @@ const DefaultStyle = {
   input: {}
 };
 
-function NumEdit({ min, max, defaultValue, onChange, style }: NumEditProps) {
+function SliderInput({ min, max, defaultValue, onChange, style }: SliderInputProps) {
   const [value, setValue] = useState(defaultValue);
   const inputRef: Ref<HTMLInputElement> = useRef(null);
 
@@ -43,12 +43,12 @@ function NumEdit({ min, max, defaultValue, onChange, style }: NumEditProps) {
   );
 }
 
-NumEdit.defaultProps = {
+SliderInput.defaultProps = {
   min: 0,
   max: 100,
   defaultValue: 0,
   onChange: () => { },
   style: {}
-} as NumEditProps;
+} as SliderInputProps;
 
-export default NumEdit;
+export default SliderInput;
