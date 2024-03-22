@@ -2,7 +2,8 @@ import { Ref, useRef, useState } from "react";
 import { useAppDispatch } from "../redux/hooks";
 import { setSkillset } from "../redux/slices/skillsetSlice";
 import { RawNodeDatum, Point } from "react-d3-tree";
-import { Flex } from "antd";
+import { Flex, FloatButton } from "antd";
+import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
 
 /* Gets tauri window size to center tree */
@@ -58,6 +59,11 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
           {`(${-Math.round(translate.x - initialTranslate.x)}, ${-Math.round(translate.y - initialTranslate.y)})`}
         </p>
       </Flex>
+      {/* Add button to reset zoom & translate */}
+      <FloatButton icon={<ExpandOutlined />} style={{ top: 20 }} onClick={() => {
+        setZoom(initialZoom);
+        setTranslate(initialTranslate);
+      }} />
     </>
   );
 }
