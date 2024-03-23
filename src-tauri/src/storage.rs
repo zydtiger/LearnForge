@@ -6,6 +6,17 @@ use tauri::{
     AppHandle, Runtime,
 };
 
+/// Resolves the path of the data file for storage.
+/// 
+/// # Errors
+/// 
+/// 1. App data directory not found
+/// 2. `create_dir_all` failed
+/// 
+/// # Notes
+/// 
+/// Maybe could be a database here?
+/// 
 fn resolve_data_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathBuf, io::Error> {
     let app_data_dir = app_handle
         .path_resolver()
@@ -22,7 +33,18 @@ fn resolve_data_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathB
     Ok(app_data_dir.join("skillset.json"))
 }
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+/// Handles reading data file and filling data file with default value if not exists.
+/// 
+/// # Errors
+/// 
+/// 1. Resolve data file path failed
+/// 2. `File::create` failed when data file does not exist
+/// 3. `write_all` failed when filling new data file with default
+/// 4. `File::open` failed when opening data file for read
+/// 5. `read_to_string` failed when reading
+/// 
+/// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+/// 
 #[tauri::command]
 fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<String, Error> {
     let data_file = resolve_data_file(app_handle)?;
@@ -39,6 +61,14 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<String, Error> {
     Ok(contents)
 }
 
+/// Handles writing to data file with frontend data.
+/// 
+/// # Errors
+/// 
+/// 1. Resolve data file path failed
+/// 2. `File::create` failed when opening data file for write
+/// 3. `write_all` failed when filling data file with `content`
+/// 
 #[tauri::command]
 fn write<R: Runtime>(app_handle: AppHandle<R>, content: String) -> Result<(), Error> {
     let data_file = resolve_data_file(app_handle)?;
@@ -47,6 +77,8 @@ fn write<R: Runtime>(app_handle: AppHandle<R>, content: String) -> Result<(), Er
     Ok(())
 }
 
+/// Initializes the storage plugin with read, write handlers.
+/// 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("storage")
         .invoke_handler(tauri::generate_handler![read, write])
