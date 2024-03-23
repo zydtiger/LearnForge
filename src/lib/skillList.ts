@@ -1,15 +1,8 @@
 import React from 'react';
-import { TreeDataNode } from 'antd';
+import { SkillListDataNode } from '../types';
 import { RawNodeDatum } from 'react-d3-tree';
 
 import SkillListNode from '../components/SkillListNode';
-
-/* Augment the data node to contain extra information for regeneration */
-type SkillListDataNode = TreeDataNode & {
-  name: string;
-  progressPercent: number;
-  children?: SkillListDataNode[];
-};
 
 /**
  * Generates list data recursively from data prop.
