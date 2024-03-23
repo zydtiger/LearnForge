@@ -1,7 +1,7 @@
 import { Ref, useRef, useState } from "react";
 import { useAppDispatch } from "../redux/hooks";
 import { setSkillset } from "../redux/slices/skillsetSlice";
-import { RawNodeDatum, Point } from "react-d3-tree";
+import { RawNodeDatum, Point, TreeProps } from "react-d3-tree";
 import { Flex, FloatButton } from "antd";
 import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
@@ -24,31 +24,35 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
   const initialTranslate: Point = { x: 200, y: windowSize.height / 2 };
   const [translate, setTranslate] = useState(initialTranslate);
 
+  const handleOnNodeClick: TreeProps['onNodeClick'] = (node, event) => {
+    const newTreeData = tree.current!.handleNodeChange!(node, event);
+    if (newTreeData) {
+      const oldCollapseState = tree.current!.geteCollapseState();
+      tree.current!.setFrozen(true); // freeze rendering before update finished
+      dispatch(setSkillset(convertToRaw(newTreeData)));
+      setTimeout(() => {
+        tree.current!.setCollapseState(oldCollapseState);
+        tree.current!.setFrozen(false); // allow rendering to continue
+      });
+    }
+  };
+
+  const handleOnUpdate: TreeProps['onUpdate'] = ({ zoom, translate }) => {
+    // HACK: the internal d3 state emits default values after component update, filtering out the bad case
+    if (zoom != initialZoom || translate.x != initialTranslate.x || translate.y != initialTranslate.y) {
+      setZoom(zoom);
+      setTranslate(translate);
+    }
+  };
+
   return (
     <>
       <SkillTreeInner
         ref={tree}
         data={data}
         renderCustomNodeElement={SkillTreeNode}
-        onNodeClick={(node, event) => {
-          const newTreeData = tree.current!.handleNodeChange!(node, event);
-          if (newTreeData) {
-            const oldCollapseState = tree.current!.geteCollapseState();
-            tree.current!.setFrozen(true); // freeze rendering before update finished
-            dispatch(setSkillset(convertToRaw(newTreeData)));
-            setTimeout(() => {
-              tree.current!.setCollapseState(oldCollapseState);
-              tree.current!.setFrozen(false); // allow rendering to continue
-            });
-          }
-        }}
-        onUpdate={({ zoom, translate }) => {
-          // HACK: the internal d3 state emits default values after component update, filtering out the bad case
-          if (zoom != initialZoom || translate.x != initialTranslate.x || translate.y != initialTranslate.y) {
-            setZoom(zoom);
-            setTranslate(translate);
-          }
-        }}
+        onNodeClick={handleOnNodeClick}
+        onUpdate={handleOnUpdate}
         zoom={zoom}
         translate={translate}
         pathFunc="step"
