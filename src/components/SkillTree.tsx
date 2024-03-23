@@ -55,10 +55,27 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         depthFactor={350}
       />
       {/* Add text showing current zoom level and translation */}
-      <Flex align="center" style={{ position: 'absolute', bottom: 12, right: 25, fontSize: 13, color: 'gray' }}>
+      <Flex
+        align="center"
+        style={{
+          position: 'absolute',
+          background: '#fff',
+          borderRadius: 5,
+          // This is from antd @shadow-2-down
+          boxShadow: `
+            0px 3px 6px -4px rgba(0, 0, 0, 0.12),
+            0px 6px 16px 0px rgba(0, 0, 0, 0.08),
+            0px 9px 28px 8px rgba(0, 0, 0, 0.05)`,
+          bottom: 12,
+          right: 25,
+          paddingLeft: 10,
+          paddingRight: 10,
+          fontSize: 13,
+          color: 'gray'
+        }}>
         <p style={{ textAlign: 'right' }}>{Math.round(zoom / initialZoom * 100)}%</p>
         <code style={{ width: 20, textAlign: 'center' }}>:</code>
-        <p style={{ width: 80, textAlign: 'right' }}>
+        <p style={{ minWidth: 60, textAlign: 'right' }}>
           {`(${-Math.round(translate.x - initialTranslate.x)}, ${-Math.round(translate.y - initialTranslate.y)})`}
         </p>
       </Flex>
