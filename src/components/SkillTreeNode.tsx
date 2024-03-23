@@ -18,7 +18,7 @@ function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
       {/* Title */}
       <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={90} height={30}>
         <Flex align="center">
-          <b>{nodeDatum.name}</b>
+          <p style={{fontWeight: nodeDatum.children ? '600' : 'normal'}}>{nodeDatum.name}</p>
           <Popover
             content={
               <Input
