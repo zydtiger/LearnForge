@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import { RawNodeDatum } from "react-d3-tree";
 
 import { invoke } from "@tauri-apps/api";
+import { getStorageReadEndpoint, getStorageWriteEndpoint } from "../../constants/endpoints";
 
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
@@ -13,7 +14,7 @@ declare module 'react-d3-tree' {
 
 let skillset;
 try {
-  skillset = JSON.parse(await invoke('plugin:storage|read'));
+  skillset = JSON.parse(await invoke(getStorageReadEndpoint()));
 } catch (err) {
   console.error(err);
 }
@@ -24,7 +25,7 @@ export const skillsetSlice = createSlice({
   reducers: {
     setSkillset(state, action: PayloadAction<RawNodeDatum>) {
       Object.assign(state, action.payload);
-      invoke('plugin:storage|write', { content: JSON.stringify(state) })
+      invoke(getStorageWriteEndpoint(), { content: JSON.stringify(state) })
         .catch((err) => console.error(err));
     }
   }
