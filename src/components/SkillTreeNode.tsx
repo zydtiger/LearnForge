@@ -6,6 +6,7 @@ import SliderInput from "./SliderInput"; // replaces standard antd components
 function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
   const width = 180;
   const height = 65;
+  const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
 
   return (
     <g>
@@ -18,7 +19,7 @@ function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
       {/* Title */}
       <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={90} height={30}>
         <Flex align="center">
-          <p style={{fontWeight: nodeDatum.children ? '600' : 'normal'}}>{nodeDatum.name}</p>
+          <p style={{ fontWeight: isLeafNode ? 'normal' : '600' }}>{nodeDatum.name}</p>
           <Popover
             content={
               <Input
@@ -42,7 +43,7 @@ function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
         <Flex justify="flex-end" align="center">
           <p style={{ fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
           {/* Only allow percentage change if at leaf node */}
-          {!nodeDatum.children ?
+          {isLeafNode ?
             <Popover
               placement="bottom"
               content={
@@ -73,7 +74,7 @@ function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
       <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="none" stroke="black" />
 
       {/* Expand / Collapse Btn */}
-      {nodeDatum.children &&
+      {!isLeafNode &&
         <foreignObject x={width / 2 + 5} y={-16} width={50} height={50}>
           <Button
             type="primary"
