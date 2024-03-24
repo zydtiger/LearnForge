@@ -18,4 +18,23 @@ function convertToRaw(currentNode: TreeNodeDatum): RawNodeDatum {
   return node;
 }
 
-export { convertToRaw };
+/**
+ * Finds the siblings of target node.
+ * @param siblings current siblings to look at
+ * @param targetNode node to search for
+ * @returns [siblings, index]
+ */
+function findNodeInSiblings(siblings: TreeNodeDatum[], targetNode: TreeNodeDatum): [TreeNodeDatum[], number] | null {
+  for (let i = 0; i < siblings.length; i++) {
+    if (siblings[i].__rd3t.id == targetNode.__rd3t.id) {
+      return [siblings, i];
+    }
+    if (siblings[i].children) {
+      const res = findNodeInSiblings(siblings[i].children!, targetNode);
+      if (res) return res;
+    }
+  }
+  return null;
+}
+
+export { convertToRaw, findNodeInSiblings };

@@ -1,5 +1,7 @@
 import Tree, { RawNodeDatum, TreeNodeDatum, TreeProps } from "react-d3-tree";
 
+import { findNodeInSiblings } from "../lib/skillTree";
+
 interface CollapseState {
   collapsed: boolean;
   children?: CollapseState[];
@@ -57,6 +59,11 @@ class SkillTreeInner extends Tree {
 
       case 'changeName':
         nodeDatum.name = (event.target as HTMLInputElement).value;
+        break;
+
+      case 'deleteNode':
+        const [siblings, index] = findNodeInSiblings(dataClone, nodeDatum)!;
+        siblings.splice(index, 1);
         break;
 
       default:

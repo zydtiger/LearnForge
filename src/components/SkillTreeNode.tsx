@@ -1,12 +1,13 @@
 import { CustomNodeElementProps } from "react-d3-tree";
 import { Flex, Input, Popover, Button } from 'antd';
-import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined } from '@ant-design/icons';
+import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import SliderInput from "./SliderInput"; // replaces standard antd components
 
-function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
+function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
   const width = 180;
   const height = 65;
   const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
+  const isRootNode = hierarchyPointNode.parent == null
 
   return (
     <g>
@@ -69,6 +70,23 @@ function SkillTreeNode({ nodeDatum, onNodeClick }: CustomNodeElementProps) {
           }
         </Flex>
       </foreignObject>
+
+      {/* Delete Btn */}
+      {!isRootNode &&
+        <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
+          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+            <Button
+              size="small"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={(event) => {
+                event.type = 'deleteNode';
+                onNodeClick(event);
+              }}
+            />
+          </Flex>
+        </foreignObject>
+      }
 
       {/* Border */}
       <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="none" stroke="black" />
