@@ -1,6 +1,6 @@
-import Tree, { RawNodeDatum, TreeNodeDatum, TreeProps } from "react-d3-tree";
+import Tree, { TreeNodeDatum, TreeProps } from "react-d3-tree";
 
-import { findNodeInSiblings } from "../lib/skillTree";
+import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
 
 interface CollapseState {
   collapsed: boolean;
@@ -34,7 +34,7 @@ class SkillTreeInner extends Tree {
    */
   handleNodeChange: TreeProps['onNodeClick'] = (node, event): TreeNodeDatum | null => {
     const dataClone = [...this.state.data];
-    const nodeDatum = SkillTreeInner.findNodeInTree(dataClone[0], node.data);
+    const nodeDatum = findNodeInTree(dataClone[0], node.data);
 
     if (!nodeDatum) {
       return null;
@@ -54,7 +54,7 @@ class SkillTreeInner extends Tree {
 
       case 'changePercent':
         nodeDatum.progressPercent = Number((event.target as HTMLInputElement).value);
-        SkillTreeInner.updatePercentages(dataClone[0]); // triggers update cascade
+        updatePercentages(dataClone[0]); // triggers update cascade
         break;
 
       case 'changeName':
@@ -77,42 +77,6 @@ class SkillTreeInner extends Tree {
     this.setState({ data: dataClone });
     return null;
   };
-
-  /**
- * Updates percentages at node by calling
- * the recursive inner function.
- */
-  static updatePercentages(nodeDatum: TreeNodeDatum) {
-    const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
-      if (nodeDatum.children) {
-        const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
-          return acc + generatePercentagesAtNode(current);
-        }, 0);
-        nodeDatum.progressPercent = childrenPercentageSum / nodeDatum.children.length;
-      }
-      return nodeDatum.progressPercent;
-    };
-    generatePercentagesAtNode(nodeDatum);
-  }
-
-  /**
-   * Finds the target node in the designated subtree.
-   * @param currentNode root node of current subtree
-   * @param targetNode target node to find
-   * @returns node if found, null if not found
-   */
-  static findNodeInTree(currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): TreeNodeDatum | null {
-    if (currentNode.__rd3t.id == targetNode.__rd3t.id) {
-      return currentNode;
-    }
-    if (currentNode.children) {
-      for (let child of currentNode.children) {
-        const res = SkillTreeInner.findNodeInTree(child, targetNode);
-        if (res) return res;
-      }
-    }
-    return null;
-  }
 
   /**
    * Sets the collapse state of the current tree.
