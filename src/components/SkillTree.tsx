@@ -71,7 +71,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
             0px 6px 16px 0px rgba(0, 0, 0, 0.08),
             0px 9px 28px 8px rgba(0, 0, 0, 0.05)`,
           bottom: 12,
-          right: 25,
+          right: 20,
           paddingLeft: 10,
           paddingRight: 10,
           fontSize: 13,
