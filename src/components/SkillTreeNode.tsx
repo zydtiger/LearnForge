@@ -1,13 +1,14 @@
 import { CustomNodeElementProps } from "react-d3-tree";
 import { Flex, Input, Popover, Button } from 'antd';
-import { NodeExpandOutlined, NodeCollapseOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import SliderInput from "./SliderInput"; // replaces standard antd components
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
   const width = 180;
   const height = 65;
   const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
-  const isRootNode = hierarchyPointNode.parent == null
+  const isRootNode = hierarchyPointNode.parent == null;
+  const isCollapsed = nodeDatum.__rd3t.collapsed;
 
   return (
     <g>
@@ -93,16 +94,20 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
 
       {/* Expand / Collapse Btn */}
       {!isLeafNode &&
-        <foreignObject x={width / 2 + 5} y={-16} width={50} height={50}>
-          <Button
-            type="primary"
-            shape="circle"
-            icon={nodeDatum.__rd3t.collapsed ? <NodeExpandOutlined /> : <NodeCollapseOutlined />}
-            onClick={(event) => {
-              event.type = 'toggleNode';
-              onNodeClick(event);
-            }}
-          />
+        <foreignObject x={width / 2 - 10} y={-25} width={50} height={50}>
+          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+            <Button
+              type="primary"
+              size="small"
+              shape="circle"
+              danger={!isCollapsed}
+              icon={isCollapsed ? <PlusOutlined /> : <MinusOutlined />}
+              onClick={(event) => {
+                event.type = 'toggleNode';
+                onNodeClick(event);
+              }}
+            />
+          </Flex>
         </foreignObject>
       }
     </g>
