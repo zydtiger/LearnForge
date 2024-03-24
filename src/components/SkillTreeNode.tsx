@@ -1,11 +1,11 @@
 import { CustomNodeElementProps } from "react-d3-tree";
 import { Flex, Input, Popover, Button } from 'antd';
-import { PlusOutlined, MinusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import SliderInput from "./SliderInput"; // replaces standard antd components
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
   const width = 180;
-  const height = 65;
+  const height = 75;
   const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
   const isRootNode = hierarchyPointNode.parent == null;
   const isCollapsed = nodeDatum.__rd3t.collapsed;
@@ -19,9 +19,9 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       <rect width={nodeDatum.progressPercent / 100 * width} height={height} x={-width / 2} y={-height / 2} fill="#9cec5b" stroke="none" />
 
       {/* Title */}
-      <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={90} height={30}>
-        <Flex align="center">
-          <p style={{ fontWeight: isLeafNode ? 'normal' : '600' }}>{nodeDatum.name}</p>
+      <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={120} height={60}>
+        <p style={{ fontWeight: isLeafNode ? 'normal' : '600', width: '100%', wordWrap: 'normal' }}>
+          {nodeDatum.name}
           <Popover
             content={
               <Input
@@ -37,7 +37,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
           >
             <Button type="link" size="middle" icon={<EditOutlined />} />
           </Popover>
-        </Flex>
+        </p>
       </foreignObject>
 
       {/* Percentage */}
@@ -104,6 +104,23 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
               icon={isCollapsed ? <PlusOutlined /> : <MinusOutlined />}
               onClick={(event) => {
                 event.type = 'toggleNode';
+                onNodeClick(event);
+              }}
+            />
+          </Flex>
+        </foreignObject>
+      }
+
+      {/* Add Btn */}
+      {!isCollapsed &&
+        <foreignObject x={isLeafNode ? width / 2 - 10 : width / 2 + 60} y={-25} width={50} height={50}>
+          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+            <Button
+              type="primary"
+              size="small"
+              icon={<PlusSquareOutlined />}
+              onClick={(event) => {
+                event.type = 'addNode';
                 onNodeClick(event);
               }}
             />

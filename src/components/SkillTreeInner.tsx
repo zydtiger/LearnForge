@@ -1,6 +1,7 @@
 import Tree, { TreeNodeDatum, TreeProps } from "react-d3-tree";
 
 import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
+import { DefaultNode } from "../types/defaults";
 
 interface CollapseState {
   collapsed: boolean;
@@ -59,6 +60,23 @@ class SkillTreeInner extends Tree {
 
       case 'changeName':
         nodeDatum.name = (event.target as HTMLInputElement).value;
+        break;
+
+      case 'addNode':
+        nodeDatum.children = nodeDatum.children || []; // in case the children is null
+        const defaultNode = DefaultNode as TreeNodeDatum;
+        // make up __rd3t properties
+        defaultNode.__rd3t = {
+          id: '',
+          depth: 0,
+          collapsed: false
+        };
+        // inherit progress percent from parent if adding to a leaf node
+        if (nodeDatum.children.length == 0) {
+          defaultNode.progressPercent = nodeDatum.progressPercent;
+        }
+        nodeDatum.children.push(defaultNode);
+        updatePercentages(dataClone[0]);
         break;
 
       case 'deleteNode':
