@@ -12,12 +12,7 @@ declare module 'react-d3-tree' {
   }
 }
 
-let skillset;
-try {
-  skillset = JSON.parse(await invoke(getStorageReadEndpoint()));
-} catch (err) {
-  console.error(err);
-}
+let skillset: RawNodeDatum = await invoke(getStorageReadEndpoint());
 
 export const skillsetSlice = createSlice({
   name: 'skillset',
@@ -25,7 +20,7 @@ export const skillsetSlice = createSlice({
   reducers: {
     setSkillset(state, action: PayloadAction<RawNodeDatum>) {
       Object.assign(state, action.payload);
-      invoke(getStorageWriteEndpoint(), { content: JSON.stringify(state) })
+      invoke(getStorageWriteEndpoint(), { rawNode: state })
         .catch((err) => console.error(err));
     }
   }

@@ -1,10 +1,21 @@
 use crate::error::Error;
+use serde::{Serialize, Deserialize};
+use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{fs, io, path};
 use tauri::{
     plugin::{Builder, TauriPlugin},
     AppHandle, Runtime,
 };
+
+#[derive(Debug, Serialize, Deserialize)]
+struct RawNodeDatum {
+    name: String,
+    #[serde(rename = "progressPercent")]
+    progress_percent: f64,
+    attributes: Option<HashMap<String, serde_json::Value>>,
+    children: Option<Vec<RawNodeDatum>>,
+}
 
 /// Resolves the path of the data file for storage.
 /// 
@@ -46,7 +57,7 @@ fn resolve_data_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathB
 /// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 /// 
 #[tauri::command]
-fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<String, Error> {
+fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<RawNodeDatum, Error> {
     let data_file = resolve_data_file(app_handle)?;
 
     if !data_file.exists() {
@@ -58,7 +69,7 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<String, Error> {
     let mut file = fs::File::open(&data_file)?;
     file.read_to_string(&mut contents)?;
 
-    Ok(contents)
+    Ok(serde_json::from_str(&contents)?)
 }
 
 /// Handles writing to data file with frontend data.
@@ -70,9 +81,10 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<String, Error> {
 /// 3. `write_all` failed when filling data file with `content`
 /// 
 #[tauri::command]
-fn write<R: Runtime>(app_handle: AppHandle<R>, content: String) -> Result<(), Error> {
+fn write<R: Runtime>(app_handle: AppHandle<R>, raw_node: RawNodeDatum) -> Result<(), Error> {
     let data_file = resolve_data_file(app_handle)?;
     let mut file = fs::File::create(&data_file)?;
+    let content = serde_json::to_string(&raw_node)?;
     file.write_all(content.as_bytes())?;
     Ok(())
 }
