@@ -3,6 +3,7 @@ import { FloatButton } from 'antd';
 import { UnorderedListOutlined, SisternodeOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
+import Manual from './components/Manual';
 
 import { useAppSelector } from './redux/hooks';
 import { selectSkillset } from './redux/slices/skillsetSlice';
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <div className="app">
+      <Manual />
       {ports[viewMode].Component}
       <FloatButton
         type="primary"
