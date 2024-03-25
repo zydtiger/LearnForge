@@ -2,8 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { RawNodeDatum } from "react-d3-tree";
 
-/* Use mock data for UI design */
-import skillset from '../../assets/mock.json';
+import { invoke } from "@tauri-apps/api";
+import { getStorageReadEndpoint, getStorageWriteEndpoint } from "../../constants/endpoints";
+
+let skillset: RawNodeDatum = await invoke(getStorageReadEndpoint());
 
 export const skillsetSlice = createSlice({
   name: 'skillset',
@@ -11,6 +13,8 @@ export const skillsetSlice = createSlice({
   reducers: {
     setSkillset(state, action: PayloadAction<RawNodeDatum>) {
       Object.assign(state, action.payload);
+      invoke(getStorageWriteEndpoint(), { rawNode: state })
+        .catch((err) => console.error(err));
     }
   }
 });
