@@ -18,27 +18,43 @@ struct RawNodeDatum {
 }
 
 impl Default for RawNodeDatum {
-  fn default() -> Self {
-    RawNodeDatum {
-      name: "Root".into(),
-      progress_percent: 0.0,
-      attributes: None,
-      children: None
+    fn default() -> Self {
+        RawNodeDatum {
+            name: "Root".into(),
+            progress_percent: 0.0,
+            attributes: None,
+            children: None,
+        }
     }
-  }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct SkillsetState {
+    data: RawNodeDatum,
+    #[serde(rename = "isInitialBoot")]
+    is_initial_boot: bool,
+}
+
+impl Default for SkillsetState {
+    fn default() -> Self {
+        SkillsetState {
+            data: RawNodeDatum::default(),
+            is_initial_boot: true,
+        }
+    }
 }
 
 /// Resolves the path of the data file for storage.
-/// 
+///
 /// # Errors
-/// 
+///
 /// 1. App data directory not found
 /// 2. `create_dir_all` failed
-/// 
+///
 /// # Notes
-/// 
+///
 /// Maybe could be a database here?
-/// 
+///
 fn resolve_data_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathBuf, io::Error> {
     let app_data_dir = app_handle
         .path_resolver()
@@ -56,24 +72,24 @@ fn resolve_data_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathB
 }
 
 /// Handles reading data file and filling data file with default value if not exists.
-/// 
+///
 /// # Errors
-/// 
+///
 /// 1. Resolve data file path failed
 /// 2. `File::create` failed when data file does not exist
 /// 3. `write_all` failed when filling new data file with default
 /// 4. `File::open` failed when opening data file for read
 /// 5. `read_to_string` failed when reading
-/// 
+///
 /// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-/// 
+///
 #[tauri::command]
-fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<RawNodeDatum, Error> {
+fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<SkillsetState, Error> {
     let data_file = resolve_data_file(app_handle)?;
 
     if !data_file.exists() {
         let mut file = fs::File::create(&data_file)?;
-        let default = serde_json::to_string(&RawNodeDatum::default())?;
+        let default = serde_json::to_string(&SkillsetState::default())?;
         file.write_all(default.as_bytes())?;
     }
 
@@ -85,24 +101,24 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<RawNodeDatum, Error> {
 }
 
 /// Handles writing to data file with frontend data.
-/// 
+///
 /// # Errors
-/// 
+///
 /// 1. Resolve data file path failed
 /// 2. `File::create` failed when opening data file for write
 /// 3. `write_all` failed when filling data file with `content`
-/// 
+///
 #[tauri::command]
-fn write<R: Runtime>(app_handle: AppHandle<R>, raw_node: RawNodeDatum) -> Result<(), Error> {
+fn write<R: Runtime>(app_handle: AppHandle<R>, state: SkillsetState) -> Result<(), Error> {
     let data_file = resolve_data_file(app_handle)?;
     let mut file = fs::File::create(&data_file)?;
-    let content = serde_json::to_string(&raw_node)?;
+    let content = serde_json::to_string(&state)?;
     file.write_all(content.as_bytes())?;
     Ok(())
 }
 
 /// Initializes the storage plugin with read, write handlers.
-/// 
+///
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("storage")
         .invoke_handler(tauri::generate_handler![read, write])
