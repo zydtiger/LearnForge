@@ -17,6 +17,17 @@ struct RawNodeDatum {
     children: Option<Vec<RawNodeDatum>>,
 }
 
+impl Default for RawNodeDatum {
+  fn default() -> Self {
+    RawNodeDatum {
+      name: "Root".into(),
+      progress_percent: 0.0,
+      attributes: None,
+      children: None
+    }
+  }
+}
+
 /// Resolves the path of the data file for storage.
 /// 
 /// # Errors
@@ -62,7 +73,8 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<RawNodeDatum, Error> {
 
     if !data_file.exists() {
         let mut file = fs::File::create(&data_file)?;
-        file.write_all(b"{\"name\": \"Root\", \"progressPercent\": 0}")?;
+        let default = serde_json::to_string(&RawNodeDatum::default())?;
+        file.write_all(default.as_bytes())?;
     }
 
     let mut contents = String::new();
