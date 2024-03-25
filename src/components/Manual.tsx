@@ -1,14 +1,15 @@
-import { useState } from 'react';
 import { Button, Modal } from 'antd';
 import Markdown from 'react-markdown';
 
 const res = await fetch('/public/Manual.md');
 const intro = await res.text();
 
-function Manual() {
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const closeModal = () => setIsModalOpen(false);
+interface ManualProps {
+  isModalOpen: boolean;
+  closeModal: () => void;
+}
 
+function Manual({ isModalOpen, closeModal }: ManualProps) {
   return (
     <Modal
       open={isModalOpen}

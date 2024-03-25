@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FloatButton } from 'antd';
-import { UnorderedListOutlined, SisternodeOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
 import Manual from './components/Manual';
@@ -22,11 +22,17 @@ function App() {
     }
   };
   const [viewMode, setViewMode] = useState('tree' as keyof typeof ports);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(true);
 
   return (
     <div className="app">
-      <Manual />
+      <Manual isModalOpen={isHelpModalOpen} closeModal={() => setIsHelpModalOpen(false)} />
       {ports[viewMode].Component}
+      <FloatButton
+        style={{ bottom: 100 }}
+        icon={<QuestionCircleOutlined />}
+        onClick={() => setIsHelpModalOpen(true)}
+      />
       <FloatButton
         type="primary"
         icon={ports[viewMode].Icon}
