@@ -56,7 +56,7 @@ The configuration file provided contains several important settings that govern 
 
 #### `width`
 - Description: Sets the window width of the application.
-- Value: `800`
+- Value: `1000`
 
 #### `height`
 - Description: Sets the window height of the application.

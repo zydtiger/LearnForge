@@ -20,7 +20,7 @@
     "windows": [
       {
         "title": "LearnForge",
-        "width": 800,
+        "width": 1000,
         "height": 600,
         "fileDropEnabled": false
       }
