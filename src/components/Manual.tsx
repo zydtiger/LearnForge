@@ -1,7 +1,7 @@
 import { Button, Modal } from 'antd';
 import Markdown from 'react-markdown';
 
-const res = await fetch('/public/Manual.md');
+const res = await fetch('/Manual.md');
 const intro = await res.text();
 
 interface ManualProps {
