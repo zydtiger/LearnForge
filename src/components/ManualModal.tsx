@@ -12,6 +12,8 @@ interface ManualModalProps {
 function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
   return (
     <Modal
+      centered
+      width={800}
       open={isModalOpen}
       onCancel={closeModal}
       footer={() => (
