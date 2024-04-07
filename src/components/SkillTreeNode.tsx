@@ -1,7 +1,7 @@
 import { CustomNodeElementProps } from "react-d3-tree";
 import { Flex, Input, Popover, Button } from 'antd';
 import { PlusOutlined, MinusOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import SliderInput from "./SliderInput"; // replaces standard antd components
+import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
@@ -47,27 +47,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
           <p style={{ fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
           {/* Only allow percentage change if at leaf node */}
           {isLeafNode ?
-            <Popover
-              placement="bottom"
-              content={
-                <SliderInput
-                  min={0}
-                  max={100}
-                  defaultValue={nodeDatum.progressPercent}
-                  style={{
-                    slider: { width: 100 },
-                    input: { width: 65 }
-                  }}
-                  onChange={(event) => {
-                    event.type = 'changePercent';
-                    onNodeClick(event);
-                  }}
-                />
-              }
-              trigger="click"
-            >
-              <Button type="link" size="small" icon={<EditOutlined />} />
-            </Popover> :
+            <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onNodeClick} /> :
             <div style={{ width: 10 }}></div> // placeholder for aligning percentage label
           }
         </Flex>

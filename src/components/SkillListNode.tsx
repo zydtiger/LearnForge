@@ -1,8 +1,8 @@
 import { RawNodeDatum } from "react-d3-tree";
 import { Flex, Popover, Button, Input } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import SliderInput from "./SliderInput";
 import { SyntheticEvent } from "react";
+import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 
 interface SkillListNodeProps {
@@ -41,27 +41,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
 
       {/* Progress Label */}
       <p style={{ marginLeft: 10 }}>{Math.round(nodeDatum.progressPercent)}%</p>
-      <Popover
-        placement="bottom"
-        content={
-          <SliderInput
-            min={0}
-            max={100}
-            defaultValue={nodeDatum.progressPercent}
-            style={{
-              slider: { width: 100 },
-              input: { width: 65 }
-            }}
-            onChange={(event) => {
-              event.type = 'changePercent';
-              onChange(event);
-            }}
-          />
-        }
-        trigger="click"
-      >
-        <Button type="link" size="small" icon={<EditOutlined />} />
-      </Popover>
+      <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onChange} /> :
 
       {/* Delete Btn */}
       <DeleteBtn type="link" onClick={onChange} />
