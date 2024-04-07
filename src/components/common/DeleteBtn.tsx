@@ -30,7 +30,8 @@ function DeleteBtn({ type, onClick }: DeleteBtnProps) {
 }
 
 DeleteBtn.defaultProps = {
-  type: 'default'
+  type: 'default',
+  onClick: () => { },
 };
 
 export default DeleteBtn;
