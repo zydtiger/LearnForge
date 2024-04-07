@@ -1,4 +1,5 @@
 import { RawNodeDatum } from "react-d3-tree";
+import { TreeDataNode } from "antd";
 
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
