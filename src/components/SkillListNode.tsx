@@ -1,8 +1,9 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Flex, Popover, Button, Input, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Flex, Popover, Button, Input } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import SliderInput from "./SliderInput";
 import { SyntheticEvent } from "react";
+import DeleteBtn from "./common/DeleteBtn";
 
 interface SkillListNodeProps {
   nodeDatum: RawNodeDatum,
@@ -63,23 +64,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
       </Popover>
 
       {/* Delete Btn */}
-      <Popconfirm
-        title="Delete"
-        description="Are you sure to delete this node?"
-        onConfirm={(event) => {
-          event!.type = 'deleteNode';
-          onChange(event!);
-        }}
-        okText="Yes"
-        cancelText="Cancel"
-      >
-        <Button
-          type="link"
-          size="small"
-          danger
-          icon={<DeleteOutlined />}
-        />
-      </Popconfirm>
+      <DeleteBtn type="link" onClick={onChange} />
 
     </Flex>
   );
