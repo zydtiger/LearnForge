@@ -1,7 +1,7 @@
 import { useAppDispatch } from "../redux/hooks";
 import { setSkillset } from "../redux/slices/skillsetSlice";
 import { RawNodeDatum } from 'react-d3-tree';
-import { Tree, ConfigProvider } from 'antd';
+import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
 import { SyntheticEvent } from "react";
 
@@ -15,16 +15,16 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     const value = (event.target as HTMLInputElement).value;
     const listDataClone = [...listData];
     const [siblings, index, node] = findNode(listDataClone, key)!;
-    
+
     switch (type) {
       case 'changeName':
         node.name = value;
         break;
-      
+
       case 'changePercent':
         node.progressPercent = Number(value);
         break;
-      
+
       case 'deleteNode':
         siblings.splice(index, 1);
         break;
@@ -81,6 +81,8 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       }
     }}>
       <div style={{ width: '100%', height: '100%', padding: 20, boxSizing: 'border-box' }}>
+        <Typography.Title level={2}>List View</Typography.Title>
+        <Divider />
         <Tree
           showLine
           draggable
