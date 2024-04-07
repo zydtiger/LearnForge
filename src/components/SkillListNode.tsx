@@ -1,5 +1,5 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Flex, Popover, Button, Input } from 'antd';
+import { Flex, Popover, Button, Input, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import SliderInput from "./SliderInput";
 import { SyntheticEvent } from "react";
@@ -63,16 +63,24 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
       </Popover>
 
       {/* Delete Btn */}
-      <Button
-        type="link"
-        size="small"
-        danger
-        icon={<DeleteOutlined />}
-        onClick={(event) => {
-          event.type = 'deleteNode';
-          onChange(event);
+      <Popconfirm
+        title="Delete"
+        description="Are you sure to delete this node?"
+        onConfirm={(event) => {
+          event!.type = 'deleteNode';
+          onChange(event!);
         }}
-      />
+        okText="Yes"
+        cancelText="Cancel"
+      >
+        <Button
+          type="link"
+          size="small"
+          danger
+          icon={<DeleteOutlined />}
+        />
+      </Popconfirm>
+
     </Flex>
   );
 }

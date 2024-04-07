@@ -1,5 +1,5 @@
 import { CustomNodeElementProps } from "react-d3-tree";
-import { Flex, Input, Popover, Button } from 'antd';
+import { Flex, Input, Popover, Button, Popconfirm } from 'antd';
 import { PlusOutlined, MinusOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import SliderInput from "./SliderInput"; // replaces standard antd components
 
@@ -76,15 +76,22 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       {!isRootNode &&
         <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
           <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
-            <Button
-              size="small"
-              danger
-              icon={<DeleteOutlined />}
-              onClick={(event) => {
-                event.type = 'deleteNode';
-                onNodeClick(event);
+            <Popconfirm
+              title="Delete"
+              description="Are you sure to delete this node?"
+              onConfirm={(event) => {
+                event!.type = 'deleteNode';
+                onNodeClick(event!);
               }}
-            />
+              okText="Yes"
+              cancelText="Cancel"
+            >
+              <Button
+                size="small"
+                danger
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
           </Flex>
         </foreignObject>
       }
