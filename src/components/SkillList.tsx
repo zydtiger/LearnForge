@@ -3,12 +3,37 @@ import { setSkillset } from "../redux/slices/skillsetSlice";
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider } from 'antd';
 import type { TreeProps } from 'antd';
+import { SyntheticEvent } from "react";
 
 import { convertToListData, convertToTreeData, findNode } from '../lib/skillList';
 
 function SkillList({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
-  const listData = convertToListData(data);
+
+  const handleOnChange = (event: SyntheticEvent) => {
+    const [type, key] = event.type.split('|');
+    const value = (event.target as HTMLInputElement).value;
+    const listDataClone = [...listData];
+    const [_siblings, _index, node] = findNode(listDataClone, key)!;
+    
+    switch (type) {
+      case 'changeName':
+        node.name = value;
+        break;
+      
+      case 'changePercent':
+        node.progressPercent = Number(value);
+        break;
+
+      default:
+        break;
+    }
+
+    const newTreeData = convertToTreeData(listDataClone[0]);
+    dispatch(setSkillset(newTreeData));
+  };
+
+  const listData = convertToListData(data, handleOnChange);
 
   const handleOnDrop: TreeProps['onDrop'] = (info) => {
     const dropKey = info.node.key;

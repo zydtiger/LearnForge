@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { SkillListDataNode } from '../types';
 import { RawNodeDatum } from 'react-d3-tree';
 
@@ -11,12 +11,18 @@ import SkillListNode from '../components/SkillListNode';
  * @param index inherited index in parent's children array
  * @returns converted current node
  */
-function convertToListDataRecursive(currentNode: RawNodeDatum, parentKey: React.Key, index: number): SkillListDataNode {
+function convertToListDataRecursive(currentNode: RawNodeDatum, parentKey: React.Key, index: number, onChange: (event: SyntheticEvent) => void): SkillListDataNode {
   const key = parentKey + '-' + String(index);
 
   const node: SkillListDataNode = {
     key,
-    title: SkillListNode({ name: currentNode.name, progressPercent: currentNode.progressPercent }),
+    title: SkillListNode({
+      nodeDatum: currentNode,
+      onChange: (event) => {
+        event.type += `|${key}`; // exposes the key of the current node for event location
+        onChange(event);
+      }
+    }),
 
     // stores name and progress for regeneration
     name: currentNode.name,
@@ -24,7 +30,7 @@ function convertToListDataRecursive(currentNode: RawNodeDatum, parentKey: React.
   };
 
   if (currentNode.children) {
-    node.children = currentNode.children.map((val, index) => convertToListDataRecursive(val, key, index));
+    node.children = currentNode.children.map((val, index) => convertToListDataRecursive(val, key, index, onChange));
   }
 
   return node;
@@ -35,8 +41,8 @@ function convertToListDataRecursive(currentNode: RawNodeDatum, parentKey: React.
  * @param rootNode root node of the tree
  * @returns generated tree data
  */
-function convertToListData(rootNode: RawNodeDatum): SkillListDataNode[] {
-  return [convertToListDataRecursive(rootNode, '0', 0)];
+function convertToListData(rootNode: RawNodeDatum, onChange: (event: SyntheticEvent) => void): SkillListDataNode[] {
+  return [convertToListDataRecursive(rootNode, '0', 0, onChange)];
 }
 
 /**
