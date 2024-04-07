@@ -6,11 +6,15 @@ import SkillList from './components/SkillList';
 import Manual from './components/Manual';
 
 import { useAppSelector, useAppDispatch } from './redux/hooks';
-import { selectSkillset, selectIsInitialBoot, setNotInitialBoot } from './redux/slices/skillsetSlice';
+import { selectSkillset, selectIsInitialBoot, fetchSkillset, setNotInitialBoot } from './redux/slices/skillsetSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const skillset = useAppSelector(selectSkillset);
+
+  useEffect(() => {
+    dispatch(fetchSkillset());
+  }, [dispatch]);
 
   const ports = {
     tree: {
@@ -26,16 +30,15 @@ function App() {
   const [viewMode, setViewMode] = useState('tree' as keyof typeof ports);
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  useEffect(() => {
-    // opens manual page if first boot
-    setIsHelpModalOpen(isInitialBoot);
-    // not first boot anymore
-    dispatch(setNotInitialBoot());
-  }, []); // empty dependency to run only once
+
+  const closeModal = () => {
+    if (isInitialBoot) dispatch(setNotInitialBoot());
+    setIsHelpModalOpen(false);
+  };
 
   return (
     <div className="app">
-      <Manual isModalOpen={isHelpModalOpen} closeModal={() => setIsHelpModalOpen(false)} />
+      <Manual isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
       {ports[viewMode].Component}
       <FloatButton
         style={{ bottom: 100 }}
