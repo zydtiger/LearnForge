@@ -14,7 +14,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     const [type, key] = event.type.split('|');
     const value = (event.target as HTMLInputElement).value;
     const listDataClone = [...listData];
-    const [_siblings, _index, node] = findNode(listDataClone, key)!;
+    const [siblings, index, node] = findNode(listDataClone, key)!;
     
     switch (type) {
       case 'changeName':
@@ -23,6 +23,10 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       
       case 'changePercent':
         node.progressPercent = Number(value);
+        break;
+      
+      case 'deleteNode':
+        siblings.splice(index, 1);
         break;
 
       default:
