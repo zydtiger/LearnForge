@@ -3,7 +3,7 @@ import { FloatButton } from 'antd';
 import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
-import Manual from './components/Manual';
+import ManualModal from './components/ManualModal';
 
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import { selectSkillset, selectIsInitialBoot, setNotInitialBoot } from './redux/slices/skillsetSlice';
@@ -35,7 +35,7 @@ function App() {
 
   return (
     <div className="app">
-      <Manual isModalOpen={isHelpModalOpen} closeModal={() => setIsHelpModalOpen(false)} />
+      <ManualModal isModalOpen={isHelpModalOpen} closeModal={() => setIsHelpModalOpen(false)} />
       {ports[viewMode].Component}
       <FloatButton
         style={{ bottom: 100 }}

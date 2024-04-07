@@ -4,12 +4,12 @@ import Markdown from 'react-markdown';
 const res = await fetch('/Manual.md');
 const intro = await res.text();
 
-interface ManualProps {
+interface ManualModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
 }
 
-function Manual({ isModalOpen, closeModal }: ManualProps) {
+function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
   return (
     <Modal
       open={isModalOpen}
@@ -23,4 +23,4 @@ function Manual({ isModalOpen, closeModal }: ManualProps) {
   );
 }
 
-export default Manual;
+export default ManualModal;
