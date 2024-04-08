@@ -1,12 +1,12 @@
-import { useState, Ref, useRef, CSSProperties } from "react";
+import { SyntheticEvent, useState, Ref, useRef, CSSProperties } from "react";
 import { Slider, InputNumber, Flex } from "antd";
-import { SyntheticEventHandler } from "react-d3-tree";
 
 interface SliderInputProps {
   min: number;
   max: number;
   defaultValue: number;
-  onChange: SyntheticEventHandler;
+  onChange: (event: SyntheticEvent) => void;
+  onPressEnter: (event: SyntheticEvent) => void;
   style: {
     slider?: CSSProperties;
     input?: CSSProperties;
@@ -21,7 +21,7 @@ const DefaultStyle = {
   input: {}
 };
 
-function SliderInput({ min, max, defaultValue, onChange, style }: SliderInputProps) {
+function SliderInput({ min, max, defaultValue, onChange, onPressEnter, style }: SliderInputProps) {
   const [value, setValue] = useState(defaultValue);
   const inputRef: Ref<HTMLInputElement> = useRef(null);
 
@@ -34,10 +34,17 @@ function SliderInput({ min, max, defaultValue, onChange, style }: SliderInputPro
           setValue(value);
           setTimeout(() => inputRef.current!.click()); // manually trigger event
         }} />
-        <InputNumber min={min} max={max} value={value} style={{ ...DefaultStyle.input, ...style.input}} onChange={(value) => {
-          setValue(value ?? 0);
-          setTimeout(() => inputRef.current!.click()); // manually trigger event
-        }} />
+        <InputNumber
+          min={min}
+          max={max}
+          value={value}
+          style={{ ...DefaultStyle.input, ...style.input }}
+          onChange={(value) => {
+            setValue(value ?? 0);
+            setTimeout(() => inputRef.current!.click()); // manually trigger event
+          }}
+          onPressEnter={onPressEnter}
+        />
       </Flex>
     </>
   );
@@ -48,6 +55,7 @@ SliderInput.defaultProps = {
   max: 100,
   defaultValue: 0,
   onChange: () => { },
+  onPressEnter: () => { },
   style: {}
 } as SliderInputProps;
 

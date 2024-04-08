@@ -4,6 +4,7 @@ import { PlusOutlined, MinusOutlined, PlusSquareOutlined } from '@ant-design/ico
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
+import { calcProgressColor } from "../constants/color";
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
   const width = 180;
@@ -18,7 +19,11 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="white" stroke="none" />
 
       {/* Progress Bar */}
-      <rect width={nodeDatum.progressPercent / 100 * width} height={height} x={-width / 2} y={-height / 2} fill="#9cec5b" stroke="none" />
+      <rect
+        width={nodeDatum.progressPercent / 100 * width} height={height}
+        x={-width / 2} y={-height / 2}
+        fill={calcProgressColor(nodeDatum.progressPercent)} stroke="none"
+      />
 
       {/* Title */}
       <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={120} height={60}>
