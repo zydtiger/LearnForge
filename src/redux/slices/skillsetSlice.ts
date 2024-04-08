@@ -20,6 +20,9 @@ const initialState: SkillsetState = {
   isSaved: true,
 };
 
+/**
+ * Fetches the skillset from backend.
+ */
 export const fetchSkillset = createAsyncThunk(
   "skillset/fetchSkillset",
   async () => {
@@ -32,6 +35,9 @@ const unwrapState = (state: unknown) => {
   return (state as RootState).skillset;
 };
 
+/**
+ * Saves the skillset to backend, runs periodically
+ */
 export const saveSkillset = createAsyncThunk(
   "skillset/saveState",
   async (_, { getState, dispatch }) => {
@@ -42,6 +48,9 @@ export const saveSkillset = createAsyncThunk(
   }
 );
 
+/**
+ * Sets not initial boot.
+ */
 export const setNotInitialBoot = createAsyncThunk(
   "skillset/setNotInitialBoot",
   async (_, { getState, dispatch }) => {
