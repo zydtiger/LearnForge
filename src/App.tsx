@@ -1,16 +1,31 @@
 import { useEffect, useState } from 'react';
 import { FloatButton } from 'antd';
-import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
 import ManualModal from './components/ManualModal';
 
 import { useAppSelector, useAppDispatch } from './redux/hooks';
-import { selectSkillset, selectIsInitialBoot, setNotInitialBoot } from './redux/slices/skillsetSlice';
+import {
+  selectSkillset,
+  selectIsInitialBoot,
+  selectLastSaveTime,
+  selectIsSaved,
+  fetchSkillset,
+  setNotInitialBoot,
+  saveSkillset
+} from './redux/slices/skillsetSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const skillset = useAppSelector(selectSkillset);
+  const lastSaveTime = useAppSelector(selectLastSaveTime);
+  const isSaved = useAppSelector(selectIsSaved);
+
+  useEffect(() => {
+    dispatch(fetchSkillset());
+    setInterval(() => dispatch(saveSkillset()), 10000); // saves every 10s
+  }, [dispatch]);
 
   const ports = {
     tree: {
@@ -26,17 +41,24 @@ function App() {
   const [viewMode, setViewMode] = useState('tree' as keyof typeof ports);
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  useEffect(() => {
-    // opens manual page if first boot
-    setIsHelpModalOpen(isInitialBoot);
-    // not first boot anymore
-    dispatch(setNotInitialBoot());
-  }, []); // empty dependency to run only once
+
+  const closeModal = () => {
+    if (isInitialBoot) dispatch(setNotInitialBoot());
+    setIsHelpModalOpen(false);
+  };
 
   return (
     <div className="app">
-      <ManualModal isModalOpen={isHelpModalOpen} closeModal={() => setIsHelpModalOpen(false)} />
+      <ManualModal isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
       {ports[viewMode].Component}
+      <FloatButton
+        type={isSaved ? 'default' : 'primary'}
+        style={{ bottom: 152 }}
+        badge={{ dot: !isSaved }}
+        tooltip={new Date(lastSaveTime).toLocaleString()}
+        icon={<SaveOutlined />}
+        onClick={() => dispatch(saveSkillset())}
+      />
       <FloatButton
         style={{ bottom: 100 }}
         icon={<QuestionCircleOutlined />}
