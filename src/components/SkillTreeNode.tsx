@@ -1,6 +1,7 @@
 import { CustomNodeElementProps } from "react-d3-tree";
-import { Flex, Input, Popover, Button } from 'antd';
-import { PlusOutlined, MinusOutlined, EditOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { Flex, Button } from 'antd';
+import { PlusOutlined, MinusOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 
@@ -23,21 +24,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={120} height={60}>
         <p style={{ fontWeight: isLeafNode ? 'normal' : '600', width: '100%', wordWrap: 'normal' }}>
           {nodeDatum.name}
-          <Popover
-            content={
-              <Input
-                defaultValue={nodeDatum.name}
-                style={{ width: 120 }}
-                onChange={(event) => {
-                  event.type = 'changeName';
-                  onNodeClick(event);
-                }}
-              />
-            }
-            trigger="click"
-          >
-            <Button type="link" size="middle" icon={<EditOutlined />} />
-          </Popover>
+          <NameEdit defaultValue={nodeDatum.name} onChange={onNodeClick} />
         </p>
       </foreignObject>
 

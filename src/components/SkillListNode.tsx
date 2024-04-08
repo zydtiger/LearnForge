@@ -1,7 +1,7 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Flex, Popover, Button, Input } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Flex } from 'antd';
 import { SyntheticEvent } from "react";
+import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 
@@ -15,21 +15,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
     <Flex align="center">
       {/* Title */}
       <p>{nodeDatum.name}</p>
-      <Popover
-        content={
-          <Input
-            defaultValue={nodeDatum.name}
-            style={{ width: 120 }}
-            onChange={(event) => {
-              event.type = 'changeName';
-              onChange(event);
-            }}
-          />
-        }
-        trigger="click"
-      >
-        <Button type="link" size="small" icon={<EditOutlined />} />
-      </Popover>
+      <NameEdit defaultValue={nodeDatum.name} onChange={onChange} />
 
       {/* Progress Bar */}
       <svg width={60} height={5} xmlns="http://www.w3.org/2000/svg">
