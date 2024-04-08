@@ -64,7 +64,7 @@ class SkillTreeInner extends Tree {
 
       case 'addNode':
         nodeDatum.children = nodeDatum.children || []; // in case the children is null
-        const defaultNode = DefaultNode as TreeNodeDatum;
+        const defaultNode = { ...DefaultNode as TreeNodeDatum }; // copy default node
         // make up __rd3t properties
         defaultNode.__rd3t = {
           id: '',
