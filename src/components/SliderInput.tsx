@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, Ref, useRef, CSSProperties } from "react";
+import { SyntheticEvent, useState, Ref, useRef, CSSProperties, useEffect } from "react";
 import { Slider, InputNumber, Flex } from "antd";
 
 interface SliderInputProps {
@@ -24,6 +24,10 @@ const DefaultStyle = {
 function SliderInput({ min, max, defaultValue, onChange, onPressEnter, style }: SliderInputProps) {
   const [value, setValue] = useState(defaultValue);
   const inputRef: Ref<HTMLInputElement> = useRef(null);
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   return (
     <>
