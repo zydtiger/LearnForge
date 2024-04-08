@@ -35,6 +35,11 @@ const unwrapState = (state: unknown) => {
   return (state as RootState).skillset;
 };
 
+const writeState = async (state: SkillsetState, callback: () => void) => {
+  await invoke(getStorageWriteEndpoint(), { state });
+  callback();
+};
+
 /**
  * Saves the skillset to backend, runs periodically
  */
@@ -43,8 +48,7 @@ export const saveSkillset = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const state = { ...unwrapState(getState()) };
     state.lastSaveTime = new Date().toISOString();
-    await invoke(getStorageWriteEndpoint(), { state });
-    dispatch(fetchSkillset()); // resync
+    writeState(state, () => dispatch(fetchSkillset()));
   }
 );
 
@@ -56,8 +60,7 @@ export const setNotInitialBoot = createAsyncThunk(
   async (_, { getState, dispatch }) => {
     const state = { ...unwrapState(getState()) };
     state.isInitialBoot = false;
-    await invoke(getStorageWriteEndpoint(), { state });
-    dispatch(fetchSkillset()); // resync
+    writeState(state, () => dispatch(fetchSkillset()));
   }
 );
 
