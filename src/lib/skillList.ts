@@ -21,7 +21,8 @@ function convertToListDataRecursive(currentNode: RawNodeDatum, parentKey: React.
       onChange: (event) => {
         event.type += `|${key}`; // exposes the key of the current node for event location
         onChange(event);
-      }
+      },
+      isRoot: parentKey == '0'
     }),
 
     // stores name and progress for regeneration

@@ -10,9 +10,10 @@ import { calcProgressColor } from "../constants/color";
 interface SkillListNodeProps {
   nodeDatum: RawNodeDatum,
   onChange: (event: SyntheticEvent) => void;
+  isRoot: boolean;
 }
 
-function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
+function SkillListNode({ nodeDatum, onChange, isRoot }: SkillListNodeProps) {
   const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
 
   return (
@@ -44,7 +45,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
       {isLeafNode && <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onChange} />}
 
       {/* Delete Btn */}
-      <DeleteBtn type="link" onClick={onChange} />
+      {!isRoot && <DeleteBtn type="link" onClick={onChange} />}
 
     </Flex>
   );
