@@ -1,5 +1,6 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Flex } from 'antd';
+import { Button, Flex } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { SyntheticEvent } from "react";
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
@@ -13,6 +14,17 @@ interface SkillListNodeProps {
 function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
   return (
     <Flex align="center">
+      {/* Add Btn */}
+      <Button
+        type="link"
+        size="small"
+        icon={<PlusOutlined />}
+        onClick={(event) => {
+          event.type = 'addNode';
+          onChange(event);
+        }}
+      />
+
       {/* Title */}
       <p>{nodeDatum.name}</p>
       <NameEdit defaultValue={nodeDatum.name} onChange={onChange} />

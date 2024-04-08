@@ -82,4 +82,21 @@ function findNode(siblings: SkillListDataNode[], key: React.Key): [SkillListData
   return null;
 };
 
-export { convertToListData, convertToTreeData, findNode };
+/**
+ * Updates percentages at node by calling
+ * the recursive inner function.
+ */
+function updatePercentages(nodeDatum: RawNodeDatum) {
+  const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
+    if (nodeDatum.children) {
+      const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
+        return acc + generatePercentagesAtNode(current);
+      }, 0);
+      nodeDatum.progressPercent = childrenPercentageSum / nodeDatum.children.length;
+    }
+    return nodeDatum.progressPercent;
+  };
+  generatePercentagesAtNode(nodeDatum);
+}
+
+export { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages };

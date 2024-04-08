@@ -4,8 +4,9 @@ import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
 import { SyntheticEvent } from "react";
+import { DefaultNode } from "../types/defaults";
 
-import { convertToListData, convertToTreeData, findNode } from '../lib/skillList';
+import { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
 
 function SkillList({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     const listDataClone = [...listData];
     const [siblings, index, node] = findNode(listDataClone, key)!;
 
+    let isUpdatePercentNeeded = false;
     switch (type) {
       case 'changeName':
         node.name = value;
@@ -23,10 +25,24 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
 
       case 'changePercent':
         node.progressPercent = Number(value);
+        isUpdatePercentNeeded = true;
         break;
 
       case 'deleteNode':
         siblings.splice(index, 1);
+        isUpdatePercentNeeded = true;
+        break;
+
+      case 'addNode':
+        node.children = node.children || [];
+        const insertIndex = node.children.length;
+        const defaultRawNode = { ...DefaultNode };
+        if (insertIndex == 0) { // if inserting as first child, inherit progress set in parent
+          defaultRawNode.progressPercent = node.progressPercent;
+        }
+        const defaultNode = convertToListDataRecursive(defaultRawNode, node.key, insertIndex, handleOnChange);
+        node.children.push(defaultNode);
+        isUpdatePercentNeeded = true;
         break;
 
       default:
@@ -34,6 +50,9 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     }
 
     const newTreeData = convertToTreeData(listDataClone[0]);
+    if (isUpdatePercentNeeded) {
+      updatePercentages(newTreeData);
+    }
     dispatch(setSkillset(newTreeData));
   };
 
