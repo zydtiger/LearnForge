@@ -1,14 +1,15 @@
 import { SyntheticEvent, useState } from "react";
-import { Popover, Input, Button } from "antd";
+import { Popover, Input, Button, ButtonProps } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 interface NameEditProps {
+  size: ButtonProps['size'],
   defaultValue: string;
   onChange: (event: SyntheticEvent) => void;
 }
 
-function NameEdit({ defaultValue, onChange }: NameEditProps) {
-  const [open, setOpen] = useState(false)
+function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover
@@ -28,12 +29,13 @@ function NameEdit({ defaultValue, onChange }: NameEditProps) {
       onOpenChange={(newOpen) => setOpen(newOpen)}
       trigger="click"
     >
-      <Button type="link" size="middle" icon={<EditOutlined />} />
+      <Button type="link" size={size} icon={<EditOutlined />} />
     </Popover>
   );
 }
 
 NameEdit.defaultProps = {
+  size: 'middle',
   defaultValue: '',
   onChange: () => { }
 };

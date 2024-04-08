@@ -16,7 +16,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
     <Flex align="center">
       {/* Title */}
       <p>{nodeDatum.name}</p>
-      <NameEdit defaultValue={nodeDatum.name} onChange={onChange} />
+      <NameEdit size="small" defaultValue={nodeDatum.name} onChange={onChange} />
 
       {/* Progress Bar */}
       <Progress
