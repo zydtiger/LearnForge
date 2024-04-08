@@ -13,6 +13,8 @@ interface SkillListNodeProps {
 }
 
 function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
+  const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
+
   return (
     <Flex align="center">
       {/* Add Btn */}
@@ -38,8 +40,8 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
         style={{ width: '100px' }}
       />
 
-      {/* Progress Label */}
-      <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onChange} />
+      {/* Progress Edit */}
+      {isLeafNode && <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onChange} />}
 
       {/* Delete Btn */}
       <DeleteBtn type="link" onClick={onChange} />
