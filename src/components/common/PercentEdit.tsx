@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 import { Button, Popover } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import SliderInput from "../SliderInput"; // replaces standard antd components
@@ -9,6 +9,8 @@ interface PercentEditProps {
 }
 
 function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
+  const [open, setOpen] = useState(false);
+
   return (
     <Popover
       placement="bottom"
@@ -23,8 +25,11 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
             event.type = 'changePercent';
             onChange(event);
           }}
+          onPressEnter={() => setOpen(false)}
         />
       }
+      open={open}
+      onOpenChange={(newOpen) => setOpen(newOpen)}
       trigger="click"
     >
       <Button type="link" size="small" icon={<EditOutlined />} />
