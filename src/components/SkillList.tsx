@@ -88,6 +88,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     }
 
     const newTreeData = convertToTreeData(listDataClone[0]);
+    updatePercentages(newTreeData);
     dispatch(setSkillset(newTreeData));
   };
 
