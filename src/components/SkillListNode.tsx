@@ -20,7 +20,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
 
       {/* Progress Bar */}
       <Progress
-        percent={nodeDatum.progressPercent}
+        percent={Math.round(nodeDatum.progressPercent)}
         size="small"
         strokeColor={calcProgressColor(nodeDatum.progressPercent)}
         style={{ width: '100px' }}
