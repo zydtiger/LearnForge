@@ -1,19 +1,28 @@
 import { useEffect, useState } from 'react';
 import { FloatButton } from 'antd';
-import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
 import Manual from './components/Manual';
 
 import { useAppSelector, useAppDispatch } from './redux/hooks';
-import { selectSkillset, selectIsInitialBoot, fetchSkillset, setNotInitialBoot } from './redux/slices/skillsetSlice';
+import {
+  selectSkillset,
+  selectIsInitialBoot,
+  selectIsSaved,
+  fetchSkillset,
+  setNotInitialBoot,
+  saveSkillset
+} from './redux/slices/skillsetSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const skillset = useAppSelector(selectSkillset);
+  const isSaved = useAppSelector(selectIsSaved);
 
   useEffect(() => {
     dispatch(fetchSkillset());
+    setInterval(() => dispatch(saveSkillset()), 10000); // saves every 10s
   }, [dispatch]);
 
   const ports = {
@@ -40,6 +49,13 @@ function App() {
     <div className="app">
       <Manual isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
       {ports[viewMode].Component}
+      <FloatButton
+        type={isSaved ? 'default' : 'primary'}
+        style={{ bottom: 152 }}
+        badge={{ dot: !isSaved }}
+        icon={<SaveOutlined />}
+        onClick={() => dispatch(saveSkillset())}
+      />
       <FloatButton
         style={{ bottom: 100 }}
         icon={<QuestionCircleOutlined />}

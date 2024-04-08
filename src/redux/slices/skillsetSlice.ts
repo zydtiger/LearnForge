@@ -8,11 +8,14 @@ import { DefaultRootNode } from "../../types/defaults";
 interface SkillsetState {
   data: RawNodeDatum,
   isInitialBoot: boolean,
+  // fields below should not be persisted
+  isSaved: boolean,
 }
 
 const initialState: SkillsetState = {
   data: DefaultRootNode,
   isInitialBoot: false,
+  isSaved: true,
 };
 
 export const fetchSkillset = createAsyncThunk(
@@ -27,13 +30,12 @@ const unwrapState = (state: unknown) => {
   return (state as RootState).skillset;
 };
 
-export const setSkillset = createAsyncThunk(
-  "skillset/setSkillset",
-  async (skillset: RawNodeDatum, { getState, dispatch }) => {
-      const state = { ...unwrapState(getState()) };
-      state.data = skillset;
-      await invoke(getStorageWriteEndpoint(), { state });
-      dispatch(fetchSkillset());
+export const saveSkillset = createAsyncThunk(
+  "skillset/saveState",
+  async (_, { getState, dispatch }) => {
+    const state = { ...unwrapState(getState()) };
+    await invoke(getStorageWriteEndpoint(), { state });
+    dispatch(fetchSkillset()); // resync
   }
 );
 
@@ -43,14 +45,22 @@ export const setNotInitialBoot = createAsyncThunk(
     const state = { ...unwrapState(getState()) };
     state.isInitialBoot = false;
     await invoke(getStorageWriteEndpoint(), { state });
-    dispatch(fetchSkillset());
+    dispatch(fetchSkillset()); // resync
   }
 );
 
 export const skillsetSlice = createSlice({
   name: 'skillset',
   initialState,
-  reducers: {},
+  reducers: {
+    // reducer is here to update state locally.
+    // saving to the remote side will be processed at set intervals
+    // to decrease lag.
+    setSkillset(state, action: PayloadAction<RawNodeDatum>) {
+      Object.assign(state.data, action.payload);
+      state.isSaved = false;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(fetchSkillset.fulfilled, (state, action) => {
@@ -58,11 +68,17 @@ export const skillsetSlice = createSlice({
       })
       .addCase(fetchSkillset.rejected, (_, action) => {
         console.error(action.error);
+      })
+      .addCase(saveSkillset.fulfilled, (state, _) => {
+        state.isSaved = true;
       });
   }
 });
 
+export const { setSkillset } = skillsetSlice.actions;
+
 export const selectSkillset = (state: RootState) => state.skillset.data;
 export const selectIsInitialBoot = (state: RootState) => state.skillset.isInitialBoot;
+export const selectIsSaved = (state: RootState) => state.skillset.isSaved;
 
 export default skillsetSlice.reducer;
