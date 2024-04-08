@@ -55,17 +55,19 @@ function App() {
         type={isSaved ? 'default' : 'primary'}
         style={{ bottom: 152 }}
         badge={{ dot: !isSaved }}
-        tooltip={new Date(lastSaveTime).toLocaleString()}
+        tooltip={"Last Saved " + new Date(lastSaveTime).toLocaleString()}
         icon={<SaveOutlined />}
         onClick={() => dispatch(saveSkillset())}
       />
       <FloatButton
         style={{ bottom: 100 }}
+        tooltip={"View Manual"}
         icon={<QuestionCircleOutlined />}
         onClick={() => setIsHelpModalOpen(true)}
       />
       <FloatButton
         type="primary"
+        tooltip={"Toggle " + (viewMode == 'tree' ? "List View" : "Tree View")}
         icon={ports[viewMode].Icon}
         onClick={() => setViewMode(viewMode == 'tree' ? 'list' : 'tree')}
       />

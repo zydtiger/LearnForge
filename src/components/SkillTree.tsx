@@ -84,10 +84,14 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         </p>
       </Flex>
       {/* Add button to reset zoom & translate */}
-      <FloatButton icon={<ExpandOutlined />} style={{ top: 20 }} onClick={() => {
-        setZoom(initialZoom);
-        setTranslate(initialTranslate);
-      }} />
+      <FloatButton
+        tooltip={"Reset View"}
+        icon={<ExpandOutlined />}
+        style={{ top: 20 }}
+        onClick={() => {
+          setZoom(initialZoom);
+          setTranslate(initialTranslate);
+        }} />
     </>
   );
 }
