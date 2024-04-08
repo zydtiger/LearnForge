@@ -62,7 +62,7 @@ function findNodeInSiblings(siblings: TreeNodeDatum[], targetNode: TreeNodeDatum
  */
 function updatePercentages(nodeDatum: TreeNodeDatum) {
   const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
-    if (nodeDatum.children) {
+    if (nodeDatum.children && nodeDatum.children.length != 0) { // if NOT leaf node
       const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
         return acc + generatePercentagesAtNode(current);
       }, 0);

@@ -88,7 +88,7 @@ function findNode(siblings: SkillListDataNode[], key: React.Key): [SkillListData
  */
 function updatePercentages(nodeDatum: RawNodeDatum) {
   const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
-    if (nodeDatum.children) {
+    if (nodeDatum.children && nodeDatum.children.length != 0) { // if NOT leaf node
       const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
         return acc + generatePercentagesAtNode(current);
       }, 0);
