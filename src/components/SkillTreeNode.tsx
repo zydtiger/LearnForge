@@ -1,7 +1,9 @@
 import { CustomNodeElementProps } from "react-d3-tree";
-import { Flex, Input, Popover, Button, Popconfirm } from 'antd';
-import { PlusOutlined, MinusOutlined, EditOutlined, DeleteOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import SliderInput from "./SliderInput"; // replaces standard antd components
+import { Flex, Button } from 'antd';
+import { PlusOutlined, MinusOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import NameEdit from "./common/NameEdit";
+import PercentEdit from "./common/PercentEdit";
+import DeleteBtn from "./common/DeleteBtn";
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
   const width = 180;
@@ -22,21 +24,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={120} height={60}>
         <p style={{ fontWeight: isLeafNode ? 'normal' : '600', width: '100%', wordWrap: 'normal' }}>
           {nodeDatum.name}
-          <Popover
-            content={
-              <Input
-                defaultValue={nodeDatum.name}
-                style={{ width: 120 }}
-                onChange={(event) => {
-                  event.type = 'changeName';
-                  onNodeClick(event);
-                }}
-              />
-            }
-            trigger="click"
-          >
-            <Button type="link" size="middle" icon={<EditOutlined />} />
-          </Popover>
+          <NameEdit defaultValue={nodeDatum.name} onChange={onNodeClick} />
         </p>
       </foreignObject>
 
@@ -46,27 +34,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
           <p style={{ fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
           {/* Only allow percentage change if at leaf node */}
           {isLeafNode ?
-            <Popover
-              placement="bottom"
-              content={
-                <SliderInput
-                  min={0}
-                  max={100}
-                  defaultValue={nodeDatum.progressPercent}
-                  style={{
-                    slider: { width: 100 },
-                    input: { width: 65 }
-                  }}
-                  onChange={(event) => {
-                    event.type = 'changePercent';
-                    onNodeClick(event);
-                  }}
-                />
-              }
-              trigger="click"
-            >
-              <Button type="link" size="small" icon={<EditOutlined />} />
-            </Popover> :
+            <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onNodeClick} /> :
             <div style={{ width: 10 }}></div> // placeholder for aligning percentage label
           }
         </Flex>
@@ -76,22 +44,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       {!isRootNode &&
         <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
           <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
-            <Popconfirm
-              title="Delete"
-              description="Are you sure to delete this node?"
-              onConfirm={(event) => {
-                event!.type = 'deleteNode';
-                onNodeClick(event!);
-              }}
-              okText="Yes"
-              cancelText="Cancel"
-            >
-              <Button
-                size="small"
-                danger
-                icon={<DeleteOutlined />}
-              />
-            </Popconfirm>
+            <DeleteBtn onClick={onNodeClick} />
           </Flex>
         </foreignObject>
       }

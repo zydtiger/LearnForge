@@ -1,8 +1,9 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Flex, Popover, Button, Input, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import SliderInput from "./SliderInput";
+import { Flex } from 'antd';
 import { SyntheticEvent } from "react";
+import NameEdit from "./common/NameEdit";
+import PercentEdit from "./common/PercentEdit";
+import DeleteBtn from "./common/DeleteBtn";
 
 interface SkillListNodeProps {
   nodeDatum: RawNodeDatum,
@@ -14,21 +15,7 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
     <Flex align="center">
       {/* Title */}
       <p>{nodeDatum.name}</p>
-      <Popover
-        content={
-          <Input
-            defaultValue={nodeDatum.name}
-            style={{ width: 120 }}
-            onChange={(event) => {
-              event.type = 'changeName';
-              onChange(event);
-            }}
-          />
-        }
-        trigger="click"
-      >
-        <Button type="link" size="small" icon={<EditOutlined />} />
-      </Popover>
+      <NameEdit defaultValue={nodeDatum.name} onChange={onChange} />
 
       {/* Progress Bar */}
       <svg width={60} height={5} xmlns="http://www.w3.org/2000/svg">
@@ -40,46 +27,10 @@ function SkillListNode({ nodeDatum, onChange }: SkillListNodeProps) {
 
       {/* Progress Label */}
       <p style={{ marginLeft: 10 }}>{Math.round(nodeDatum.progressPercent)}%</p>
-      <Popover
-        placement="bottom"
-        content={
-          <SliderInput
-            min={0}
-            max={100}
-            defaultValue={nodeDatum.progressPercent}
-            style={{
-              slider: { width: 100 },
-              input: { width: 65 }
-            }}
-            onChange={(event) => {
-              event.type = 'changePercent';
-              onChange(event);
-            }}
-          />
-        }
-        trigger="click"
-      >
-        <Button type="link" size="small" icon={<EditOutlined />} />
-      </Popover>
+      <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onChange} /> :
 
       {/* Delete Btn */}
-      <Popconfirm
-        title="Delete"
-        description="Are you sure to delete this node?"
-        onConfirm={(event) => {
-          event!.type = 'deleteNode';
-          onChange(event!);
-        }}
-        okText="Yes"
-        cancelText="Cancel"
-      >
-        <Button
-          type="link"
-          size="small"
-          danger
-          icon={<DeleteOutlined />}
-        />
-      </Popconfirm>
+      <DeleteBtn type="link" onClick={onChange} />
 
     </Flex>
   );
