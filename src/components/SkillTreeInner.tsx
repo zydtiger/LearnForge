@@ -82,6 +82,7 @@ class SkillTreeInner extends Tree {
       case 'deleteNode':
         const [siblings, index] = findNodeInSiblings(dataClone, nodeDatum)!;
         siblings.splice(index, 1);
+        updatePercentages(dataClone[0])
         break;
 
       default:
