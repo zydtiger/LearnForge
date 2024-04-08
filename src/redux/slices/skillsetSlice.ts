@@ -8,6 +8,7 @@ import { DefaultRootNode } from "../../types/defaults";
 interface SkillsetState {
   data: RawNodeDatum,
   isInitialBoot: boolean,
+  lastSaveTime: string; // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
   // fields below should not be persisted
   isSaved: boolean,
 }
@@ -15,6 +16,7 @@ interface SkillsetState {
 const initialState: SkillsetState = {
   data: DefaultRootNode,
   isInitialBoot: false,
+  lastSaveTime: new Date().toISOString(),
   isSaved: true,
 };
 
@@ -34,6 +36,7 @@ export const saveSkillset = createAsyncThunk(
   "skillset/saveState",
   async (_, { getState, dispatch }) => {
     const state = { ...unwrapState(getState()) };
+    state.lastSaveTime = new Date().toISOString();
     await invoke(getStorageWriteEndpoint(), { state });
     dispatch(fetchSkillset()); // resync
   }
@@ -79,6 +82,7 @@ export const { setSkillset } = skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
 export const selectIsInitialBoot = (state: RootState) => state.skillset.isInitialBoot;
+export const selectLastSaveTime = (state: RootState) => state.skillset.lastSaveTime;
 export const selectIsSaved = (state: RootState) => state.skillset.isSaved;
 
 export default skillsetSlice.reducer;

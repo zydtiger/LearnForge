@@ -1,5 +1,6 @@
 use crate::error::Error;
-use serde::{Serialize, Deserialize};
+use chrono::Local;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::io::prelude::*;
 use std::{fs, io, path};
@@ -33,6 +34,8 @@ struct SkillsetState {
     data: RawNodeDatum,
     #[serde(rename = "isInitialBoot")]
     is_initial_boot: bool,
+    #[serde(rename = "lastSaveTime")]
+    last_save_time: String,
 }
 
 impl Default for SkillsetState {
@@ -40,6 +43,7 @@ impl Default for SkillsetState {
         SkillsetState {
             data: RawNodeDatum::default(),
             is_initial_boot: true,
+            last_save_time: Local::now().to_rfc3339(), // ISO 8601 format
         }
     }
 }

@@ -9,6 +9,7 @@ import { useAppSelector, useAppDispatch } from './redux/hooks';
 import {
   selectSkillset,
   selectIsInitialBoot,
+  selectLastSaveTime,
   selectIsSaved,
   fetchSkillset,
   setNotInitialBoot,
@@ -18,6 +19,7 @@ import {
 function App() {
   const dispatch = useAppDispatch();
   const skillset = useAppSelector(selectSkillset);
+  const lastSaveTime = useAppSelector(selectLastSaveTime);
   const isSaved = useAppSelector(selectIsSaved);
 
   useEffect(() => {
@@ -53,6 +55,7 @@ function App() {
         type={isSaved ? 'default' : 'primary'}
         style={{ bottom: 152 }}
         badge={{ dot: !isSaved }}
+        tooltip={new Date(lastSaveTime).toLocaleString()}
         icon={<SaveOutlined />}
         onClick={() => dispatch(saveSkillset())}
       />
