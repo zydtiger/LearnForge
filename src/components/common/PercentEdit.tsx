@@ -50,7 +50,10 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
       }
       open={open}
       onOpenChange={(newOpen) => {
-        if (newOpen) setValue(defaultValue);
+        if (newOpen) {
+          setValue(defaultValue);
+          setEdited(false);
+        }
         setOpen(newOpen);
       }}
       trigger="click"

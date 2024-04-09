@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState, useRef } from "react";
+import { SyntheticEvent, useState } from "react";
 import { Flex, Popover, Input, Button, ButtonProps } from "antd";
 import { EditOutlined, CheckOutlined } from "@ant-design/icons";
 
@@ -40,7 +40,10 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
       }
       open={open}
       onOpenChange={(newOpen) => {
-        if (newOpen) setValue(defaultValue);
+        if (newOpen) {
+          setValue(defaultValue);
+          setEdited(false);
+        }
         setOpen(newOpen);
       }}
       trigger="click"
