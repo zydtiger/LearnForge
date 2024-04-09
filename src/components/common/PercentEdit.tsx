@@ -49,7 +49,10 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
         </Flex>
       }
       open={open}
-      onOpenChange={(newOpen) => setOpen(newOpen)}
+      onOpenChange={(newOpen) => {
+        if (newOpen) setValue(defaultValue);
+        setOpen(newOpen);
+      }}
       trigger="click"
     >
       <Button type="link" size="small" icon={<EditOutlined />} />
