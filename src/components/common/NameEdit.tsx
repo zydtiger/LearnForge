@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState, useRef } from "react";
 import { Popover, Input, Button, ButtonProps } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
@@ -10,19 +10,25 @@ interface NameEditProps {
 
 function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
   const [open, setOpen] = useState(false);
+  const inputRef = useRef(null);
+
+  const emitEvent = (event: SyntheticEvent) => {
+    setOpen(false);
+    event.type = 'changeName';
+    // @ts-ignore
+    event.target.value = inputRef.current.input.value; // fake event.target.value for downstream processing
+    onChange(event);
+  };
 
   return (
     <Popover
       content={
         <Input
+          ref={inputRef}
           allowClear
           defaultValue={defaultValue}
           style={{ width: 120 }}
-          onChange={(event) => {
-            event.type = 'changeName';
-            onChange(event);
-          }}
-          onPressEnter={() => setOpen(false)}
+          onPressEnter={emitEvent}
         />
       }
       open={open}
