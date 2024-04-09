@@ -100,7 +100,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         }
       }
     }}>
-      <div style={{ width: '100%', height: '100%', padding: 20, boxSizing: 'border-box' }}>
+      <div style={{ width: '100%', height: '100%', padding: 20, boxSizing: 'border-box', overflowY: 'scroll' }}>
         <Typography.Title level={2}>List View</Typography.Title>
         <Divider />
         <Tree
