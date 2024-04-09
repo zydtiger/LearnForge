@@ -17,21 +17,19 @@
         "open": true
       }
     },
-    "windows": [
-      {
-        "title": "LearnForge",
-        "width": 1000,
-        "height": 600,
-        "fileDropEnabled": false
-      }
-    ],
+    "windows": [{
+      "title": "LearnForge",
+      "width": 1000,
+      "height": 600,
+      "fileDropEnabled": false
+    }],
     "security": {
       "csp": null
     },
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.ohzyd.learnforge",
+      "identifier": "top.ohzyd.learnforge",
       "icon": [
         "icons/32x32.png",
         "icons/64x64.png",
