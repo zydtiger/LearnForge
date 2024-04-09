@@ -7,7 +7,8 @@ import DeleteBtn from "./common/DeleteBtn";
 import { calcProgressColor } from "../constants/color";
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
-  const width = 180;
+  const maxWidth = 250;
+  const width = Math.min(nodeDatum.name.length * 8 + 100, maxWidth);
   const height = 75;
   const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
   const isRootNode = hierarchyPointNode.parent == null;
@@ -26,12 +27,12 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       />
 
       {/* Title */}
-      <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={120} height={60}>
+      <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={width - 30} height={60}>
         <Flex align="center">
           <Tooltip title={nodeDatum.name}>
             <p style={{
               fontWeight: isLeafNode ? 'normal' : '600',
-              maxWidth: '100px',
+              maxWidth: width - 80,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis'
@@ -88,7 +89,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
 
       {/* Add Btn */}
       {!isCollapsed &&
-        <foreignObject x={isLeafNode ? width / 2 - 10 : width / 2 + 60} y={-25} width={50} height={50}>
+        <foreignObject x={isLeafNode ? width / 2 - 10 : 150} y={-25} width={50} height={50}>
           <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
             <Button
               type="primary"
