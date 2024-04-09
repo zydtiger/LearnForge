@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { FloatButton } from 'antd';
-import { UnorderedListOutlined, SisternodeOutlined, QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
+import {
+  UnorderedListOutlined,
+  SisternodeOutlined,
+  QuestionCircleOutlined,
+  SaveOutlined,
+  UndoOutlined,
+  RedoOutlined
+} from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
 import ManualModal from './components/ManualModal';
@@ -11,6 +18,10 @@ import {
   selectIsInitialBoot,
   selectLastSaveTime,
   selectIsSaved,
+  selectIsUndoable,
+  selectIsRedoable,
+  undo,
+  redo,
   fetchSkillset,
   setNotInitialBoot,
   saveSkillset
@@ -21,6 +32,8 @@ function App() {
   const skillset = useAppSelector(selectSkillset);
   const lastSaveTime = useAppSelector(selectLastSaveTime);
   const isSaved = useAppSelector(selectIsSaved);
+  const isUndoable = useAppSelector(selectIsUndoable);
+  const isRedoable = useAppSelector(selectIsRedoable);
 
   useEffect(() => {
     dispatch(fetchSkillset());
@@ -51,6 +64,8 @@ function App() {
     <div className="app">
       <ManualModal isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
       {ports[viewMode].Component}
+
+      {/* Function Btns */}
       <FloatButton
         type={isSaved ? 'default' : 'primary'}
         style={{ bottom: 152 }}
@@ -70,6 +85,22 @@ function App() {
         tooltip={"Toggle " + (viewMode == 'tree' ? "List View" : "Tree View")}
         icon={ports[viewMode].Icon}
         onClick={() => setViewMode(viewMode == 'tree' ? 'list' : 'tree')}
+      />
+
+      {/* Undo / redo */}
+      <FloatButton
+        type={isUndoable ? "primary" : "default"}
+        style={{ left: 20, bottom: 100 }}
+        tooltip={"Undo"}
+        icon={<UndoOutlined />}
+        onClick={() => dispatch(undo())}
+      />
+      <FloatButton
+        type={isRedoable ? "primary" : "default"}
+        style={{ left: 20 }}
+        tooltip={"Redo"}
+        icon={<RedoOutlined />}
+        onClick={() => dispatch(redo())}
       />
     </div>
   );
