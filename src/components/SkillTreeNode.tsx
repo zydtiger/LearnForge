@@ -1,5 +1,5 @@
 import { CustomNodeElementProps } from "react-d3-tree";
-import { Flex, Button } from 'antd';
+import { Flex, Button, Tooltip } from 'antd';
 import { PlusOutlined, MinusOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
@@ -27,10 +27,20 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
 
       {/* Title */}
       <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={120} height={60}>
-        <p style={{ fontWeight: isLeafNode ? 'normal' : '600', width: '100%', wordWrap: 'normal' }}>
-          {nodeDatum.name}
+        <Flex align="center">
+          <Tooltip title={nodeDatum.name}>
+            <p style={{
+              fontWeight: isLeafNode ? 'normal' : '600',
+              maxWidth: '100px',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}>
+              {nodeDatum.name}
+            </p>
+          </Tooltip>
           <NameEdit defaultValue={nodeDatum.name} onChange={onNodeClick} />
-        </p>
+        </Flex>
       </foreignObject>
 
       {/* Percentage */}
