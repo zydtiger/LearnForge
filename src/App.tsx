@@ -68,20 +68,21 @@ function App() {
       {/* Function Btns */}
       <FloatButton
         type={isSaved ? 'default' : 'primary'}
-        style={{ bottom: 152 }}
+        style={{ right: 20, bottom: 124 }}
         badge={{ dot: !isSaved }}
         tooltip={"Last Saved " + new Date(lastSaveTime).toLocaleString()}
         icon={<SaveOutlined />}
         onClick={() => dispatch(saveSkillset())}
       />
       <FloatButton
-        style={{ bottom: 100 }}
+        style={{ right: 20, bottom: 72 }}
         tooltip={"View Manual"}
         icon={<QuestionCircleOutlined />}
         onClick={() => setIsHelpModalOpen(true)}
       />
       <FloatButton
         type="primary"
+        style={{ right: 20, bottom: 20 }}
         tooltip={"Toggle " + (viewMode == 'tree' ? "List View" : "Tree View")}
         icon={ports[viewMode].Icon}
         onClick={() => setViewMode(viewMode == 'tree' ? 'list' : 'tree')}
@@ -90,14 +91,14 @@ function App() {
       {/* Undo / redo */}
       <FloatButton
         type={isUndoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 100 }}
+        style={{ left: 20, bottom: 72 }}
         tooltip={"Undo"}
         icon={<UndoOutlined />}
         onClick={() => dispatch(undo())}
       />
       <FloatButton
         type={isRedoable ? "primary" : "default"}
-        style={{ left: 20 }}
+        style={{ left: 20, bottom: 20 }}
         tooltip={"Redo"}
         icon={<RedoOutlined />}
         onClick={() => dispatch(redo())}

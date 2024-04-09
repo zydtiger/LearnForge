@@ -70,8 +70,9 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
             0px 3px 6px -4px rgba(0, 0, 0, 0.12),
             0px 6px 16px 0px rgba(0, 0, 0, 0.08),
             0px 9px 28px 8px rgba(0, 0, 0, 0.05)`,
-          bottom: 12,
-          right: 20,
+          bottom: 20,
+          left: '50vw',
+          translate: '-50% 0',
           paddingLeft: 10,
           paddingRight: 10,
           fontSize: 13,
@@ -79,7 +80,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         }}>
         <p style={{ textAlign: 'right' }}>{Math.round(zoom / initialZoom * 100)}%</p>
         <code style={{ width: 20, textAlign: 'center' }}>:</code>
-        <p style={{ minWidth: 60, textAlign: 'right' }}>
+        <p style={{ textAlign: 'left' }}>
           {`(${-Math.round(translate.x - initialTranslate.x)}, ${-Math.round(translate.y - initialTranslate.y)})`}
         </p>
       </Flex>
@@ -87,7 +88,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
       <FloatButton
         tooltip={"Reset View"}
         icon={<ExpandOutlined />}
-        style={{ top: 20 }}
+        style={{ top: 20, right: 20 }}
         onClick={() => {
           setZoom(initialZoom);
           setTranslate(initialTranslate);
