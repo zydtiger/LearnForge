@@ -135,10 +135,24 @@ fn export<R: Runtime>(app_handle: AppHandle<R>, file_path: String) -> Result<(),
     Ok(())
 }
 
+/// Handles importing from chosen path.
+///
+/// # Errors
+///
+/// 1. Resolve data file path failed
+/// 2. `copy` failed when copying selected path to data file
+///
+#[tauri::command]
+fn import<R: Runtime>(app_handle: AppHandle<R>, file_path: String) -> Result<(), Error> {
+    let data_file = resolve_data_file(app_handle)?;
+    fs::copy(file_path, data_file)?;
+    Ok(())
+}
+
 /// Initializes the storage plugin with read, write handlers.
 ///
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("storage")
-        .invoke_handler(tauri::generate_handler![read, write, export])
+        .invoke_handler(tauri::generate_handler![read, write, export, import])
         .build()
 }
