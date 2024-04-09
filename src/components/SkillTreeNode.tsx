@@ -4,6 +4,7 @@ import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
+import ClearBtn from "./common/ClearBtn";
 import { calcProgressColor } from "../constants/color";
 
 function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
@@ -61,6 +62,15 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
         <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
           <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
             <DeleteBtn onClick={onNodeClick} />
+          </Flex>
+        </foreignObject>
+      }
+
+      {/* Clear Btn */}
+      {isRootNode &&
+        <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
+          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+            <ClearBtn onClick={onNodeClick} />
           </Flex>
         </foreignObject>
       }

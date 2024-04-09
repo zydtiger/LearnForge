@@ -1,7 +1,7 @@
 import Tree, { TreeNodeDatum, TreeProps } from "react-d3-tree";
 
 import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
-import { DefaultNode } from "../types/defaults";
+import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
 interface CollapseState {
   collapsed: boolean;
@@ -82,7 +82,12 @@ class SkillTreeInner extends Tree {
       case 'deleteNode':
         const [siblings, index] = findNodeInSiblings(dataClone, nodeDatum)!;
         siblings.splice(index, 1);
-        updatePercentages(dataClone[0])
+        updatePercentages(dataClone[0]);
+        break;
+
+      case 'clear':
+        Object.assign(dataClone[0], DefaultRootNode);
+        dataClone[0].children = []; // manual override
         break;
 
       default:

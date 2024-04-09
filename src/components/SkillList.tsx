@@ -4,7 +4,7 @@ import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
 import { SyntheticEvent } from "react";
-import { DefaultNode } from "../types/defaults";
+import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
 import { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
 
@@ -14,7 +14,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
   const handleOnChange = (event: SyntheticEvent) => {
     const [type, key] = event.type.split('|');
     const value = (event.target as HTMLInputElement).value;
-    const listDataClone = [...listData];
+    let listDataClone = [...listData];
     const [siblings, index, node] = findNode(listDataClone, key)!;
 
     let isUpdatePercentNeeded = false;
@@ -31,6 +31,11 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       case 'deleteNode':
         siblings.splice(index, 1);
         isUpdatePercentNeeded = true;
+        break;
+
+      case 'clear':
+        listDataClone = convertToListData(DefaultRootNode, handleOnChange);
+        listDataClone[0].children = []; // manual override
         break;
 
       case 'addNode':
