@@ -5,6 +5,7 @@ import { SyntheticEvent } from "react";
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
+import ClearBtn from "./common/ClearBtn";
 import { calcProgressColor } from "../constants/color";
 
 interface SkillListNodeProps {
@@ -47,6 +48,8 @@ function SkillListNode({ nodeDatum, onChange, isRoot }: SkillListNodeProps) {
       {/* Delete Btn */}
       {!isRoot && <DeleteBtn type="link" onClick={onChange} />}
 
+      {/* Clear Btn */}
+      {isRoot && <ClearBtn type="link" onClick={onChange} />}
     </Flex>
   );
 }
