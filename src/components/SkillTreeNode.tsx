@@ -1,6 +1,6 @@
 import { CustomNodeElementProps } from "react-d3-tree";
 import { Flex, Button, Tooltip } from 'antd';
-import { PlusOutlined, MinusOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
@@ -93,7 +93,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
             <Button
               type="primary"
               size="small"
-              icon={<PlusSquareOutlined />}
+              icon={<PlusOutlined />}
               onClick={(event) => {
                 event.type = 'addNode';
                 onNodeClick(event);
