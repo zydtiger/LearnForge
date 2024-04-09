@@ -28,7 +28,7 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
           <Input
             allowClear
             value={value}
-            style={{ width: 120 }}
+            style={{ width: 150 }}
             onChange={(event) => {
               setValue(event.target.value);
               setEdited(true);
