@@ -15,16 +15,22 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": true
       }
     },
-    "windows": [
-      {
-        "title": "LearnForge",
-        "width": 1000,
-        "height": 600,
-        "fileDropEnabled": false
-      }
-    ],
+    "windows": [{
+      "title": "LearnForge",
+      "width": 1000,
+      "height": 600,
+      "fileDropEnabled": false
+    }],
     "security": {
       "csp": null
     },
