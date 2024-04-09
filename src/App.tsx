@@ -7,8 +7,8 @@ import {
   SaveOutlined,
   UndoOutlined,
   RedoOutlined,
-  DownloadOutlined,
-  UploadOutlined
+  LogoutOutlined,
+  LoginOutlined
 } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
@@ -76,12 +76,12 @@ function App() {
       >
         <FloatButton
           tooltip={"Import"}
-          icon={<UploadOutlined />}
+          icon={<LoginOutlined />}
           onClick={() => dispatch(importSkillset())}
         />
         <FloatButton
           tooltip={"Export"}
-          icon={<DownloadOutlined />}
+          icon={<LogoutOutlined />}
           onClick={() => dispatch(exportSkillset())}
         />
       </FloatButton.Group>
