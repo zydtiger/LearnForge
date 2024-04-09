@@ -6,7 +6,9 @@ import {
   QuestionCircleOutlined,
   SaveOutlined,
   UndoOutlined,
-  RedoOutlined
+  RedoOutlined,
+  DownloadOutlined,
+  UploadOutlined
 } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
@@ -24,7 +26,9 @@ import {
   redo,
   fetchSkillset,
   setNotInitialBoot,
-  saveSkillset
+  saveSkillset,
+  exportSkillset,
+  importSkillset,
 } from './redux/slices/skillsetSlice';
 
 function App() {
@@ -66,6 +70,21 @@ function App() {
       {ports[viewMode].Component}
 
       {/* Function Btns */}
+      <FloatButton.Group
+        trigger='click'
+        style={{ right: 20, bottom: 176 }}
+      >
+        <FloatButton
+          tooltip={"Import"}
+          icon={<UploadOutlined />}
+          onClick={() => dispatch(importSkillset())}
+        />
+        <FloatButton
+          tooltip={"Export"}
+          icon={<DownloadOutlined />}
+          onClick={() => dispatch(exportSkillset())}
+        />
+      </FloatButton.Group>
       <FloatButton
         type={isSaved ? 'default' : 'primary'}
         style={{ right: 20, bottom: 124 }}

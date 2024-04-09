@@ -2,9 +2,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { RawNodeDatum } from "react-d3-tree";
 import { invoke } from "@tauri-apps/api";
-import { getStorageReadEndpoint, getStorageWriteEndpoint } from "../../constants/endpoints";
+import {
+  getStorageReadEndpoint,
+  getStorageWriteEndpoint,
+  getStorageExportEndpoint,
+  getStorageImportEndpoint
+} from "../../constants/endpoints";
 import { DefaultRootNode } from "../../types/defaults";
 import { MaxHistoryLength } from "../../constants/vars";
+import { openDialog, saveDialog } from '../../lib/dialogs';
 
 interface SkillsetState {
   data: RawNodeDatum,
@@ -70,6 +76,30 @@ export const setNotInitialBoot = createAsyncThunk(
     const state = { ...unwrapState(getState()) };
     state.isInitialBoot = false;
     writeState(state, () => dispatch(fetchSkillset()));
+  }
+);
+
+/**
+ * Exports to chosen path in dialog.
+ */
+export const exportSkillset = createAsyncThunk(
+  "skillset/exportSkillset",
+  async (_, { dispatch }) => {
+    await dispatch(saveSkillset()); // saves the current workspace
+    const filePath = await saveDialog();
+    invoke(getStorageExportEndpoint(), { filePath });
+  }
+);
+
+/**
+ * Imports from chosen path in dialog.
+ */
+export const importSkillset = createAsyncThunk(
+  "skillset/importSkillset",
+  async (_, { dispatch }) => {
+    const filePath = await openDialog();
+    await invoke(getStorageImportEndpoint(), { filePath });
+    dispatch(fetchSkillset());
   }
 );
 
