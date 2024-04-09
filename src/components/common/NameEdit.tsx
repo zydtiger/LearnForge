@@ -11,13 +11,13 @@ interface NameEditProps {
 function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
   const [open, setOpen] = useState(false);
   const [edited, setEdited] = useState(false);
-  const inputRef = useRef(null);
+  const [value, setValue] = useState(defaultValue);
 
   const emitEvent = (event: SyntheticEvent) => {
     setOpen(false);
     event.type = 'changeName';
     // @ts-ignore
-    event.target.value = inputRef.current.input.value; // fake event.target.value for downstream processing
+    event.target.value = value; // fake event.target.value for downstream processing
     onChange(event);
   };
 
@@ -26,18 +26,23 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
       content={
         <Flex align="center">
           <Input
-            ref={inputRef}
             allowClear
-            defaultValue={defaultValue}
+            value={value}
             style={{ width: 120 }}
-            onChange={() => setEdited(true)}
+            onChange={(event) => {
+              setValue(event.target.value);
+              setEdited(true);
+            }}
             onPressEnter={emitEvent}
           />
           {edited && <Button type="link" icon={<CheckOutlined />} onClick={emitEvent} />}
         </Flex>
       }
       open={open}
-      onOpenChange={(newOpen) => setOpen(newOpen)}
+      onOpenChange={(newOpen) => {
+        if (newOpen) setValue(defaultValue);
+        setOpen(newOpen);
+      }}
       trigger="click"
     >
       <Button type="link" size={size} icon={<EditOutlined />} />
