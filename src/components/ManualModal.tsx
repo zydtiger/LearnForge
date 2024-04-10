@@ -1,8 +1,6 @@
 import { Button, Modal } from 'antd';
+import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
-
-const res = await fetch('/Manual.md');
-const intro = await res.text();
 
 interface ManualModalProps {
   isModalOpen: boolean;
@@ -10,6 +8,13 @@ interface ManualModalProps {
 }
 
 function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
+  const [intro, setIntro] = useState('');
+  useEffect(() => {
+    fetch('/Manual.md').then((res) => {
+      res.text().then(setIntro);
+    });
+  });
+
   return (
     <Modal
       centered
