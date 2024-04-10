@@ -85,7 +85,13 @@ function App() {
       <ManualModal isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
 
       {/* Core view port */}
-      {ports[viewMode].Component}
+      {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
+      <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
+        {ports.tree.Component}
+      </div>
+      <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
+        {ports.list.Component}
+      </div>
 
       {/* Function Btns */}
       <FloatButton.Group
