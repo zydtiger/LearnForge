@@ -3,7 +3,7 @@ import { setSkillset } from "../redux/slices/skillsetSlice";
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
-import { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useState } from "react";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
 import { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
@@ -16,6 +16,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     const value = (event.target as HTMLInputElement).value;
     let listDataClone = [...listData];
     const [siblings, index, node] = findNode(listDataClone, key)!;
+    const keysCollect: React.Key[] = [];
 
     let isUpdatePercentNeeded = false;
     switch (type) {
@@ -34,7 +35,8 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         break;
 
       case 'clear':
-        listDataClone = convertToListData(DefaultRootNode, handleOnChange);
+        listDataClone = convertToListData(DefaultRootNode, handleOnChange, keysCollect);
+        setExpandedKeys(keysCollect);
         listDataClone[0].children = []; // manual override
         break;
 
@@ -45,7 +47,8 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         if (insertIndex == 0) { // if inserting as first child, inherit progress set in parent
           defaultRawNode.progressPercent = node.progressPercent;
         }
-        const defaultNode = convertToListDataRecursive(defaultRawNode, node.key, insertIndex, handleOnChange);
+        const defaultNode = convertToListDataRecursive(defaultRawNode, node.key, insertIndex, handleOnChange, keysCollect);
+        setExpandedKeys([...expandedKeys, ...keysCollect]);
         node.children.push(defaultNode);
         isUpdatePercentNeeded = true;
         break;
@@ -61,7 +64,9 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     dispatch(setSkillset(newTreeData));
   };
 
-  const listData = convertToListData(data, handleOnChange);
+  const keysCollect: React.Key[] = [];
+  const listData = convertToListData(data, handleOnChange, keysCollect);
+  const [expandedKeys, setExpandedKeys] = useState(keysCollect);
 
   const handleOnDrop: TreeProps['onDrop'] = (info) => {
     const dropKey = info.node.key;
@@ -112,9 +117,10 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
           showLine
           draggable
           blockNode
-          defaultExpandAll
+          expandedKeys={expandedKeys}
           treeData={listData}
           onDrop={handleOnDrop}
+          onExpand={setExpandedKeys}
         />
       </div>
     </ConfigProvider>
