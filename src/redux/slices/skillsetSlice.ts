@@ -13,21 +13,24 @@ import { MaxHistoryLength } from "../../constants/vars";
 import { openDialog, saveDialog } from '../../lib/dialogs';
 
 interface SkillsetState {
-  data: RawNodeDatum,
-  isInitialBoot: boolean,
-  lastSaveTime: string; // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
+  data: RawNodeDatum;         // skillset data
+  isInitialBoot: boolean;     // whether to show manual modal on app opening
+  lastSaveTime: string;       // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
+
   // fields below should not be persisted
-  isSaved: boolean,
-  history: RawNodeDatum[],
-  historyIndex: number,
-  isUndoable: boolean,
-  isRedoable: boolean,
+  isFirstTimeLoading: boolean;// whether to show loading page
+  isSaved: boolean;           // whether the current state is persisted
+  history: RawNodeDatum[];    // historical states, length constrained by MaxHistoryLength
+  historyIndex: number;       // index of currently used historical state
+  isUndoable: boolean;        // whether the undo btn should highlight
+  isRedoable: boolean;        // whether the redo btn should highlight
 }
 
 const initialState: SkillsetState = {
   data: DefaultRootNode,
   isInitialBoot: false,
   lastSaveTime: new Date().toISOString(),
+  isFirstTimeLoading: true,
   isSaved: true,
   history: [],
   historyIndex: 0,
@@ -155,6 +158,7 @@ export const skillsetSlice = createSlice({
         if (state.history.length == 0) {
           state.history.push({ ...state.data }); // init history
         }
+        state.isFirstTimeLoading = false;
       })
       .addCase(fetchSkillset.rejected, (_, action) => {
         console.error(action.error);
@@ -173,5 +177,6 @@ export const selectLastSaveTime = (state: RootState) => state.skillset.lastSaveT
 export const selectIsSaved = (state: RootState) => state.skillset.isSaved;
 export const selectIsUndoable = (state: RootState) => state.skillset.isUndoable;
 export const selectIsRedoable = (state: RootState) => state.skillset.isRedoable;
+export const selectIsFirstTimeLoading = (state: RootState) => state.skillset.isFirstTimeLoading;
 
 export default skillsetSlice.reducer;

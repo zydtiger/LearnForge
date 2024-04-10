@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FloatButton } from 'antd';
+import { Flex, FloatButton, Spin } from 'antd';
 import {
   UnorderedListOutlined,
   SisternodeOutlined,
@@ -22,6 +22,7 @@ import {
   selectIsSaved,
   selectIsUndoable,
   selectIsRedoable,
+  selectIsFirstTimeLoading,
   undo,
   redo,
   fetchSkillset,
@@ -38,6 +39,7 @@ function App() {
   const isSaved = useAppSelector(selectIsSaved);
   const isUndoable = useAppSelector(selectIsUndoable);
   const isRedoable = useAppSelector(selectIsRedoable);
+  const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
 
   useEffect(() => {
     dispatch(fetchSkillset());
@@ -66,7 +68,23 @@ function App() {
 
   return (
     <div className="app">
+      {/* Loading page */}
+      {isFirstTimeLoading && <Flex
+        justify='center'
+        align='center'
+        style={{
+          position: 'fixed',
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: '#f6f6f6'
+        }}>
+        <Spin size='large' />
+      </Flex>}
+
+      {/* Manual Modal */}
       <ManualModal isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
+
+      {/* Core view port */}
       {ports[viewMode].Component}
 
       {/* Function Btns */}
