@@ -116,7 +116,7 @@ const updateUndoRedoable = (state: SkillsetState) => {
   state.isRedoable = (state.historyIndex != state.history.length - 1);
 };
 
-export const skillsetSlice = createSlice({
+const skillsetSlice = createSlice({
   name: 'skillset',
   initialState,
   reducers: {

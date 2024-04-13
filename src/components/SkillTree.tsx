@@ -45,7 +45,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
       <FloatButton
         tooltip={"Reset View"}
         icon={<ExpandOutlined />}
-        style={{ top: 20, right: 20 }}
+        style={{ top: 50, right: 20 }}
         onClick={() => window.location.reload()} />
     </>
   );

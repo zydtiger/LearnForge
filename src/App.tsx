@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Flex, FloatButton, Spin } from 'antd';
 import {
   UnorderedListOutlined,
@@ -29,8 +29,15 @@ import {
   setNotInitialBoot,
   saveSkillset,
   exportSkillset,
-  importSkillset,
+  importSkillset
 } from './redux/slices/skillsetSlice';
+import {
+  selectViewMode,
+  selectIsManualModalOpen,
+  setViewMode,
+  setIsManualModalOpen
+} from './redux/slices/viewSlice';
+import AppMenu from './components/AppMenu';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -57,13 +64,13 @@ function App() {
     }
   };
 
-  const [viewMode, setViewMode] = useState('tree' as keyof typeof ports);
+  const viewMode = useAppSelector(selectViewMode);
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
-  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const isManualModalOpen = useAppSelector(selectIsManualModalOpen);
 
   const closeModal = () => {
     if (isInitialBoot) dispatch(setNotInitialBoot());
-    setIsHelpModalOpen(false);
+    dispatch(setIsManualModalOpen(false));
   };
 
   return (
@@ -81,8 +88,11 @@ function App() {
         <Spin size='large' />
       </Flex>}
 
+      {/* App Menu */}
+      <AppMenu />
+
       {/* Manual Modal */}
-      <ManualModal isModalOpen={isHelpModalOpen || isInitialBoot} closeModal={closeModal} />
+      <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
       {/* Core view port */}
       {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
@@ -121,14 +131,14 @@ function App() {
         style={{ right: 20, bottom: 72 }}
         tooltip={"View Manual"}
         icon={<QuestionCircleOutlined />}
-        onClick={() => setIsHelpModalOpen(true)}
+        onClick={() => dispatch(setIsManualModalOpen(true))}
       />
       <FloatButton
         type="primary"
         style={{ right: 20, bottom: 20 }}
         tooltip={"Toggle " + (viewMode == 'tree' ? "List View" : "Tree View")}
         icon={ports[viewMode].Icon}
-        onClick={() => setViewMode(viewMode == 'tree' ? 'list' : 'tree')}
+        onClick={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
       />
 
       {/* Undo / redo */}
