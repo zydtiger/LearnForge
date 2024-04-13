@@ -1,0 +1,11 @@
+{
+  "import": ["ctrl+o"],
+  "export": ["ctrl+e"],
+  "save": ["ctrl+s"],
+  "undo": ["ctrl+z"],
+  "redo": ["ctrl+shift+z", "ctrl+y"],
+  "reset": ["ctrl+r"],
+  "tree": ["ctrl+t"],
+  "list": ["ctrl+l"],
+  "help": ["ctrl+h"]
+}

@@ -3,6 +3,7 @@ import { FileFilled, EditFilled, EyeFilled, QuestionCircleOutlined } from '@ant-
 import { useAppDispatch } from '../redux/hooks';
 import { importSkillset, exportSkillset, saveSkillset, undo, redo } from '../redux/slices/skillsetSlice';
 import { setViewMode, setIsManualModalOpen } from '../redux/slices/viewSlice';
+import shortcuts from "../assets/shortcuts.json";
 
 // define menu items
 const items = [
@@ -78,39 +79,39 @@ function AppMenu() {
   // define actions
   const actions = {
     import: {
-      shortcuts: ['ctrl+o'],
+      shortcuts: shortcuts['import'],
       exec: () => dispatch(importSkillset())
     },
     export: {
-      shortcuts: ['ctrl+e'],
+      shortcuts: shortcuts['export'],
       exec: () => dispatch(exportSkillset())
     },
     save: {
-      shortcuts: ['ctrl+s'],
+      shortcuts: shortcuts['save'],
       exec: () => dispatch(saveSkillset())
     },
     undo: {
-      shortcuts: ['ctrl+z'],
+      shortcuts: shortcuts['undo'],
       exec: () => dispatch(undo())
     },
     redo: {
-      shortcuts: ['ctrl+shift+z', 'ctrl+y'],
+      shortcuts: shortcuts['redo'],
       exec: () => dispatch(redo())
     },
     reset: {
-      shortcuts: ['ctrl+r'],
+      shortcuts: shortcuts['reset'],
       exec: () => window.location.reload()
     },
     tree: {
-      shortcuts: ['ctrl+t'],
+      shortcuts: shortcuts['tree'],
       exec: () => dispatch(setViewMode('tree'))
     },
     list: {
-      shortcuts: ['ctrl+l'],
+      shortcuts: shortcuts['list'],
       exec: () => dispatch(setViewMode('list'))
     },
     help: {
-      shortcuts: ['ctrl+h'],
+      shortcuts: shortcuts['help'],
       exec: () => dispatch(setIsManualModalOpen(true))
     }
   };
