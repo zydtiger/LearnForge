@@ -7,20 +7,12 @@
   },
   "package": {
     "productName": "LearnForge",
-    "version": "0.0.0"
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
       "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      },
       "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": false,
         "open": true,
         "save": true
       }
