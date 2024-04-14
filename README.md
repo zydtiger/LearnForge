@@ -14,6 +14,10 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
 
 - **Cross-Platform Compatibility**: LearnForge is built using Tauri, React, and TypeScript (ts). This technology stack ensures cross-platform compatibility, allowing you to run the app locally on various operating systems.
 
+## Demo
+![Tree View Demo](public/tree-view-demo.png)
+![List View Demo](public/list-view-demo.png)
+
 ## Installation Guide
 
 ### Windows
