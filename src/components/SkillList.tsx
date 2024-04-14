@@ -1,9 +1,9 @@
-import { useAppDispatch } from "../redux/hooks";
-import { setSkillset } from "../redux/slices/skillsetSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useEffect, useState } from "react";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
 import { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
@@ -64,9 +64,15 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     dispatch(setSkillset(newTreeData));
   };
 
+  const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
   const keysCollect: React.Key[] = [];
   const listData = convertToListData(data, handleOnChange, keysCollect);
   const [expandedKeys, setExpandedKeys] = useState(keysCollect);
+
+  // ISSUE: expandedKeys doesn't update after async data fetching is done
+  useEffect(() => {
+    setExpandedKeys(keysCollect);
+  }, [isFirstTimeLoading]);
 
   const handleOnDrop: TreeProps['onDrop'] = (info) => {
     const dropKey = info.node.key;
