@@ -18,37 +18,70 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
 
 ### Windows
 
-Navigate the the releases page and download the latest app.
+Navigate the the releases page and download the latest installer.
 
 ### Linux
 
+> Not tested
+
+Follow the [Getting Started](#getting-started) section and run `yarn tauri build`. Refer to [Tauri Linux Bundle](https://tauri.app/v1/guides/building/linux/).
+
 ### Mac
+
+> Not tested
+
+Follow the [Getting Started](#getting-started) section and run `yarn tauri build`. Refer to the [Tauri macOS Bundle](https://tauri.app/v1/guides/building/macos).
 
 ## Getting Started
 
 To run LearnForge locally on your machine, follow these steps:
 
-1. **Clone the Repository**: Start by cloning the LearnForge repository to your local machine using the following command:
+1. **Install Environment**: Start by installing the [latest Node.js LTS](https://nodejs.org/en) and the [latest Rust](https://www.rust-lang.org/). Verify that your installation is successful by typing the following.
+
+    ```
+    > cargo --version
+    cargo 1.77.1 (e52e36006 2024-03-26)
+    > node -v
+    v20.12.1
+    ```  
+
+2. **Install Tauri Prerequisites**: You may need to install platform-specific webviews. This is because Tauri uses the system webview for better performance and memory-optimization. Refer to this guide to install the correct one for your platform [Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites).
+
+3. **Clone the Repository**: Start by cloning the LearnForge repository to your local machine using the following command:
    ```
-   git clone https://github.com/zydtiger/learnforge.git
+   > git clone https://github.com/zydtiger/LearnForge.git
    ```
 
-2. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies by running the following command:
+4. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies by running the following command:
    ```
-   cd learnforge
-   yarn
-   ```
-
-3. **Run the App**: Once the installation is complete, you can launch LearnForge by executing the following command:
-   ```
-   yarn tauri dev
+   > cd LearnForge
+   > yarn
    ```
 
-4. **Access LearnForge**: The LearnForge app should pop up automatically with the correct setup. You can now begin managing your learning goals and exploring the skill tree interface.
+5. **Run the App**: Once the installation is complete, you can launch LearnForge by executing the following command:
+   ```
+   > yarn tauri dev
+   ```
+
+6. **Access LearnForge**: The LearnForge app should pop up automatically with the correct setup. You can now begin managing your learning goals and exploring the skill tree interface.
+   - In case something like this pops up, change the `scripts:dev` in `package.json` to `vite --port=<available port>` and `build:devPath` in `src-tauri/tauri.conf.json` to `http://localhost:<your port>`.
+    ```
+    error when starting dev server:
+    Error: listen EACCES: permission denied ::1:1420
+      at Server.setupListenHandle [as _listen2] (node:net:1880:21)
+      at listenInCluster (node:net:1945:12)
+      at GetAddrInfoReqWrap.doListen [as callback] (node:net:2109:7)
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:109:8)
+    ```
+
+1. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
+    ```
+    > yarn tauri build
+    ```
 
 ## Contributing
 
-
+When contributing to this repo, first fork your own repo and merge through PR.
 
 ## Feedback and Issues
 
