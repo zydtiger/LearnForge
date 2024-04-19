@@ -11,6 +11,7 @@ import {
 import { DefaultRootNode } from "../../types/defaults";
 import { MaxHistoryLength } from "../../constants/vars";
 import { openDialog, saveDialog } from '../../lib/dialogs';
+import { nanoid } from 'nanoid';
 
 interface SkillsetState {
   data: RawNodeDatum;         // skillset data
@@ -56,6 +57,18 @@ const unwrapState = (state: unknown) => {
 const writeState = async (state: SkillsetState, callback: () => void) => {
   await invoke(getStorageWriteEndpoint(), { state });
   callback();
+};
+
+const generateIds = (state: SkillsetState) => {
+  const generateIdsRecursive = (node: RawNodeDatum, isRoot: boolean) => {
+    node.id = isRoot ? 'root' : nanoid();
+    if (node.children) {
+      for (const child of node.children) {
+        generateIdsRecursive(child, false);
+      }
+    }
+  };
+  generateIdsRecursive(state.data, true);
 };
 
 /**
@@ -155,6 +168,7 @@ const skillsetSlice = createSlice({
     builder
       .addCase(fetchSkillset.fulfilled, (state, action) => {
         Object.assign(state, action.payload);
+        generateIds(state);
         if (state.history.length == 0) {
           state.history.push({ ...state.data }); // init history
         }

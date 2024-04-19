@@ -4,6 +4,7 @@ import { TreeDataNode } from "antd";
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
   export interface RawNodeDatum {
+    id: string;
     name: string;
     progressPercent: number;
     attributes?: Record<string, string | number | boolean>;
