@@ -1,3 +1,4 @@
+// external imports
 import { useEffect } from 'react';
 import { Flex, FloatButton, Spin } from 'antd';
 import {
@@ -10,10 +11,15 @@ import {
   LogoutOutlined,
   LoginOutlined
 } from '@ant-design/icons';
+
+// component imports
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
 import ManualModal from './components/ManualModal';
+import AppMenu from './components/AppMenu';
+import GlobalContextMenu from './components/GlobalContextMenu';
 
+// redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import {
   selectSkillset,
@@ -37,7 +43,6 @@ import {
   setViewMode,
   setIsManualModalOpen
 } from './redux/slices/viewSlice';
-import AppMenu from './components/AppMenu';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -95,13 +100,17 @@ function App() {
       <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
       {/* Core view port */}
-      {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
-      <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
-        {ports.tree.Component}
-      </div>
-      <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
-        {ports.list.Component}
-      </div>
+      <GlobalContextMenu>
+        <div className='viewport' style={{ width: '100%', height: '100%' }}>
+          {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
+          <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
+            {ports.tree.Component}
+          </div>
+          <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
+            {ports.list.Component}
+          </div>
+        </div>
+      </GlobalContextMenu>
 
       {/* Function Btns */}
       <FloatButton.Group
