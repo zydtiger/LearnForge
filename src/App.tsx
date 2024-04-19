@@ -1,16 +1,7 @@
 // external imports
 import { useEffect } from 'react';
-import { Flex, FloatButton, Spin } from 'antd';
-import {
-  UnorderedListOutlined,
-  SisternodeOutlined,
-  QuestionCircleOutlined,
-  SaveOutlined,
-  UndoOutlined,
-  RedoOutlined,
-  LogoutOutlined,
-  LoginOutlined
-} from '@ant-design/icons';
+import { Flex, Spin } from 'antd';
+import { UnorderedListOutlined, SisternodeOutlined } from '@ant-design/icons';
 
 // component imports
 import SkillTree from './components/SkillTree';
@@ -18,39 +9,28 @@ import SkillList from './components/SkillList';
 import ManualModal from './components/ManualModal';
 import AppMenu from './components/AppMenu';
 import GlobalContextMenu from './components/GlobalContextMenu';
+import GlobalBtns from './components/GlobalBtns';
 
 // redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import {
   selectSkillset,
   selectIsInitialBoot,
-  selectLastSaveTime,
-  selectIsSaved,
-  selectIsUndoable,
-  selectIsRedoable,
   selectIsFirstTimeLoading,
-  undo,
-  redo,
   fetchSkillset,
   setNotInitialBoot,
   saveSkillset,
-  exportSkillset,
-  importSkillset
 } from './redux/slices/skillsetSlice';
 import {
   selectViewMode,
   selectIsManualModalOpen,
-  setViewMode,
-  setIsManualModalOpen
+  setIsManualModalOpen,
+  setViewMode
 } from './redux/slices/viewSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const skillset = useAppSelector(selectSkillset);
-  const lastSaveTime = useAppSelector(selectLastSaveTime);
-  const isSaved = useAppSelector(selectIsSaved);
-  const isUndoable = useAppSelector(selectIsUndoable);
-  const isRedoable = useAppSelector(selectIsRedoable);
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
 
   useEffect(() => {
@@ -112,58 +92,13 @@ function App() {
         </div>
       </GlobalContextMenu>
 
-      {/* Function Btns */}
-      <FloatButton.Group
-        trigger='click'
-        style={{ right: 20, bottom: 176 }}
-      >
-        <FloatButton
-          tooltip={"Import"}
-          icon={<LoginOutlined />}
-          onClick={() => dispatch(importSkillset())}
-        />
-        <FloatButton
-          tooltip={"Export"}
-          icon={<LogoutOutlined />}
-          onClick={() => dispatch(exportSkillset())}
-        />
-      </FloatButton.Group>
-      <FloatButton
-        type={isSaved ? 'default' : 'primary'}
-        style={{ right: 20, bottom: 124 }}
-        badge={{ dot: !isSaved }}
-        tooltip={"Last Saved " + new Date(lastSaveTime).toLocaleString()}
-        icon={<SaveOutlined />}
-        onClick={() => dispatch(saveSkillset())}
-      />
-      <FloatButton
-        style={{ right: 20, bottom: 72 }}
-        tooltip={"View Manual"}
-        icon={<QuestionCircleOutlined />}
-        onClick={() => dispatch(setIsManualModalOpen(true))}
-      />
-      <FloatButton
-        type="primary"
-        style={{ right: 20, bottom: 20 }}
-        tooltip={"Toggle " + (viewMode == 'tree' ? "List View" : "Tree View")}
-        icon={ports[viewMode].Icon}
-        onClick={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
-      />
-
-      {/* Undo / redo */}
-      <FloatButton
-        type={isUndoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 72 }}
-        tooltip={"Undo"}
-        icon={<UndoOutlined />}
-        onClick={() => dispatch(undo())}
-      />
-      <FloatButton
-        type={isRedoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 20 }}
-        tooltip={"Redo"}
-        icon={<RedoOutlined />}
-        onClick={() => dispatch(redo())}
+      {/* Global Functional Btns */}
+      <GlobalBtns
+        toggleViewBtn={{
+          tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
+          Icon: ports[viewMode].Icon,
+        }}
+        onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
       />
     </div>
   );
