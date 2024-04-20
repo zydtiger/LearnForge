@@ -68,6 +68,7 @@ function convertToListData(
  */
 function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
   const node: RawNodeDatum = {
+    id: '', // unimportant in this step as this will not be persisted
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
   };

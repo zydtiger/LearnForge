@@ -43,7 +43,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       case 'addNode':
         node.children = node.children || [];
         const insertIndex = node.children.length;
-        const defaultRawNode = { ...DefaultNode };
+        const defaultRawNode = DefaultNode();
         if (insertIndex == 0) { // if inserting as first child, inherit progress set in parent
           defaultRawNode.progressPercent = node.progressPercent;
         }
