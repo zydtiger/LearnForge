@@ -2,10 +2,10 @@ import { Typography } from "antd";
 import MDEditor from '@uiw/react-md-editor';
 import { useState } from 'react';
 import { useAppSelector } from '../redux/hooks';
-import { selectNoteViewContext } from '../redux/slices/viewSlice';
+import { selectNoteViewNode } from '../redux/slices/viewSlice';
 
 function SkillNote() {
-  const nodeDatum = useAppSelector(selectNoteViewContext);
+  const nodeDatum = useAppSelector(selectNoteViewNode);
   const [value, setValue] = useState('');
 
   return (

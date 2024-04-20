@@ -1,17 +1,18 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { findNodeInTree } from '../../lib/skillTree';
+import { RawNodeDatum } from 'react-d3-tree';
+import { DefaultRootNode } from '../../types/defaults';
 
 interface ViewState {
   viewMode: 'tree' | 'list' | 'note'; // determines the current view
   isManualModalOpen: boolean;         // whether manual modal is open 
-  noteViewId: string;                 // the current id to edit in note view
+  noteViewNode: RawNodeDatum;         // the current node to edit in note view
 }
 
 const initialState: ViewState = {
   viewMode: 'tree',
   isManualModalOpen: false,
-  noteViewId: 'root',
+  noteViewNode: DefaultRootNode,
 };
 
 const viewSlice = createSlice({
@@ -24,16 +25,16 @@ const viewSlice = createSlice({
     setIsManualModalOpen(state, action: PayloadAction<boolean>) {
       state.isManualModalOpen = action.payload;
     },
-    setNoteViewId(state, action: PayloadAction<string>) {
-      state.noteViewId = action.payload;
+    setNoteViewNode(state, action: PayloadAction<RawNodeDatum>) {
+      state.noteViewNode = action.payload;
     }
   }
 });
 
-export const { setViewMode, setIsManualModalOpen, setNoteViewId } = viewSlice.actions;
+export const { setViewMode, setIsManualModalOpen, setNoteViewNode } = viewSlice.actions;
 
 export const selectViewMode = (state: RootState) => state.view.viewMode;
 export const selectIsManualModalOpen = (state: RootState) => state.view.isManualModalOpen;
-export const selectNoteViewContext = (state: RootState) => findNodeInTree(state.skillset.data, state.view.noteViewId)!;
+export const selectNoteViewNode = (state: RootState) => state.view.noteViewNode;
 
 export default viewSlice.reducer;

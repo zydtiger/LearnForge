@@ -9,7 +9,7 @@ import SkillTreeNode from "./SkillTreeNode";
 
 import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
-import { setNoteViewId, setViewMode } from '../redux/slices/viewSlice';
+import { setNoteViewNode, setViewMode } from '../redux/slices/viewSlice';
 
 function SkillTree({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
@@ -59,7 +59,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         break;
 
       case 'triggerNote':
-        dispatch(setNoteViewId(nodeDatum.id));
+        dispatch(setNoteViewNode(nodeDatum));
         dispatch(setViewMode('note'));
         break;
 
