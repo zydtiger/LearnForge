@@ -35,6 +35,7 @@ function convertToListDataRecursive(
     }),
 
     // stores name and progress for regeneration
+    id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
   };
@@ -68,7 +69,7 @@ function convertToListData(
  */
 function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
   const node: RawNodeDatum = {
-    id: '', // unimportant in this step as this will not be persisted
+    id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
   };

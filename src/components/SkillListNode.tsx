@@ -18,7 +18,12 @@ function SkillListNode({ nodeDatum, onChange, isRoot }: SkillListNodeProps) {
   const isLeafNode = !nodeDatum.children || nodeDatum.children.length == 0;
 
   return (
-    <Flex align="center">
+    <Flex align="center" onClick={(event) => {
+      if (event.detail == 2) { // this means a double click on the node
+        event.type = 'triggerNote';
+        onChange(event);
+      }
+    }}>
       {/* Add Btn */}
       <Button
         type="link"

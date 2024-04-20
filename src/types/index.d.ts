@@ -14,6 +14,7 @@ declare module 'react-d3-tree' {
 
 /* Augment the data node to contain extra information for regeneration */
 export type SkillListDataNode = TreeDataNode & {
+  id: string;
   name: string;
   progressPercent: number;
   children?: SkillListDataNode[];

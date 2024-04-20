@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
+import { setNoteViewNode, setViewMode } from '../redux/slices/viewSlice';
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
@@ -51,6 +52,11 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         setExpandedKeys([...expandedKeys, ...keysCollect]);
         node.children.push(defaultNode);
         isUpdatePercentNeeded = true;
+        break;
+
+      case 'triggerNote':
+        dispatch(setNoteViewNode(node)); // SkillListDataNode is compatible with RawNodeDatum
+        dispatch(setViewMode('note'));
         break;
 
       default:
