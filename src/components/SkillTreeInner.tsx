@@ -1,7 +1,5 @@
-import Tree, { TreeNodeDatum, TreeProps } from "react-d3-tree";
-
-import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
-import { DefaultNode, DefaultRootNode } from "../types/defaults";
+import Tree, { RawNodeDatum, TreeNodeDatum } from "react-d3-tree";
+import { findNodeInTree } from "../lib/skillTree";
 
 interface CollapseState {
   collapsed: boolean;
@@ -28,78 +26,19 @@ class SkillTreeInner extends Tree {
   }
 
   /**
-   * Handles the node click event:
-   * 1) toggles expand/collapse.
-   * 2) changes title.
-   * 3) changes percentage.
+   * Handles the toggle node event.
    */
-  handleNodeChange: TreeProps['onNodeClick'] = (node, event): TreeNodeDatum | null => {
+  handleToggleNode(node: RawNodeDatum) {
     const dataClone = [...this.state.data];
-    const nodeDatum = findNodeInTree(dataClone[0], node.data);
+    const nodeDatum = findNodeInTree(dataClone[0], node) as TreeNodeDatum;
 
-    if (!nodeDatum) {
-      return null;
-    }
-
-    let isTreeDataModified = true;
-
-    switch (event.type) {
-      case 'toggleNode':
-        if (nodeDatum.__rd3t.collapsed) {
-          SkillTreeInner.expandNode(nodeDatum);
-        } else {
-          SkillTreeInner.collapseNode(nodeDatum);
-        }
-        isTreeDataModified = false;
-        break;
-
-      case 'changePercent':
-        nodeDatum.progressPercent = Number((event.target as HTMLInputElement).value);
-        updatePercentages(dataClone[0]); // triggers update cascade
-        break;
-
-      case 'changeName':
-        nodeDatum.name = (event.target as HTMLInputElement).value;
-        break;
-
-      case 'addNode':
-        nodeDatum.children = nodeDatum.children || []; // in case the children is null
-        const defaultNode = { ...DefaultNode as TreeNodeDatum }; // copy default node
-        // make up __rd3t properties
-        defaultNode.__rd3t = {
-          id: '',
-          depth: 0,
-          collapsed: false
-        };
-        // inherit progress percent from parent if adding to a leaf node
-        if (nodeDatum.children.length == 0) {
-          defaultNode.progressPercent = nodeDatum.progressPercent;
-        }
-        nodeDatum.children.push(defaultNode);
-        updatePercentages(dataClone[0]);
-        break;
-
-      case 'deleteNode':
-        const [siblings, index] = findNodeInSiblings(dataClone, nodeDatum)!;
-        siblings.splice(index, 1);
-        updatePercentages(dataClone[0]);
-        break;
-
-      case 'clear':
-        Object.assign(dataClone[0], DefaultRootNode);
-        dataClone[0].children = []; // manual override
-        break;
-
-      default:
-        break;
-    }
-
-    if (isTreeDataModified) {
-      return dataClone[0]; // expose altered root node for re-rendering
+    if (nodeDatum.__rd3t.collapsed) {
+      SkillTreeInner.expandNode(nodeDatum);
+    } else {
+      SkillTreeInner.collapseNode(nodeDatum);
     }
 
     this.setState({ data: dataClone });
-    return null;
   };
 
   /**

@@ -1,22 +1,5 @@
-import { RawNodeDatum, TreeNodeDatum } from "react-d3-tree";
+import { RawNodeDatum } from "react-d3-tree";
 
-/**
- * Generates raw tree from tree.
- * @param currentNode current tree node to convert
- * @returns converted raw node
- */
-function convertToRaw(currentNode: TreeNodeDatum): RawNodeDatum {
-  const node: RawNodeDatum = {
-    name: currentNode.name,
-    progressPercent: currentNode.progressPercent
-  };
-
-  if (currentNode.children) {
-    node.children = currentNode.children.map((val) => convertToRaw(val));
-  }
-
-  return node;
-}
 
 /**
    * Finds the target node in the designated subtree.
@@ -24,8 +7,8 @@ function convertToRaw(currentNode: TreeNodeDatum): RawNodeDatum {
    * @param targetNode target node to find
    * @returns node if found, null if not found
    */
-function findNodeInTree(currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): TreeNodeDatum | null {
-  if (currentNode.__rd3t.id == targetNode.__rd3t.id) {
+function findNodeInTree(currentNode: RawNodeDatum, targetNode: RawNodeDatum): RawNodeDatum | null {
+  if (currentNode.id == targetNode.id) {
     return currentNode;
   }
   if (currentNode.children) {
@@ -43,9 +26,9 @@ function findNodeInTree(currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): 
  * @param targetNode node to search for
  * @returns [siblings, index]
  */
-function findNodeInSiblings(siblings: TreeNodeDatum[], targetNode: TreeNodeDatum): [TreeNodeDatum[], number] | null {
+function findNodeInSiblings(siblings: RawNodeDatum[], targetNode: RawNodeDatum): [RawNodeDatum[], number] | null {
   for (let i = 0; i < siblings.length; i++) {
-    if (siblings[i].__rd3t.id == targetNode.__rd3t.id) {
+    if (siblings[i].id == targetNode.id) {
       return [siblings, i];
     }
     if (siblings[i].children) {
@@ -60,7 +43,7 @@ function findNodeInSiblings(siblings: TreeNodeDatum[], targetNode: TreeNodeDatum
  * Updates percentages at node by calling
  * the recursive inner function.
  */
-function updatePercentages(nodeDatum: TreeNodeDatum) {
+function updatePercentages(nodeDatum: RawNodeDatum) {
   const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
     if (nodeDatum.children && nodeDatum.children.length != 0) { // if NOT leaf node
       const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
@@ -73,4 +56,4 @@ function updatePercentages(nodeDatum: TreeNodeDatum) {
   generatePercentagesAtNode(nodeDatum);
 }
 
-export { convertToRaw, findNodeInTree, findNodeInSiblings, updatePercentages };
+export { findNodeInTree, findNodeInSiblings, updatePercentages };
