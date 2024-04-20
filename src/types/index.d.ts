@@ -7,6 +7,7 @@ declare module 'react-d3-tree' {
     id: string;
     name: string;
     progressPercent: number;
+    mdNote?: string,
     attributes?: Record<string, string | number | boolean>;
     children?: RawNodeDatum[];
   }
@@ -17,5 +18,6 @@ export type SkillListDataNode = TreeDataNode & {
   id: string;
   name: string;
   progressPercent: number;
+  mdNote?: string,
   children?: SkillListDataNode[];
 };

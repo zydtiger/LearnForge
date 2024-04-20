@@ -1,12 +1,11 @@
 import { Typography } from "antd";
 import MDEditor from '@uiw/react-md-editor';
-import { useState } from 'react';
-import { useAppSelector } from '../redux/hooks';
-import { selectNoteViewNode } from '../redux/slices/viewSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { selectNoteViewNode, updateMarkdownNote } from '../redux/slices/viewSlice';
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
-  const [value, setValue] = useState('');
+  const dispatch = useAppDispatch();
 
   return (
     <div data-color-mode="light" style={{ padding: 30 }}>
@@ -14,8 +13,8 @@ function SkillNote() {
         {nodeDatum.name}
       </Typography.Title>
       <MDEditor
-        value={value}
-        onChange={(val) => setValue(val!)}
+        value={nodeDatum.mdNote}
+        onChange={(val) => dispatch(updateMarkdownNote(val!))}
       />
     </div>
   );

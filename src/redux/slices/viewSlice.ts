@@ -27,11 +27,14 @@ const viewSlice = createSlice({
     },
     setNoteViewNode(state, action: PayloadAction<RawNodeDatum>) {
       state.noteViewNode = action.payload;
+    },
+    updateMarkdownNote(state, action: PayloadAction<string>) {
+      state.noteViewNode.mdNote = action.payload;
     }
   }
 });
 
-export const { setViewMode, setIsManualModalOpen, setNoteViewNode } = viewSlice.actions;
+export const { setViewMode, setIsManualModalOpen, setNoteViewNode, updateMarkdownNote } = viewSlice.actions;
 
 export const selectViewMode = (state: RootState) => state.view.viewMode;
 export const selectIsManualModalOpen = (state: RootState) => state.view.isManualModalOpen;

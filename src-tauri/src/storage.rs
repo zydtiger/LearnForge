@@ -14,6 +14,8 @@ struct RawNodeDatum {
     name: String,
     #[serde(rename = "progressPercent")]
     progress_percent: f64,
+    #[serde(rename = "mdNote")]
+    md_note: Option<String>,
     attributes: Option<HashMap<String, serde_json::Value>>,
     children: Option<Vec<RawNodeDatum>>,
 }
@@ -23,6 +25,7 @@ impl Default for RawNodeDatum {
         RawNodeDatum {
             name: "Root".into(),
             progress_percent: 0.0,
+            md_note: None,
             attributes: None,
             children: None,
         }

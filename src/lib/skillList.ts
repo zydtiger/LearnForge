@@ -40,6 +40,10 @@ function convertToListDataRecursive(
     progressPercent: currentNode.progressPercent,
   };
 
+  if (currentNode.mdNote) {
+    node.mdNote = currentNode.mdNote;
+  }
+
   if (currentNode.children) {
     node.children = currentNode.children.map((val, index) => convertToListDataRecursive(val, key, index, onChange, keysCollect));
   }
@@ -73,6 +77,10 @@ function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
   };
+
+  if (currentNode.mdNote) {
+    node.mdNote = currentNode.mdNote;
+  }
 
   if (currentNode.children) {
     node.children = currentNode.children.map((val: SkillListDataNode) => convertToTreeData(val));
