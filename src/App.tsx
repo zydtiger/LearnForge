@@ -8,7 +8,8 @@ import {
   UndoOutlined,
   RedoOutlined,
   LogoutOutlined,
-  LoginOutlined
+  LoginOutlined,
+  FormOutlined
 } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
@@ -38,6 +39,7 @@ import {
   setIsManualModalOpen
 } from './redux/slices/viewSlice';
 import AppMenu from './components/AppMenu';
+import SkillNote from './components/SkillNote';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -61,6 +63,10 @@ function App() {
     list: {
       Icon: <SisternodeOutlined />,
       Component: <SkillList data={skillset} />
+    },
+    note: {
+      Icon: <FormOutlined />,
+      Component: <SkillNote />
     }
   };
 
@@ -101,6 +107,9 @@ function App() {
       </div>
       <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
         {ports.list.Component}
+      </div>
+      <div className="note" hidden={viewMode != 'note'} style={{ width: '100%', height: '100%' }}>
+        {ports.note.Component}
       </div>
 
       {/* Function Btns */}

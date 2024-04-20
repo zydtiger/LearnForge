@@ -9,6 +9,7 @@ import SkillTreeNode from "./SkillTreeNode";
 
 import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
+import { setNoteViewId, setViewMode } from '../redux/slices/viewSlice';
 
 function SkillTree({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
@@ -55,6 +56,11 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
       case 'clear':
         Object.assign(dataClone, DefaultRootNode);
         dataClone.children = []; // manual override
+        break;
+
+      case 'triggerNote':
+        dispatch(setNoteViewId(nodeDatum.id));
+        dispatch(setViewMode('note'));
         break;
 
       default:
