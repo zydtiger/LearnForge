@@ -1,9 +1,7 @@
 import { Menu } from 'antd';
 import { FileFilled, EditFilled, EyeFilled, QuestionCircleOutlined } from '@ant-design/icons';
 import { useAppDispatch } from '../redux/hooks';
-import { importSkillset, exportSkillset, saveSkillset, undo, redo } from '../redux/slices/skillsetSlice';
-import { setViewMode, setIsManualModalOpen } from '../redux/slices/viewSlice';
-import shortcuts from "../assets/shortcuts.json";
+import { bindShortcuts, convertMenuToDisplayMode, invokeAction } from '../lib/menu';
 
 // define menu items
 const items = [
@@ -75,69 +73,13 @@ const items = [
 
 function AppMenu() {
   const dispatch = useAppDispatch();
-
-  // define actions
-  const actions = {
-    import: {
-      shortcuts: shortcuts['import'],
-      exec: () => dispatch(importSkillset())
-    },
-    export: {
-      shortcuts: shortcuts['export'],
-      exec: () => dispatch(exportSkillset())
-    },
-    save: {
-      shortcuts: shortcuts['save'],
-      exec: () => dispatch(saveSkillset())
-    },
-    undo: {
-      shortcuts: shortcuts['undo'],
-      exec: () => dispatch(undo())
-    },
-    redo: {
-      shortcuts: shortcuts['redo'],
-      exec: () => dispatch(redo())
-    },
-    reset: {
-      shortcuts: shortcuts['reset'],
-      exec: () => window.location.reload()
-    },
-    tree: {
-      shortcuts: shortcuts['tree'],
-      exec: () => dispatch(setViewMode('tree'))
-    },
-    list: {
-      shortcuts: shortcuts['list'],
-      exec: () => dispatch(setViewMode('list'))
-    },
-    help: {
-      shortcuts: shortcuts['help'],
-      exec: () => dispatch(setIsManualModalOpen(true))
-    }
-  };
-
-  // bind shortcuts to events
-  window.onkeydown = (event) => {
-    const modifier = window.navigator.userAgent.indexOf('Mac') != -1 ? event.metaKey : event.ctrlKey;
-    if (!modifier) return;
-    for (const name in actions) {
-      const action = actions[name as keyof typeof actions];
-      for (const shortcut of action.shortcuts) {
-        const shortcutKeys = shortcut.split('+');
-        let targetKey = shortcutKeys[1] == 'shift' ? shortcutKeys[2].toUpperCase() : shortcutKeys[1];
-        if (event.key == targetKey) {
-          action.exec();
-          return;
-        }
-      }
-    };
-  };
+  bindShortcuts(dispatch);
 
   return <Menu
     mode="horizontal"
-    onClick={(e) => actions[e.key as keyof typeof actions].exec()}
+    onClick={({ key }) => invokeAction(key, dispatch)}
     selectable={false}
-    items={items}
+    items={convertMenuToDisplayMode(items)}
     style={{ lineHeight: '30px' }
     }
   />;

@@ -1,7 +1,7 @@
 import { Button, Modal, Tabs, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
-import shortcuts from '../assets/shortcuts.json';
+import { actions, convertToPlatformShortcuts } from '../lib/menu';
 
 interface ManualModalProps {
   isModalOpen: boolean;
@@ -19,19 +19,12 @@ const tableColumns = [
   }
 ];
 
-function getPlatformSpecific(shortcuts: string[]): string[] {
-  const isMacOS = window.navigator.userAgent.indexOf('Mac') != -1;
-  return shortcuts.map((shortcut) => {
-    return isMacOS ? shortcut.replace('ctrl', 'cmd') : shortcut;
-  });
-}
-
 function convertShortcutsToTableData() {
   const data = [];
-  for (const action in shortcuts) {
+  for (const action in actions) {
     data.push({
       action,
-      shortcuts: getPlatformSpecific(shortcuts[action as keyof typeof shortcuts])
+      shortcuts: convertToPlatformShortcuts(actions[action].shortcuts)
         .map((elem) => elem.toUpperCase()).toString(),
     });
   }

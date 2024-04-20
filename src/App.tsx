@@ -1,3 +1,4 @@
+// external imports
 import { useEffect } from 'react';
 import { Flex, FloatButton, Spin } from 'antd';
 import {
@@ -8,46 +9,36 @@ import {
   UndoOutlined,
   RedoOutlined,
   LogoutOutlined,
-  LoginOutlined,
-  FormOutlined
+  LoginOutlined
 } from '@ant-design/icons';
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
 import ManualModal from './components/ManualModal';
+import AppMenu from './components/AppMenu';
+import GlobalContextMenu from './components/GlobalContextMenu';
+import GlobalBtns from './components/GlobalBtns';
 
+// redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import {
   selectSkillset,
   selectIsInitialBoot,
-  selectLastSaveTime,
-  selectIsSaved,
-  selectIsUndoable,
-  selectIsRedoable,
   selectIsFirstTimeLoading,
-  undo,
-  redo,
   fetchSkillset,
   setNotInitialBoot,
   saveSkillset,
-  exportSkillset,
-  importSkillset
 } from './redux/slices/skillsetSlice';
 import {
   selectViewMode,
   selectIsManualModalOpen,
-  setViewMode,
-  setIsManualModalOpen
+  setIsManualModalOpen,
+  setViewMode
 } from './redux/slices/viewSlice';
 import AppMenu from './components/AppMenu';
-import SkillNote from './components/SkillNote';
 
 function App() {
   const dispatch = useAppDispatch();
   const skillset = useAppSelector(selectSkillset);
-  const lastSaveTime = useAppSelector(selectLastSaveTime);
-  const isSaved = useAppSelector(selectIsSaved);
-  const isUndoable = useAppSelector(selectIsUndoable);
-  const isRedoable = useAppSelector(selectIsRedoable);
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
 
   useEffect(() => {
@@ -100,70 +91,31 @@ function App() {
       {/* Manual Modal */}
       <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
-      {/* Core view port */}
-      {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
-      <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
-        {ports.tree.Component}
-      </div>
-      <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
-        {ports.list.Component}
-      </div>
+      {/* Skillset view port */}
+      <GlobalContextMenu>
+        <div className='skillset' style={{ width: '100%', height: '100%' }}>
+          {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
+          <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
+            {ports.tree.Component}
+          </div>
+          <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
+            {ports.list.Component}
+          </div>
+        </div>
+      </GlobalContextMenu>
+
+      {/* Note view port */}
       <div className="note" hidden={viewMode != 'note'} style={{ width: '100%', height: '100%' }}>
         {ports.note.Component}
       </div>
 
-      {/* Function Btns */}
-      <FloatButton.Group
-        trigger='click'
-        style={{ right: 20, bottom: 176 }}
-      >
-        <FloatButton
-          tooltip={"Import"}
-          icon={<LoginOutlined />}
-          onClick={() => dispatch(importSkillset())}
-        />
-        <FloatButton
-          tooltip={"Export"}
-          icon={<LogoutOutlined />}
-          onClick={() => dispatch(exportSkillset())}
-        />
-      </FloatButton.Group>
-      <FloatButton
-        type={isSaved ? 'default' : 'primary'}
-        style={{ right: 20, bottom: 124 }}
-        badge={{ dot: !isSaved }}
-        tooltip={"Last Saved " + new Date(lastSaveTime).toLocaleString()}
-        icon={<SaveOutlined />}
-        onClick={() => dispatch(saveSkillset())}
-      />
-      <FloatButton
-        style={{ right: 20, bottom: 72 }}
-        tooltip={"View Manual"}
-        icon={<QuestionCircleOutlined />}
-        onClick={() => dispatch(setIsManualModalOpen(true))}
-      />
-      <FloatButton
-        type="primary"
-        style={{ right: 20, bottom: 20 }}
-        tooltip={"Toggle " + (viewMode == 'tree' ? "List View" : "Tree View")}
-        icon={ports[viewMode].Icon}
-        onClick={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
-      />
-
-      {/* Undo / redo */}
-      <FloatButton
-        type={isUndoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 72 }}
-        tooltip={"Undo"}
-        icon={<UndoOutlined />}
-        onClick={() => dispatch(undo())}
-      />
-      <FloatButton
-        type={isRedoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 20 }}
-        tooltip={"Redo"}
-        icon={<RedoOutlined />}
-        onClick={() => dispatch(redo())}
+      {/* Global Functional Btns */}
+      <GlobalBtns
+        toggleViewBtn={{
+          tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
+          Icon: ports[viewMode].Icon,
+        }}
+        onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
       />
     </div>
   );
