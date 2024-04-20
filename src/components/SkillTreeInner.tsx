@@ -30,7 +30,7 @@ class SkillTreeInner extends Tree {
    */
   handleToggleNode(node: RawNodeDatum) {
     const dataClone = [...this.state.data];
-    const nodeDatum = findNodeInTree(dataClone[0], node) as TreeNodeDatum;
+    const nodeDatum = findNodeInTree(dataClone[0], node.id) as TreeNodeDatum;
 
     if (nodeDatum.__rd3t.collapsed) {
       SkillTreeInner.expandNode(nodeDatum);

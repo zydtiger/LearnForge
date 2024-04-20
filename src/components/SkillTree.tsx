@@ -48,7 +48,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         break;
 
       case 'deleteNode':
-        const [siblings, index] = findNodeInSiblings([dataClone], nodeDatum)!;
+        const [siblings, index] = findNodeInSiblings([dataClone], nodeDatum.id)!;
         siblings.splice(index, 1);
         updatePercentages(dataClone);
         break;

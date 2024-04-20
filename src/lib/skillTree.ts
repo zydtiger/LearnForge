@@ -23,16 +23,16 @@ function findNodeInTree(currentNode: RawNodeDatum, targetId: string): RawNodeDat
 /**
  * Finds the siblings of target node.
  * @param siblings current siblings to look at
- * @param targetNode node to search for
+ * @param targetId target id to search for
  * @returns [siblings, index]
  */
-function findNodeInSiblings(siblings: RawNodeDatum[], targetNode: RawNodeDatum): [RawNodeDatum[], number] | null {
+function findNodeInSiblings(siblings: RawNodeDatum[], targetId: string): [RawNodeDatum[], number] | null {
   for (let i = 0; i < siblings.length; i++) {
-    if (siblings[i].id == targetNode.id) {
+    if (siblings[i].id == targetId) {
       return [siblings, i];
     }
     if (siblings[i].children) {
-      const res = findNodeInSiblings(siblings[i].children!, targetNode);
+      const res = findNodeInSiblings(siblings[i].children!, targetId);
       if (res) return res;
     }
   }
