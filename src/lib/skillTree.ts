@@ -4,16 +4,16 @@ import { RawNodeDatum } from "react-d3-tree";
 /**
    * Finds the target node in the designated subtree.
    * @param currentNode root node of current subtree
-   * @param targetNode target node to find
+   * @param targetId target id to find
    * @returns node if found, null if not found
    */
-function findNodeInTree(currentNode: RawNodeDatum, targetNode: RawNodeDatum): RawNodeDatum | null {
-  if (currentNode.id == targetNode.id) {
+function findNodeInTree(currentNode: RawNodeDatum, targetId: string): RawNodeDatum | null {
+  if (currentNode.id == targetId) {
     return currentNode;
   }
   if (currentNode.children) {
     for (let child of currentNode.children) {
-      const res = findNodeInTree(child, targetNode);
+      const res = findNodeInTree(child, targetId);
       if (res) return res;
     }
   }

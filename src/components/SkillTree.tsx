@@ -19,7 +19,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
 
   const handleOnNodeClick: TreeProps['onNodeClick'] = (node, event) => {
     const dataClone = JSON.parse(JSON.stringify(data)); // deep clone through JSON
-    const nodeDatum = findNodeInTree(dataClone, node.data)!;
+    const nodeDatum = findNodeInTree(dataClone, node.data.id)!;
 
     switch (event.type) {
       case 'toggleNode':
