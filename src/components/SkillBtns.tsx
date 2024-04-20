@@ -24,8 +24,7 @@ import {
 } from '../redux/slices/skillsetSlice';
 import { setIsManualModalOpen } from '../redux/slices/viewSlice';
 
-
-interface GlobalBtnsProps {
+interface SkillBtnsProps {
   toggleViewBtn: {
     tooltip: string,
     Icon: any,
@@ -33,7 +32,7 @@ interface GlobalBtnsProps {
   onToggleView: () => void;
 }
 
-function GlobalBtns({ toggleViewBtn, onToggleView }: GlobalBtnsProps) {
+function SkillBtns({ toggleViewBtn, onToggleView }: SkillBtnsProps) {
   const dispatch = useAppDispatch();
 
   const lastSaveTime = useAppSelector(selectLastSaveTime);
@@ -106,4 +105,4 @@ function GlobalBtns({ toggleViewBtn, onToggleView }: GlobalBtnsProps) {
   );
 }
 
-export default GlobalBtns;
+export default SkillBtns;

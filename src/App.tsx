@@ -1,22 +1,16 @@
 // external imports
 import { useEffect } from 'react';
-import { Flex, FloatButton, Spin } from 'antd';
-import {
-  UnorderedListOutlined,
-  SisternodeOutlined,
-  QuestionCircleOutlined,
-  SaveOutlined,
-  UndoOutlined,
-  RedoOutlined,
-  LogoutOutlined,
-  LoginOutlined
-} from '@ant-design/icons';
+import { Flex, Spin } from 'antd';
+import { UnorderedListOutlined, SisternodeOutlined, FormOutlined } from '@ant-design/icons';
+
+// component imports
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
+import SkillNote from './components/SkillNote';
 import ManualModal from './components/ManualModal';
 import AppMenu from './components/AppMenu';
-import GlobalContextMenu from './components/GlobalContextMenu';
-import GlobalBtns from './components/GlobalBtns';
+import SkillContextMenu from './components/SkillContextMenu';
+import SkillBtns from './components/SkillBtns';
 
 // redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
@@ -34,7 +28,6 @@ import {
   setIsManualModalOpen,
   setViewMode
 } from './redux/slices/viewSlice';
-import AppMenu from './components/AppMenu';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -92,7 +85,7 @@ function App() {
       <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
       {/* Skillset view port */}
-      <GlobalContextMenu>
+      <SkillContextMenu>
         <div className='skillset' style={{ width: '100%', height: '100%' }}>
           {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
           <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
@@ -101,22 +94,22 @@ function App() {
           <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
             {ports.list.Component}
           </div>
+
+          {/* Global Functional Btns */}
+          <SkillBtns
+            toggleViewBtn={{
+              tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
+              Icon: ports[viewMode].Icon,
+            }}
+            onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
+          />
         </div>
-      </GlobalContextMenu>
+      </SkillContextMenu>
 
       {/* Note view port */}
       <div className="note" hidden={viewMode != 'note'} style={{ width: '100%', height: '100%' }}>
         {ports.note.Component}
       </div>
-
-      {/* Global Functional Btns */}
-      <GlobalBtns
-        toggleViewBtn={{
-          tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
-          Icon: ports[viewMode].Icon,
-        }}
-        onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
-      />
     </div>
   );
 }
