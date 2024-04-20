@@ -46,11 +46,11 @@ class SkillTreeInner extends Tree {
    * @param collapseState collapse state to match
    */
   setCollapseState(collapseState: CollapseState) {
-    const setCollapsedState = (node: TreeNodeDatum, currentState: CollapseState) => {
-      node.__rd3t.collapsed = currentState.collapsed;
+    const setCollapsedState = (node: TreeNodeDatum, currentState: CollapseState | undefined) => {
+      node.__rd3t.collapsed = currentState?.collapsed || false;
       if (node.children) {
         for (let i = 0; i < node.children.length; i++) {
-          setCollapsedState(node.children[i], currentState.children![i]);
+          setCollapsedState(node.children[i], currentState?.children?.[i]);
         }
       }
     };
