@@ -12,12 +12,13 @@ import {
 import {
   selectNoteViewNode,
   selectIsNoteSaved,
+  selectIsUndoable,
+  selectIsRedoable,
   updateMarkdownNote,
   undo,
-  redo,
-  selectIsUndoable,
-  selectIsRedoable
+  redo
 } from '../redux/slices/noteSlice';
+import { setSkillsetNodeById } from '../redux/slices/skillsetSlice';
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -30,9 +31,18 @@ function SkillNote() {
 
   const dispatch = useAppDispatch();
 
+  const quitToPrev = () => {
+    dispatch(setViewMode(prevView)); // quits note view
+  };
+
+  const handleDone = () => {
+    dispatch(setSkillsetNodeById(nodeDatum));
+    quitToPrev();
+  };
+
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (event.key == 'Escape') {
-      dispatch(setViewMode(prevView)); // quits note view
+      quitToPrev();
     }
   };
 
@@ -72,13 +82,14 @@ function SkillNote() {
           style={{ right: 20, bottom: 20 }}
           tooltip="Done"
           icon={<CheckOutlined />}
+          onClick={handleDone}
         />
 
         {/* Undo / Redo Btns */}
         <FloatButton
           type={isUndoable ? "primary" : "default"}
           style={{ left: 20, bottom: 72 }}
-          tooltip={"Undo ????"}
+          tooltip={"Undo"}
           icon={<UndoOutlined />}
           onClick={() => dispatch(undo())}
         />

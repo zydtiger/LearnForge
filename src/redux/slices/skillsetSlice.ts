@@ -12,6 +12,7 @@ import { DefaultRootNode } from "../../types/defaults";
 import { openDialog, saveDialog } from '../../lib/dialogs';
 import { nanoid } from 'nanoid';
 import { EditHistory } from '../../lib/editHistory';
+import { findNodeInTree } from '../../lib/skillTree';
 
 interface SkillsetState {
   data: RawNodeDatum;         // skillset data
@@ -129,6 +130,11 @@ const skillsetSlice = createSlice({
       loadRawNodeDatum(state, action.payload);
       history.push({ ...state.data }); // pushes in state
     },
+    setSkillsetNodeById(state, action: PayloadAction<RawNodeDatum>) {
+      const targetNode = findNodeInTree(state.data, action.payload.id)!;
+      targetNode.name = action.payload.name;
+      targetNode.mdNote = action.payload.mdNote;
+    },
     undo(state) {
       history.undo();
       loadRawNodeDatum(state, history.current()!);
@@ -157,7 +163,7 @@ const skillsetSlice = createSlice({
   }
 });
 
-export const { setSkillset, undo, redo } = skillsetSlice.actions;
+export const { setSkillset, setSkillsetNodeById, undo, redo } = skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
 export const selectIsInitialBoot = (state: RootState) => state.skillset.isInitialBoot;
