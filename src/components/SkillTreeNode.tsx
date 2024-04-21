@@ -19,7 +19,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
     <g onClick={(event) => {
       if (event.detail == 2) { // this means a double click on the node
         event.type = 'triggerNote';
-        onNodeClick(event);
+        setTimeout(() => onNodeClick(event)); // solves node rendering error by queueing
       }
     }}>
       {/* Background */}
