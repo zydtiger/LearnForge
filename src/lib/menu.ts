@@ -42,9 +42,9 @@ const actions: Actions = {
         const prevView = selectPrevViewBeforeNote(store.getState());
         dispatch(setSkillsetNodeById(newNode));
         dispatch(setViewMode(prevView));
-      } else {
-        dispatch(saveSkillset());
       }
+
+      dispatch(saveSkillset());
     }
   },
   undo: {
