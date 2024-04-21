@@ -85,26 +85,28 @@ function App() {
       <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
       {/* Skillset view port */}
-      <SkillContextMenu>
-        <div className='skillset' style={{ width: '100%', height: '100%' }}>
-          {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
-          <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
-            {ports.tree.Component}
-          </div>
-          <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
-            {ports.list.Component}
-          </div>
+      <div className="viewport" style={{ width: '100%', height: '100%' }} hidden={viewMode != 'tree' && viewMode != 'list'}>
+        <SkillContextMenu>
+          <div className='skillset' style={{ width: '100%', height: '100%' }}>
+            {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
+            <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
+              {ports.tree.Component}
+            </div>
+            <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
+              {ports.list.Component}
+            </div>
 
-          {/* Global Functional Btns */}
-          <SkillBtns
-            toggleViewBtn={{
-              tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
-              Icon: ports[viewMode].Icon,
-            }}
-            onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
-          />
-        </div>
-      </SkillContextMenu>
+            {/* Global Functional Btns */}
+            <SkillBtns
+              toggleViewBtn={{
+                tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
+                Icon: ports[viewMode].Icon,
+              }}
+              onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
+            />
+          </div>
+        </SkillContextMenu>
+      </div>
 
       {/* Note view port */}
       <div className="note" hidden={viewMode != 'note'} style={{ width: '100%', height: '100%' }}>
