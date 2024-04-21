@@ -39,6 +39,7 @@ function SkillNote() {
         {nodeDatum.name}
       </Typography.Title>
       <MDEditor
+        height={'calc(100vh - 145px)'}
         value={nodeDatum.mdNote}
         onChange={(val) => dispatch(updateMarkdownNote(val!))}
       />
