@@ -85,7 +85,7 @@ function App() {
       <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
       {/* Skillset view port */}
-      <div className="viewport" style={{ width: '100%', height: '100%' }} hidden={viewMode != 'tree' && viewMode != 'list'}>
+      <div className="viewport" hidden={viewMode != 'tree' && viewMode != 'list'}>
         <SkillContextMenu>
           <div className='skillset' style={{ width: '100%', height: '100%' }}>
             {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
@@ -109,7 +109,7 @@ function App() {
       </div>
 
       {/* Note view port */}
-      <div className="note" hidden={viewMode != 'note'} style={{ width: '100%', height: '100%' }}>
+      <div className="viewport" hidden={viewMode != 'note'}>
         {ports.note.Component}
       </div>
     </div>
