@@ -132,8 +132,9 @@ const skillsetSlice = createSlice({
     },
     setSkillsetNodeById(state, action: PayloadAction<RawNodeDatum>) {
       const targetNode = findNodeInTree(state.data, action.payload.id)!;
-      targetNode.name = action.payload.name;
-      targetNode.mdNote = action.payload.mdNote;
+      Object.assign(targetNode, action.payload);
+      history.push({ ...state.data });
+      state.isSaved = false;
     },
     undo(state) {
       history.undo();
