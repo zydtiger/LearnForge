@@ -1,6 +1,7 @@
 import store, { AppDispatch } from '../redux/store';
 import { importSkillset, exportSkillset, saveSkillset, undo, redo, setSkillsetNodeById } from '../redux/slices/skillsetSlice';
 import { setViewMode, setIsManualModalOpen, selectViewMode, selectPrevViewBeforeNote } from '../redux/slices/viewSlice';
+import { undo as noteUndo, redo as noteRedo } from '../redux/slices/noteSlice';
 import { MenuProps } from 'antd';
 import MenuItem from '../components/MenuItem';
 import { selectNoteViewNode } from '../redux/slices/noteSlice';
@@ -48,11 +49,27 @@ const actions: Actions = {
   },
   undo: {
     shortcuts: ["ctrl+z"],
-    exec: (dispatch: AppDispatch) => dispatch(undo())
+    exec: (dispatch: AppDispatch) => {
+      const viewMode = selectViewMode(store.getState());
+
+      if (viewMode == 'note') {
+        dispatch(noteUndo());
+      } else {
+        dispatch(undo());
+      }
+    }
   },
   redo: {
     shortcuts: ["ctrl+shift+z", "ctrl+y"],
-    exec: (dispatch: AppDispatch) => dispatch(redo())
+    exec: (dispatch: AppDispatch) => {
+      const viewMode = selectViewMode(store.getState());
+
+      if (viewMode == 'note') {
+        dispatch(noteRedo());
+      } else {
+        dispatch(redo());
+      }
+    }
   },
   reset: {
     shortcuts: ["ctrl+r"],
