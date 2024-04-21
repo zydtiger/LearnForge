@@ -62,7 +62,7 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
       case 'triggerNote':
         dispatch(setNoteViewNode(nodeDatum));
         dispatch(setViewMode('note'));
-        break;
+        return; // skip store updating
 
       default:
         break;
