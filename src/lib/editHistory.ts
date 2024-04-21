@@ -32,6 +32,14 @@ export class EditHistory<T> {
   }
 
   /**
+   * Clears all history records.
+   */
+  clear() {
+    this.historyIndex = -1;
+    this.history = [];
+  }
+
+  /**
    * Returns current history record.
    * @returns current state or null if not exist
    */

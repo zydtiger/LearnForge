@@ -11,7 +11,7 @@ import {
 import { DefaultRootNode } from "../../types/defaults";
 import { openDialog, saveDialog } from '../../lib/dialogs';
 import { nanoid } from 'nanoid';
-import { EditHistory } from '../../lib/history';
+import { EditHistory } from '../../lib/editHistory';
 
 interface SkillsetState {
   data: RawNodeDatum;         // skillset data
