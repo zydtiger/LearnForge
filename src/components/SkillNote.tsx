@@ -2,6 +2,7 @@ import { KeyboardEventHandler, useEffect } from 'react';
 import { FloatButton, Typography } from "antd";
 import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 import MDEditor from '@uiw/react-md-editor';
+import rehypeSanitize from 'rehype-sanitize';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   selectPrevViewBeforeNote,
@@ -58,6 +59,9 @@ function SkillNote() {
         visibleDragbar={false}
         value={nodeDatum.mdNote}
         onChange={(val) => dispatch(updateMarkdownNote(val!))}
+        previewOptions={{
+          rehypePlugins: [[rehypeSanitize]]
+        }}
       />
 
       {/* Functional Btns */}
