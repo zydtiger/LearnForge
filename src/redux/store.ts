@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import skillsetReducer from './slices/skillsetSlice';
 import viewReducer from './slices/viewSlice';
+import noteReducer from './slices/noteSlice';
 
 const store = configureStore({
   reducer: {
+    view: viewReducer,
     skillset: skillsetReducer,
-    view: viewReducer
+    note: noteReducer,
   }
 });
 

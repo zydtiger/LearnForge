@@ -9,7 +9,8 @@ import SkillTreeNode from "./SkillTreeNode";
 
 import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
-import { setNoteViewNode, setViewMode } from '../redux/slices/viewSlice';
+import { setViewMode } from '../redux/slices/viewSlice';
+import { setNoteViewNode } from '../redux/slices/noteSlice';
 
 function SkillTree({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();

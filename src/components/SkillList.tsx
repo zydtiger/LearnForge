@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
-import { setNoteViewNode, setViewMode } from '../redux/slices/viewSlice';
+import { setViewMode } from '../redux/slices/viewSlice';
+import { setNoteViewNode } from '../redux/slices/noteSlice';
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';

@@ -3,12 +3,14 @@ import { Typography } from "antd";
 import MDEditor from '@uiw/react-md-editor';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
-  selectNoteViewNode,
   selectPrevViewBeforeNote,
   selectViewMode,
-  setViewMode,
-  updateMarkdownNote
+  setViewMode
 } from '../redux/slices/viewSlice';
+import {
+  selectNoteViewNode,
+  updateMarkdownNote
+} from '../redux/slices/noteSlice';
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
