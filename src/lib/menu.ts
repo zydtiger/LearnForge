@@ -1,8 +1,9 @@
 import store, { AppDispatch } from '../redux/store';
-import { importSkillset, exportSkillset, saveSkillset, undo, redo } from '../redux/slices/skillsetSlice';
+import { importSkillset, exportSkillset, saveSkillset, undo, redo, setSkillsetNodeById } from '../redux/slices/skillsetSlice';
 import { setViewMode, setIsManualModalOpen, selectViewMode, selectPrevViewBeforeNote } from '../redux/slices/viewSlice';
 import { MenuProps } from 'antd';
 import MenuItem from '../components/MenuItem';
+import { selectNoteViewNode } from '../redux/slices/noteSlice';
 
 interface Actions {
   [key: string]: {
@@ -31,7 +32,19 @@ const actions: Actions = {
   },
   save: {
     shortcuts: ["ctrl+s"],
-    exec: (dispatch: AppDispatch) => dispatch(saveSkillset())
+    exec: (dispatch: AppDispatch) => {
+      const viewMode = selectViewMode(store.getState());
+
+      // saves note node to tree if in note
+      if (viewMode == 'note') {
+        const newNode = selectNoteViewNode(store.getState());
+        const prevView = selectPrevViewBeforeNote(store.getState());
+        dispatch(setSkillsetNodeById(newNode));
+        dispatch(setViewMode(prevView));
+      } else {
+        dispatch(saveSkillset());
+      }
+    }
   },
   undo: {
     shortcuts: ["ctrl+z"],
