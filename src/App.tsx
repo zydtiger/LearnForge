@@ -96,7 +96,7 @@ function App() {
               {ports.list.Component}
             </div>
 
-            {/* Global Functional Btns */}
+            {/* Functional Btns */}
             <SkillBtns
               toggleViewBtn={{
                 tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
