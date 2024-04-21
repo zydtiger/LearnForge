@@ -56,7 +56,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         break;
 
       case 'triggerNote':
-        dispatch(setNoteViewNode(node)); // SkillListDataNode is compatible with RawNodeDatum
+        dispatch(setNoteViewNode(convertToTreeData(node)));
         dispatch(setViewMode('note'));
         return; // skip store updating
 
