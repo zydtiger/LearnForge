@@ -1,6 +1,6 @@
-import { AppDispatch } from '../redux/store';
+import store, { AppDispatch } from '../redux/store';
 import { importSkillset, exportSkillset, saveSkillset, undo, redo } from '../redux/slices/skillsetSlice';
-import { setViewMode, setIsManualModalOpen } from '../redux/slices/viewSlice';
+import { setViewMode, setIsManualModalOpen, selectViewMode, selectPrevViewBeforeNote } from '../redux/slices/viewSlice';
 import { MenuProps } from 'antd';
 import MenuItem from '../components/MenuItem';
 
@@ -14,7 +14,16 @@ interface Actions {
 const actions: Actions = {
   import: {
     shortcuts: ["ctrl+o"],
-    exec: (dispatch: AppDispatch) => dispatch(importSkillset())
+    exec: async (dispatch: AppDispatch) => {
+      await dispatch(importSkillset());
+
+      // quits note if view mode is note
+      const viewMode = selectViewMode(store.getState());
+      if (viewMode == 'note') {
+        const prevView = selectPrevViewBeforeNote(store.getState());
+        dispatch(setViewMode(prevView));
+      }
+    }
   },
   export: {
     shortcuts: ["ctrl+e"],
