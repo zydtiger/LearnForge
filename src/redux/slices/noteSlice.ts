@@ -37,6 +37,10 @@ const noteSlice = createSlice({
       }
       state.isNoteSaved = false;
     },
+    updateName(state, action: PayloadAction<string>) {
+      state.noteViewNode.name = action.payload;
+      state.isNoteSaved = false;
+    },
     undo(state) {
       history.undo();
       state.noteViewNode.mdNote = history.current()!;
@@ -48,7 +52,7 @@ const noteSlice = createSlice({
   }
 });
 
-export const { setNoteViewNode, updateMarkdownNote, undo, redo } = noteSlice.actions;
+export const { setNoteViewNode, updateMarkdownNote, updateName, undo, redo } = noteSlice.actions;
 
 export const selectNoteViewNode = (state: RootState) => state.note.noteViewNode;
 export const selectIsNoteSaved = (state: RootState) => state.note.isNoteSaved;

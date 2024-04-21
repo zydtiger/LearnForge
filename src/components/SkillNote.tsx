@@ -15,6 +15,7 @@ import {
   selectIsUndoable,
   selectIsRedoable,
   updateMarkdownNote,
+  updateName,
   undo,
   redo
 } from '../redux/slices/noteSlice';
@@ -59,7 +60,15 @@ function SkillNote() {
       data-color-mode="light"
       style={{ padding: 30 }}
     >
-      <Typography.Title level={2} editable={true} style={{ top: 0, left: 0 }}>
+      <Typography.Title
+        level={2}
+        editable={{
+          onChange: (value) => {
+            dispatch(updateName(value));
+          }
+        }}
+        style={{ top: 0, left: 0 }}
+      >
         {nodeDatum.name}
       </Typography.Title>
 
