@@ -11,6 +11,7 @@ use tauri::{
 
 #[derive(Debug, Serialize, Deserialize)]
 struct RawNodeDatum {
+    id: Option<String>, // uses Option so None is default value
     name: String,
     #[serde(rename = "progressPercent")]
     progress_percent: f64,
@@ -23,6 +24,7 @@ struct RawNodeDatum {
 impl Default for RawNodeDatum {
     fn default() -> Self {
         RawNodeDatum {
+            id: None,
             name: "Root".into(),
             progress_percent: 0.0,
             md_note: None,

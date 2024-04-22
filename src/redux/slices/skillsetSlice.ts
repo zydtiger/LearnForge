@@ -54,7 +54,9 @@ const writeState = async (state: SkillsetState, callback: () => void) => {
 
 const generateIds = (state: SkillsetState) => {
   const generateIdsRecursive = (node: RawNodeDatum, isRoot: boolean) => {
-    node.id = isRoot ? 'root' : nanoid();
+    if (!node.id) { // assigns node.id only when it does not exist
+      node.id = isRoot ? 'root' : nanoid();
+    }
     if (node.children) {
       for (const child of node.children) {
         generateIdsRecursive(child, false);
