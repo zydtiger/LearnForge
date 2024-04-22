@@ -65,28 +65,28 @@ function App() {
 
   return (
     <div className="app">
-      {/* Loading page */}
-      {isFirstTimeLoading && <Flex
-        justify='center'
-        align='center'
-        style={{
-          position: 'fixed',
-          width: '100vw',
-          height: '100vh',
-          backgroundColor: '#f6f6f6'
-        }}>
-        <Spin size='large' />
-      </Flex>}
-
-      {/* App Menu */}
-      <AppMenu />
-
-      {/* Manual Modal */}
-      <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
-
       <AppContextMenu>
-        {/* Skillset view port */}
         <div className='main viewport'>
+          {/* Loading page */}
+          {isFirstTimeLoading && <Flex
+            justify='center'
+            align='center'
+            style={{
+              position: 'fixed',
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#f6f6f6'
+            }}>
+            <Spin size='large' />
+          </Flex>}
+
+          {/* App Menu */}
+          <AppMenu />
+
+          {/* Manual Modal */}
+          <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
+
+          {/* Skillset view port */}
           <div className="viewport" hidden={viewMode != 'tree' && viewMode != 'list'}>
             {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
             <div className="tree viewport" hidden={viewMode != 'tree'}>
