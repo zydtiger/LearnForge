@@ -107,10 +107,14 @@ export const exportSkillset = createAsyncThunk(
  */
 export const importSkillset = createAsyncThunk(
   "skillset/importSkillset",
-  async (_, { dispatch }) => {
+  async (_, { getState, dispatch }) => {
     const filePath = await openDialog();
     await invoke(getStorageImportEndpoint(), { filePath });
-    dispatch(fetchSkillset());
+    await dispatch(fetchSkillset());
+
+    // push current state to history after import
+    const state = { ...unwrapState(getState()) };
+    history.push({ ...state.data });
   }
 );
 
