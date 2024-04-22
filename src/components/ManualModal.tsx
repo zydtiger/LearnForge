@@ -23,6 +23,7 @@ function convertShortcutsToTableData() {
   const data = [];
   for (const action in actions) {
     data.push({
+      key: action,
       action,
       shortcuts: convertToPlatformShortcuts(actions[action].shortcuts)
         .map((elem) => elem.toUpperCase()).toString(),
