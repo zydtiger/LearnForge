@@ -1,8 +1,10 @@
-import { AppDispatch } from '../redux/store';
-import { importSkillset, exportSkillset, saveSkillset, undo, redo } from '../redux/slices/skillsetSlice';
-import { setViewMode, setIsManualModalOpen } from '../redux/slices/viewSlice';
+import store, { AppDispatch } from '../redux/store';
+import { importSkillset, exportSkillset, saveSkillset, undo, redo, setSkillsetNodeById } from '../redux/slices/skillsetSlice';
+import { setViewMode, setIsManualModalOpen, selectViewMode, selectPrevViewBeforeNote } from '../redux/slices/viewSlice';
+import { undo as noteUndo, redo as noteRedo } from '../redux/slices/noteSlice';
 import { MenuProps } from 'antd';
 import MenuItem from '../components/MenuItem';
+import { selectNoteViewNode } from '../redux/slices/noteSlice';
 
 interface Actions {
   [key: string]: {
@@ -14,7 +16,16 @@ interface Actions {
 const actions: Actions = {
   import: {
     shortcuts: ["ctrl+o"],
-    exec: (dispatch: AppDispatch) => dispatch(importSkillset())
+    exec: async (dispatch: AppDispatch) => {
+      await dispatch(importSkillset());
+
+      // quits note if view mode is note
+      const viewMode = selectViewMode(store.getState());
+      if (viewMode == 'note') {
+        const prevView = selectPrevViewBeforeNote(store.getState());
+        dispatch(setViewMode(prevView));
+      }
+    }
   },
   export: {
     shortcuts: ["ctrl+e"],
@@ -22,15 +33,43 @@ const actions: Actions = {
   },
   save: {
     shortcuts: ["ctrl+s"],
-    exec: (dispatch: AppDispatch) => dispatch(saveSkillset())
+    exec: (dispatch: AppDispatch) => {
+      const viewMode = selectViewMode(store.getState());
+
+      // saves note node to tree if in note
+      if (viewMode == 'note') {
+        const newNode = selectNoteViewNode(store.getState());
+        const prevView = selectPrevViewBeforeNote(store.getState());
+        dispatch(setSkillsetNodeById(newNode));
+        dispatch(setViewMode(prevView));
+      }
+
+      dispatch(saveSkillset());
+    }
   },
   undo: {
     shortcuts: ["ctrl+z"],
-    exec: (dispatch: AppDispatch) => dispatch(undo())
+    exec: (dispatch: AppDispatch) => {
+      const viewMode = selectViewMode(store.getState());
+
+      if (viewMode == 'note') {
+        dispatch(noteUndo());
+      } else {
+        dispatch(undo());
+      }
+    }
   },
   redo: {
     shortcuts: ["ctrl+shift+z", "ctrl+y"],
-    exec: (dispatch: AppDispatch) => dispatch(redo())
+    exec: (dispatch: AppDispatch) => {
+      const viewMode = selectViewMode(store.getState());
+
+      if (viewMode == 'note') {
+        dispatch(noteRedo());
+      } else {
+        dispatch(redo());
+      }
+    }
   },
   reset: {
     shortcuts: ["ctrl+r"],

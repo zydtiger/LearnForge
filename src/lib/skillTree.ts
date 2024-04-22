@@ -1,36 +1,19 @@
-import { RawNodeDatum, TreeNodeDatum } from "react-d3-tree";
+import { RawNodeDatum } from "react-d3-tree";
 
-/**
- * Generates raw tree from tree.
- * @param currentNode current tree node to convert
- * @returns converted raw node
- */
-function convertToRaw(currentNode: TreeNodeDatum): RawNodeDatum {
-  const node: RawNodeDatum = {
-    name: currentNode.name,
-    progressPercent: currentNode.progressPercent
-  };
-
-  if (currentNode.children) {
-    node.children = currentNode.children.map((val) => convertToRaw(val));
-  }
-
-  return node;
-}
 
 /**
    * Finds the target node in the designated subtree.
    * @param currentNode root node of current subtree
-   * @param targetNode target node to find
+   * @param targetId target id to find
    * @returns node if found, null if not found
    */
-function findNodeInTree(currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): TreeNodeDatum | null {
-  if (currentNode.__rd3t.id == targetNode.__rd3t.id) {
+function findNodeInTree(currentNode: RawNodeDatum, targetId: string): RawNodeDatum | null {
+  if (currentNode.id == targetId) {
     return currentNode;
   }
   if (currentNode.children) {
     for (let child of currentNode.children) {
-      const res = findNodeInTree(child, targetNode);
+      const res = findNodeInTree(child, targetId);
       if (res) return res;
     }
   }
@@ -40,16 +23,16 @@ function findNodeInTree(currentNode: TreeNodeDatum, targetNode: TreeNodeDatum): 
 /**
  * Finds the siblings of target node.
  * @param siblings current siblings to look at
- * @param targetNode node to search for
+ * @param targetId target id to search for
  * @returns [siblings, index]
  */
-function findNodeInSiblings(siblings: TreeNodeDatum[], targetNode: TreeNodeDatum): [TreeNodeDatum[], number] | null {
+function findNodeInSiblings(siblings: RawNodeDatum[], targetId: string): [RawNodeDatum[], number] | null {
   for (let i = 0; i < siblings.length; i++) {
-    if (siblings[i].__rd3t.id == targetNode.__rd3t.id) {
+    if (siblings[i].id == targetId) {
       return [siblings, i];
     }
     if (siblings[i].children) {
-      const res = findNodeInSiblings(siblings[i].children!, targetNode);
+      const res = findNodeInSiblings(siblings[i].children!, targetId);
       if (res) return res;
     }
   }
@@ -60,7 +43,7 @@ function findNodeInSiblings(siblings: TreeNodeDatum[], targetNode: TreeNodeDatum
  * Updates percentages at node by calling
  * the recursive inner function.
  */
-function updatePercentages(nodeDatum: TreeNodeDatum) {
+function updatePercentages(nodeDatum: RawNodeDatum) {
   const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
     if (nodeDatum.children && nodeDatum.children.length != 0) { // if NOT leaf node
       const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
@@ -73,4 +56,4 @@ function updatePercentages(nodeDatum: TreeNodeDatum) {
   generatePercentagesAtNode(nodeDatum);
 }
 
-export { convertToRaw, findNodeInTree, findNodeInSiblings, updatePercentages };
+export { findNodeInTree, findNodeInSiblings, updatePercentages };

@@ -4,8 +4,10 @@ import { TreeDataNode } from "antd";
 /* Augment the node datum to contain progress percentage */
 declare module 'react-d3-tree' {
   export interface RawNodeDatum {
+    id: string;
     name: string;
     progressPercent: number;
+    mdNote?: string,
     attributes?: Record<string, string | number | boolean>;
     children?: RawNodeDatum[];
   }
@@ -13,7 +15,9 @@ declare module 'react-d3-tree' {
 
 /* Augment the data node to contain extra information for regeneration */
 export type SkillListDataNode = TreeDataNode & {
+  id: string;
   name: string;
   progressPercent: number;
+  mdNote?: string,
   children?: SkillListDataNode[];
 };

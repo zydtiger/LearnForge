@@ -1,54 +1,53 @@
 {
-  "name": "Skillset",
-  "children": [
-    {
-      "name": "Software",
-      "children": [
-        {
-          "name": "Website",
-          "children": [
-            {
-              "name": "Nginx",
-              "progressPercent": 80
-            },
-            {
-              "name": "React",
-              "progressPercent": 90
-            }
-          ],
-          "progressPercent": 85
-        },
-        {
-          "name": "Utilities",
-          "children": [
-            {
-              "name": "Docker",
-              "progressPercent": 60
-            },
-            {
-              "name": "Git",
-              "progressPercent": 100
-            }
-          ],
-          "progressPercent": 80
-        }
-      ],
-      "progressPercent": 82.5
-    },
-    {
-      "name": "Hardware",
-      "children": [
-        {
-          "name": "ESP32",
-          "progressPercent": 50
-        },
-        {
-          "name": "STM32",
-          "progressPercent": 30
-        }
-      ],
-      "progressPercent": 40
-    }
-  ],
-  "progressPercent": 56.25
+  "data": {
+    "name": "Skillset",
+    "children": [{
+        "name": "Software",
+        "children": [{
+            "name": "Website",
+            "children": [{
+                "name": "Nginx",
+                "progressPercent": 80
+              },
+              {
+                "name": "React",
+                "progressPercent": 90
+              }
+            ],
+            "progressPercent": 85
+          },
+          {
+            "name": "Utilities",
+            "children": [{
+                "name": "Docker",
+                "progressPercent": 60
+              },
+              {
+                "name": "Git",
+                "progressPercent": 100
+              }
+            ],
+            "progressPercent": 80
+          }
+        ],
+        "progressPercent": 82.5
+      },
+      {
+        "name": "Hardware",
+        "children": [{
+            "name": "ESP32",
+            "progressPercent": 50
+          },
+          {
+            "name": "STM32",
+            "progressPercent": 30
+          }
+        ],
+        "progressPercent": 40
+      }
+    ],
+    "progressPercent": 56.25
+  },
+  "isInitialBoot": false,
+  "lastSaveTime": "2024-04-20T22:04:03.884Z"
 }

@@ -1,15 +1,16 @@
 // external imports
 import { useEffect } from 'react';
 import { Flex, Spin } from 'antd';
-import { UnorderedListOutlined, SisternodeOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, SisternodeOutlined, FormOutlined } from '@ant-design/icons';
 
 // component imports
 import SkillTree from './components/SkillTree';
 import SkillList from './components/SkillList';
+import SkillNote from './components/SkillNote';
 import ManualModal from './components/ManualModal';
 import AppMenu from './components/AppMenu';
-import GlobalContextMenu from './components/GlobalContextMenu';
-import GlobalBtns from './components/GlobalBtns';
+import AppContextMenu from './components/AppContextMenu';
+import SkillBtns from './components/SkillBtns';
 
 // redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
@@ -46,6 +47,10 @@ function App() {
     list: {
       Icon: <SisternodeOutlined />,
       Component: <SkillList data={skillset} />
+    },
+    note: {
+      Icon: <FormOutlined />,
+      Component: <SkillNote />
     }
   };
 
@@ -79,27 +84,34 @@ function App() {
       {/* Manual Modal */}
       <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
 
-      {/* Core view port */}
-      <GlobalContextMenu>
-        <div className='viewport' style={{ width: '100%', height: '100%' }}>
-          {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
-          <div className="tree" hidden={viewMode != 'tree'} style={{ width: '100%', height: '100%' }}>
-            {ports.tree.Component}
+      <AppContextMenu>
+        {/* Skillset view port */}
+        <div className='main viewport'>
+          <div className="viewport" hidden={viewMode != 'tree' && viewMode != 'list'}>
+            {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
+            <div className="tree viewport" hidden={viewMode != 'tree'}>
+              {ports.tree.Component}
+            </div>
+            <div className="list viewport" hidden={viewMode != 'list'}>
+              {ports.list.Component}
+            </div>
+
+            {/* Functional Btns */}
+            <SkillBtns
+              toggleViewBtn={{
+                tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
+                Icon: ports[viewMode].Icon,
+              }}
+              onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
+            />
           </div>
-          <div className="list" hidden={viewMode != 'list'} style={{ width: '100%', height: '100%' }}>
-            {ports.list.Component}
+
+          {/* Note view port */}
+          <div className="note viewport" hidden={viewMode != 'note'}>
+            {ports.note.Component}
           </div>
         </div>
-      </GlobalContextMenu>
-
-      {/* Global Functional Btns */}
-      <GlobalBtns
-        toggleViewBtn={{
-          tooltip: "Toggle " + (viewMode == 'tree' ? "List View" : "Tree View"),
-          Icon: ports[viewMode].Icon,
-        }}
-        onToggleView={() => dispatch(setViewMode(viewMode == 'tree' ? 'list' : 'tree'))}
-      />
+      </AppContextMenu>
     </div>
   );
 }

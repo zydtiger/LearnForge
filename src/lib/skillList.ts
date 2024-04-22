@@ -35,9 +35,14 @@ function convertToListDataRecursive(
     }),
 
     // stores name and progress for regeneration
+    id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
   };
+
+  if (currentNode.mdNote) {
+    node.mdNote = currentNode.mdNote;
+  }
 
   if (currentNode.children) {
     node.children = currentNode.children.map((val, index) => convertToListDataRecursive(val, key, index, onChange, keysCollect));
@@ -68,9 +73,14 @@ function convertToListData(
  */
 function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
   const node: RawNodeDatum = {
+    id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
   };
+
+  if (currentNode.mdNote) {
+    node.mdNote = currentNode.mdNote;
+  }
 
   if (currentNode.children) {
     node.children = currentNode.children.map((val: SkillListDataNode) => convertToTreeData(val));

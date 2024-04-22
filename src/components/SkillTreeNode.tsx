@@ -16,7 +16,12 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
   const isCollapsed = nodeDatum.__rd3t.collapsed;
 
   return (
-    <g>
+    <g onClick={(event) => {
+      if (event.detail == 2) { // this means a double click on the node
+        event.type = 'triggerNote';
+        setTimeout(() => onNodeClick(event)); // solves node rendering error by queueing
+      }
+    }}>
       {/* Background */}
       <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="white" stroke="none" />
 

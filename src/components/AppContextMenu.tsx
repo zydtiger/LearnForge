@@ -42,7 +42,7 @@ const items: MenuProps['items'] = [
   }
 ];
 
-function GlobalContextMenu(props: React.PropsWithChildren) {
+function SkillContextMenu(props: React.PropsWithChildren) {
   const dispatch = useAppDispatch();
 
   return (
@@ -58,4 +58,4 @@ function GlobalContextMenu(props: React.PropsWithChildren) {
   );
 }
 
-export default GlobalContextMenu;
+export default SkillContextMenu;

@@ -9,8 +9,10 @@ import {
   getStorageImportEndpoint
 } from "../../constants/endpoints";
 import { DefaultRootNode } from "../../types/defaults";
-import { MaxHistoryLength } from "../../constants/vars";
 import { openDialog, saveDialog } from '../../lib/dialogs';
+import { nanoid } from 'nanoid';
+import { EditHistory } from '../../lib/editHistory';
+import { findNodeInTree } from '../../lib/skillTree';
 
 interface SkillsetState {
   data: RawNodeDatum;         // skillset data
@@ -20,10 +22,6 @@ interface SkillsetState {
   // fields below should not be persisted
   isFirstTimeLoading: boolean;// whether to show loading page
   isSaved: boolean;           // whether the current state is persisted
-  history: RawNodeDatum[];    // historical states, length constrained by MaxHistoryLength
-  historyIndex: number;       // index of currently used historical state
-  isUndoable: boolean;        // whether the undo btn should highlight
-  isRedoable: boolean;        // whether the redo btn should highlight
 }
 
 const initialState: SkillsetState = {
@@ -32,10 +30,6 @@ const initialState: SkillsetState = {
   lastSaveTime: new Date().toISOString(),
   isFirstTimeLoading: true,
   isSaved: true,
-  history: [],
-  historyIndex: 0,
-  isUndoable: false,
-  isRedoable: false,
 };
 
 /**
@@ -56,6 +50,20 @@ const unwrapState = (state: unknown) => {
 const writeState = async (state: SkillsetState, callback: () => void) => {
   await invoke(getStorageWriteEndpoint(), { state });
   callback();
+};
+
+const generateIds = (state: SkillsetState) => {
+  const generateIdsRecursive = (node: RawNodeDatum, isRoot: boolean) => {
+    if (!node.id) { // assigns node.id only when it does not exist
+      node.id = isRoot ? 'root' : nanoid();
+    }
+    if (node.children) {
+      for (const child of node.children) {
+        generateIdsRecursive(child, false);
+      }
+    }
+  };
+  generateIdsRecursive(state.data, true);
 };
 
 /**
@@ -99,10 +107,14 @@ export const exportSkillset = createAsyncThunk(
  */
 export const importSkillset = createAsyncThunk(
   "skillset/importSkillset",
-  async (_, { dispatch }) => {
+  async (_, { getState, dispatch }) => {
     const filePath = await openDialog();
     await invoke(getStorageImportEndpoint(), { filePath });
-    dispatch(fetchSkillset());
+    await dispatch(fetchSkillset());
+
+    // push current state to history after import
+    const state = { ...unwrapState(getState()) };
+    history.push({ ...state.data });
   }
 );
 
@@ -111,10 +123,7 @@ const loadRawNodeDatum = (state: SkillsetState, payload: RawNodeDatum) => {
   state.isSaved = false;
 };
 
-const updateUndoRedoable = (state: SkillsetState) => {
-  state.isUndoable = (state.historyIndex != 0);
-  state.isRedoable = (state.historyIndex != state.history.length - 1);
-};
+const history = new EditHistory<RawNodeDatum>(); // edit history
 
 const skillsetSlice = createSlice({
   name: 'skillset',
@@ -125,38 +134,30 @@ const skillsetSlice = createSlice({
     // to decrease lag.
     setSkillset(state, action: PayloadAction<RawNodeDatum>) {
       loadRawNodeDatum(state, action.payload);
-      // in the middle of undo/redo chain
-      if (state.historyIndex != state.history.length - 1) {
-        state.history.splice(state.historyIndex + 1); // discards everything after
-      }
-      state.history.push({ ...state.data }); // pushes in state
-      state.historyIndex++; // points to current state
-      // maintains history to be smaller than max length
-      if (state.history.length > MaxHistoryLength) {
-        state.history.splice(0, 1);
-        state.historyIndex--;
-      }
-      updateUndoRedoable(state);
+      history.push({ ...state.data }); // pushes in state
+    },
+    setSkillsetNodeById(state, action: PayloadAction<RawNodeDatum>) {
+      const targetNode = findNodeInTree(state.data, action.payload.id)!;
+      Object.assign(targetNode, action.payload);
+      history.push({ ...state.data });
+      state.isSaved = false;
     },
     undo(state) {
-      if (state.historyIndex == 0) return;
-      state.historyIndex--;
-      loadRawNodeDatum(state, state.history[state.historyIndex]);
-      updateUndoRedoable(state);
+      history.undo();
+      loadRawNodeDatum(state, history.current()!);
     },
     redo(state) {
-      if (state.historyIndex == state.history.length - 1) return;
-      state.historyIndex++;
-      loadRawNodeDatum(state, state.history[state.historyIndex]);
-      updateUndoRedoable(state);
+      history.redo();
+      loadRawNodeDatum(state, history.current()!);
     }
   },
   extraReducers(builder) {
     builder
       .addCase(fetchSkillset.fulfilled, (state, action) => {
         Object.assign(state, action.payload);
-        if (state.history.length == 0) {
-          state.history.push({ ...state.data }); // init history
+        generateIds(state);
+        if (history.length() == 0) {
+          history.push({ ...state.data }); // init history
         }
         state.isFirstTimeLoading = false;
       })
@@ -169,14 +170,14 @@ const skillsetSlice = createSlice({
   }
 });
 
-export const { setSkillset, undo, redo } = skillsetSlice.actions;
+export const { setSkillset, setSkillsetNodeById, undo, redo } = skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
 export const selectIsInitialBoot = (state: RootState) => state.skillset.isInitialBoot;
 export const selectLastSaveTime = (state: RootState) => state.skillset.lastSaveTime;
 export const selectIsSaved = (state: RootState) => state.skillset.isSaved;
-export const selectIsUndoable = (state: RootState) => state.skillset.isUndoable;
-export const selectIsRedoable = (state: RootState) => state.skillset.isRedoable;
+export const selectIsUndoable = () => history.isUndoable();
+export const selectIsRedoable = () => history.isRedoable();
 export const selectIsFirstTimeLoading = (state: RootState) => state.skillset.isFirstTimeLoading;
 
 export default skillsetSlice.reducer;

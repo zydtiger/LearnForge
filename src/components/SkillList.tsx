@@ -1,5 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
+import { setViewMode } from '../redux/slices/viewSlice';
+import { setNoteViewNode } from '../redux/slices/noteSlice';
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
@@ -43,7 +45,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       case 'addNode':
         node.children = node.children || [];
         const insertIndex = node.children.length;
-        const defaultRawNode = { ...DefaultNode };
+        const defaultRawNode = DefaultNode();
         if (insertIndex == 0) { // if inserting as first child, inherit progress set in parent
           defaultRawNode.progressPercent = node.progressPercent;
         }
@@ -52,6 +54,11 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         node.children.push(defaultNode);
         isUpdatePercentNeeded = true;
         break;
+
+      case 'triggerNote':
+        dispatch(setNoteViewNode(convertToTreeData(node)));
+        dispatch(setViewMode('note'));
+        return; // skip store updating
 
       default:
         break;
