@@ -13,7 +13,12 @@ interface Actions {
   };
 }
 
+// define actions, this will automatically show in manual modal
 const actions: Actions = {
+  find: {
+    shortcuts: ["ctrl+f"],
+    exec: (_dispatch: AppDispatch) => { } // don't do anything as default behavior is what we need
+  },
   import: {
     shortcuts: ["ctrl+o"],
     exec: async (dispatch: AppDispatch) => {
