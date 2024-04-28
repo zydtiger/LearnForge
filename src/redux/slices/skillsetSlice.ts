@@ -11,7 +11,7 @@ import { DefaultRootNode } from "../../types/defaults";
 import { openDialog, saveDialog } from '../../lib/dialogs';
 import { nanoid } from 'nanoid';
 import { EditHistory } from '../../lib/editHistory';
-import { findNodeInTree } from '../../lib/skillTree';
+import { findNode } from '../../lib/skillset';
 import { SkillsetRawNode } from "../../types";
 
 interface SkillsetState {
@@ -137,7 +137,7 @@ const skillsetSlice = createSlice({
       history.push({ ...state.data }); // pushes in state
     },
     setSkillsetNodeById(state, action: PayloadAction<SkillsetRawNode>) {
-      const targetNode = findNodeInTree(state.data, action.payload.id)!;
+      const targetNode = findNode(state.data, action.payload.id)!;
       Object.assign(targetNode, action.payload);
       history.push({ ...state.data });
       state.isSaved = false;

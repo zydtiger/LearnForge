@@ -1,5 +1,4 @@
-import Tree, { RawNodeDatum, TreeNodeDatum } from "react-d3-tree";
-import { findNodeInTree } from "../lib/skillTree";
+import Tree, { TreeNodeDatum } from "react-d3-tree";
 
 interface CollapseState {
   collapsed: boolean;
@@ -26,11 +25,30 @@ class SkillTreeInner extends Tree {
   }
 
   /**
+   * Finds the target node in the designated subtree.
+   * @param currentNode root node of current subtree
+   * @param targetId target id to find
+   * @returns node if found, null if not found
+   */
+  findNodeInTree(currentNode: TreeNodeDatum, targetId: string): TreeNodeDatum | null {
+    if (currentNode.__rd3t.id == targetId) {
+      return currentNode;
+    }
+    if (currentNode.children) {
+      for (let child of currentNode.children) {
+        const res = this.findNodeInTree(child, targetId);
+        if (res) return res;
+      }
+    }
+    return null;
+  }
+
+  /**
    * Handles the toggle node event.
    */
-  handleToggleNode(node: RawNodeDatum) {
+  handleToggleNode(node: TreeNodeDatum) {
     const dataClone = [...this.state.data];
-    const nodeDatum = findNodeInTree(dataClone[0], node.id) as TreeNodeDatum;
+    const nodeDatum = this.findNodeInTree(dataClone[0], node.__rd3t.id)!;
 
     if (nodeDatum.__rd3t.collapsed) {
       SkillTreeInner.expandNode(nodeDatum);

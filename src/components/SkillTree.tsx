@@ -1,90 +1,52 @@
 import { Ref, useRef } from "react";
-import { useAppDispatch } from "../redux/hooks";
-import { setViewMode } from '../redux/slices/viewSlice';
-import { setNoteViewNode } from '../redux/slices/noteSlice';
-import { setSkillset } from "../redux/slices/skillsetSlice";
-import { pushMessage } from "../redux/slices/messageSlice";
 import { RawNodeDatum, Point, TreeProps } from "react-d3-tree";
 import { FloatButton } from "antd";
 import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
 import SkillTreeNode from "./SkillTreeNode";
-import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
-import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
+import { handleNodeChange } from "../lib/skillset";
 
 function SkillTree({ data }: { data: RawNodeDatum; }) {
-  const dispatch = useAppDispatch();
   const tree: Ref<SkillTreeInner> = useRef(null);
 
   const initialZoom = 0.8;
   const initialTranslate: Point = { x: 200, y: window.innerHeight / 2 };
 
   const handleOnNodeClick: TreeProps['onNodeClick'] = (node, event) => {
-    const dataClone = JSON.parse(JSON.stringify(data)); // deep clone through JSON
-    const nodeDatum = findNodeInTree(dataClone, node.data.id)!;
-
     switch (event.type) {
       case 'toggleNode':
-        tree.current!.handleToggleNode(nodeDatum);
-        return; // skip store updating
-
-      case 'changePercent':
-        nodeDatum.progressPercent = Number((event.target as HTMLInputElement).value);
-        updatePercentages(dataClone); // triggers update cascade
+        tree.current!.handleToggleNode(node.data);
         break;
 
       case 'changeName':
-        nodeDatum.name = (event.target as HTMLInputElement).value;
-        break;
-
+      case 'changePercent':
       case 'addNode':
-        nodeDatum.children = nodeDatum.children || []; // in case the children is null
-        const defaultNode = DefaultNode(); // get default node
-        // inherit progress percent from parent if adding to a leaf node
-        if (nodeDatum.children.length == 0) {
-          defaultNode.progressPercent = nodeDatum.progressPercent;
-        }
-        nodeDatum.children.push(defaultNode);
-        updatePercentages(dataClone);
-        break;
-
       case 'deleteNode':
-        const [siblings, index] = findNodeInSiblings([dataClone], nodeDatum.id)!;
-        siblings.splice(index, 1);
-        updatePercentages(dataClone);
-        dispatch(pushMessage({
-          type: 'success',
-          content: 'Successfully deleted node!'
-        }))
-        break;
-
       case 'clear':
-        Object.assign(dataClone, DefaultRootNode);
-        dataClone.children = []; // manual override
-        dispatch(pushMessage({
-          type: 'success',
-          content: 'Successfully cleared tree!'
-        }))
-        break;
-
       case 'triggerNote':
-        dispatch(setNoteViewNode(nodeDatum));
-        dispatch(setViewMode('note'));
-        return; // skip store updating
+        let oldCollapseState: any;
+        handleNodeChange(
+          node.data.id,
+          event.type,
+          (event.target as HTMLInputElement).value, // this will automatically be undefined for actions like deleteNode
+          // preupdate
+          () => {
+            oldCollapseState = tree.current!.geteCollapseState();
+            tree.current!.setFrozen(true); // freeze rendering before update finished
+          },
+          // postupdate
+          () => {
+            setTimeout(() => {
+              tree.current!.setCollapseState(oldCollapseState);
+              tree.current!.setFrozen(false); // allow rendering to continue
+            });
+          });
+        break;
 
       default:
         break;
     }
-
-    // update redux store
-    const oldCollapseState = tree.current!.geteCollapseState();
-    tree.current!.setFrozen(true); // freeze rendering before update finished
-    dispatch(setSkillset(dataClone));
-    setTimeout(() => {
-      tree.current!.setCollapseState(oldCollapseState);
-      tree.current!.setFrozen(false); // allow rendering to continue
-    });
   };
 
   return (
