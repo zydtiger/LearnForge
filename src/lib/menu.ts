@@ -1,4 +1,4 @@
-import store, { AppDispatch } from '../redux/store';
+import store from '../redux/store';
 import { importSkillset, exportSkillset, saveSkillset, undo, redo, setSkillsetNodeById } from '../redux/slices/skillsetSlice';
 import { setViewMode, setIsManualModalOpen, selectViewMode, selectPrevViewBeforeNote } from '../redux/slices/viewSlice';
 import { undo as noteUndo, redo as noteRedo } from '../redux/slices/noteSlice';
@@ -9,7 +9,7 @@ import { selectNoteViewNode } from '../redux/slices/noteSlice';
 interface Actions {
   [key: string]: {
     shortcuts: string[],
-    exec: (dispatch: AppDispatch) => void;
+    exec: () => void;
   };
 }
 
@@ -17,80 +17,80 @@ interface Actions {
 const actions: Actions = {
   find: {
     shortcuts: ["ctrl+f"],
-    exec: (_dispatch: AppDispatch) => { } // don't do anything as default behavior is what we need
+    exec: () => { } // don't do anything as default behavior is what we need
   },
   import: {
     shortcuts: ["ctrl+o"],
-    exec: async (dispatch: AppDispatch) => {
-      await dispatch(importSkillset());
+    exec: async () => {
+      await store.dispatch(importSkillset());
 
       // quits note if view mode is note
       const viewMode = selectViewMode(store.getState());
       if (viewMode == 'note') {
         const prevView = selectPrevViewBeforeNote(store.getState());
-        dispatch(setViewMode(prevView));
+        store.dispatch(setViewMode(prevView));
       }
     }
   },
   export: {
     shortcuts: ["ctrl+e"],
-    exec: (dispatch: AppDispatch) => dispatch(exportSkillset())
+    exec: () => store.dispatch(exportSkillset())
   },
   save: {
     shortcuts: ["ctrl+s"],
-    exec: (dispatch: AppDispatch) => {
+    exec: () => {
       const viewMode = selectViewMode(store.getState());
 
       // saves note node to tree if in note
       if (viewMode == 'note') {
         const newNode = selectNoteViewNode(store.getState());
         const prevView = selectPrevViewBeforeNote(store.getState());
-        dispatch(setSkillsetNodeById(newNode));
-        dispatch(setViewMode(prevView));
+        store.dispatch(setSkillsetNodeById(newNode));
+        store.dispatch(setViewMode(prevView));
       }
 
-      dispatch(saveSkillset());
+      store.dispatch(saveSkillset());
     }
   },
   undo: {
     shortcuts: ["ctrl+z"],
-    exec: (dispatch: AppDispatch) => {
+    exec: () => {
       const viewMode = selectViewMode(store.getState());
 
       if (viewMode == 'note') {
-        dispatch(noteUndo());
+        store.dispatch(noteUndo());
       } else {
-        dispatch(undo());
+        store.dispatch(undo());
       }
     }
   },
   redo: {
     shortcuts: ["ctrl+shift+z", "ctrl+y"],
-    exec: (dispatch: AppDispatch) => {
+    exec: () => {
       const viewMode = selectViewMode(store.getState());
 
       if (viewMode == 'note') {
-        dispatch(noteRedo());
+        store.dispatch(noteRedo());
       } else {
-        dispatch(redo());
+        store.dispatch(redo());
       }
     }
   },
   reset: {
     shortcuts: ["ctrl+r"],
-    exec: (_dispatch: AppDispatch) => window.location.reload()
+    exec: () => window.location.reload()
   },
   tree: {
     shortcuts: ["ctrl+t"],
-    exec: (dispatch: AppDispatch) => dispatch(setViewMode('tree'))
+    exec: () => store.dispatch(setViewMode('tree'))
   },
   list: {
     shortcuts: ["ctrl+l"],
-    exec: (dispatch: AppDispatch) => dispatch(setViewMode('list'))
+    exec: () => store.dispatch(setViewMode('list'))
   },
   help: {
     shortcuts: ["ctrl+h"],
-    exec: (dispatch: AppDispatch) => dispatch(setIsManualModalOpen(true))
+    exec: () => store.dispatch(setIsManualModalOpen(true))
   }
 };
 
@@ -131,7 +131,7 @@ function convertToPlatformShortcuts(shortcuts: string[]): string[] {
 /**
  * Binds shortcuts to events.
  */
-function bindShortcuts(dispatch: AppDispatch) {
+function bindShortcuts() {
   window.onkeydown = (event) => {
     const modifier = window.navigator.userAgent.indexOf('Mac') != -1 ? event.metaKey : event.ctrlKey;
     if (!modifier) return;
@@ -141,7 +141,7 @@ function bindShortcuts(dispatch: AppDispatch) {
         const shortcutKeys = shortcut.split('+');
         let targetKey = shortcutKeys[1] == 'shift' ? shortcutKeys[2].toUpperCase() : shortcutKeys[1];
         if (event.key == targetKey) {
-          action.exec(dispatch);
+          action.exec();
           return;
         }
       }
@@ -154,8 +154,8 @@ function bindShortcuts(dispatch: AppDispatch) {
  * @param key the action key to invoke
  * @param dispatch the redux dispatch hook to use
  */
-function invokeAction(key: string, dispatch: AppDispatch) {
-  if (key in actions) actions[key].exec(dispatch);
+function invokeAction(key: string) {
+  if (key in actions) actions[key].exec();
   else console.error('Invoked a non-existing action!');
 }
 
