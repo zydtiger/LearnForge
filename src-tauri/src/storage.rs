@@ -10,7 +10,7 @@ use tauri::{
 };
 
 #[derive(Debug, Serialize, Deserialize)]
-struct RawNodeDatum {
+struct SkillsetRawNode {
     id: Option<String>, // uses Option so None is default value
     name: String,
     #[serde(rename = "progressPercent")]
@@ -18,12 +18,12 @@ struct RawNodeDatum {
     #[serde(rename = "mdNote")]
     md_note: Option<String>,
     attributes: Option<HashMap<String, serde_json::Value>>,
-    children: Option<Vec<RawNodeDatum>>,
+    children: Option<Vec<SkillsetRawNode>>,
 }
 
-impl Default for RawNodeDatum {
+impl Default for SkillsetRawNode {
     fn default() -> Self {
-        RawNodeDatum {
+        SkillsetRawNode {
             id: None,
             name: "Root".into(),
             progress_percent: 0.0,
@@ -36,7 +36,7 @@ impl Default for RawNodeDatum {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct SkillsetState {
-    data: RawNodeDatum,
+    data: SkillsetRawNode,
     #[serde(rename = "isInitialBoot")]
     is_initial_boot: bool,
     #[serde(rename = "lastSaveTime")]
@@ -46,7 +46,7 @@ struct SkillsetState {
 impl Default for SkillsetState {
     fn default() -> Self {
         SkillsetState {
-            data: RawNodeDatum::default(),
+            data: SkillsetRawNode::default(),
             is_initial_boot: true,
             last_save_time: Local::now().to_rfc3339(), // ISO 8601 format
         }

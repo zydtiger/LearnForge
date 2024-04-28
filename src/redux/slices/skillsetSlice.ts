@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { RawNodeDatum } from "react-d3-tree";
 import { invoke } from "@tauri-apps/api";
 import {
   getStorageReadEndpoint,
@@ -13,9 +12,10 @@ import { openDialog, saveDialog } from '../../lib/dialogs';
 import { nanoid } from 'nanoid';
 import { EditHistory } from '../../lib/editHistory';
 import { findNodeInTree } from '../../lib/skillTree';
+import { SkillsetRawNode } from "../../types";
 
 interface SkillsetState {
-  data: RawNodeDatum;         // skillset data
+  data: SkillsetRawNode;      // skillset data
   isInitialBoot: boolean;     // whether to show manual modal on app opening
   lastSaveTime: string;       // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
 
@@ -53,7 +53,7 @@ const writeState = async (state: SkillsetState, callback: () => void) => {
 };
 
 const generateIds = (state: SkillsetState) => {
-  const generateIdsRecursive = (node: RawNodeDatum, isRoot: boolean) => {
+  const generateIdsRecursive = (node: SkillsetRawNode, isRoot: boolean) => {
     if (!node.id) { // assigns node.id only when it does not exist
       node.id = isRoot ? 'root' : nanoid();
     }
@@ -118,12 +118,12 @@ export const importSkillset = createAsyncThunk(
   }
 );
 
-const loadRawNodeDatum = (state: SkillsetState, payload: RawNodeDatum) => {
+const loadData = (state: SkillsetState, payload: SkillsetRawNode) => {
   Object.assign(state.data, payload);
   state.isSaved = false;
 };
 
-const history = new EditHistory<RawNodeDatum>(); // edit history
+const history = new EditHistory<SkillsetRawNode>(); // edit history
 
 const skillsetSlice = createSlice({
   name: 'skillset',
@@ -132,11 +132,11 @@ const skillsetSlice = createSlice({
     // reducer is here to update state locally.
     // saving to the remote side will be processed at set intervals
     // to decrease lag.
-    setSkillset(state, action: PayloadAction<RawNodeDatum>) {
-      loadRawNodeDatum(state, action.payload);
+    setSkillset(state, action: PayloadAction<SkillsetRawNode>) {
+      loadData(state, action.payload);
       history.push({ ...state.data }); // pushes in state
     },
-    setSkillsetNodeById(state, action: PayloadAction<RawNodeDatum>) {
+    setSkillsetNodeById(state, action: PayloadAction<SkillsetRawNode>) {
       const targetNode = findNodeInTree(state.data, action.payload.id)!;
       Object.assign(targetNode, action.payload);
       history.push({ ...state.data });
@@ -144,11 +144,11 @@ const skillsetSlice = createSlice({
     },
     undo(state) {
       history.undo();
-      loadRawNodeDatum(state, history.current()!);
+      loadData(state, history.current()!);
     },
     redo(state) {
       history.redo();
-      loadRawNodeDatum(state, history.current()!);
+      loadData(state, history.current()!);
     }
   },
   extraReducers(builder) {
