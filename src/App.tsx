@@ -9,6 +9,7 @@ import SkillList from './components/SkillList';
 import SkillNote from './components/SkillNote';
 import ManualModal from './components/ManualModal';
 import AppMenu from './components/AppMenu';
+import AppMessage from './components/AppMessage';
 import AppContextMenu from './components/AppContextMenu';
 import SkillBtns from './components/SkillBtns';
 
@@ -82,6 +83,9 @@ function App() {
 
           {/* App Menu */}
           <AppMenu />
+
+          {/* App Message */}
+          <AppMessage />
 
           {/* Manual Modal */}
           <ManualModal isModalOpen={isManualModalOpen || isInitialBoot} closeModal={closeModal} />
