@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
 import { setViewMode } from '../redux/slices/viewSlice';
 import { setNoteViewNode } from '../redux/slices/noteSlice';
+import { pushMessage } from "../redux/slices/messageSlice";
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
@@ -34,12 +35,20 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       case 'deleteNode':
         siblings.splice(index, 1);
         isUpdatePercentNeeded = true;
+        dispatch(pushMessage({
+          type: 'success',
+          content: 'Successfully deleted node!'
+        }))
         break;
 
       case 'clear':
         listDataClone = convertToListData(DefaultRootNode, handleOnChange, keysCollect);
         setExpandedKeys(keysCollect);
         listDataClone[0].children = []; // manual override
+        dispatch(pushMessage({
+          type: 'success',
+          content: 'Successfully cleared tree!'
+        }))
         break;
 
       case 'addNode':

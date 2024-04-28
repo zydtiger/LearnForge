@@ -1,16 +1,17 @@
 import { Ref, useRef } from "react";
 import { useAppDispatch } from "../redux/hooks";
+import { setViewMode } from '../redux/slices/viewSlice';
+import { setNoteViewNode } from '../redux/slices/noteSlice';
 import { setSkillset } from "../redux/slices/skillsetSlice";
+import { pushMessage } from "../redux/slices/messageSlice";
 import { RawNodeDatum, Point, TreeProps } from "react-d3-tree";
 import { FloatButton } from "antd";
 import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
 import SkillTreeNode from "./SkillTreeNode";
+import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
 import { findNodeInTree, findNodeInSiblings, updatePercentages } from "../lib/skillTree";
-import { DefaultNode, DefaultRootNode } from "../types/defaults";
-import { setViewMode } from '../redux/slices/viewSlice';
-import { setNoteViewNode } from '../redux/slices/noteSlice';
 
 function SkillTree({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
@@ -52,11 +53,19 @@ function SkillTree({ data }: { data: RawNodeDatum; }) {
         const [siblings, index] = findNodeInSiblings([dataClone], nodeDatum.id)!;
         siblings.splice(index, 1);
         updatePercentages(dataClone);
+        dispatch(pushMessage({
+          type: 'success',
+          content: 'Successfully deleted node!'
+        }))
         break;
 
       case 'clear':
         Object.assign(dataClone, DefaultRootNode);
         dataClone.children = []; // manual override
+        dispatch(pushMessage({
+          type: 'success',
+          content: 'Successfully cleared tree!'
+        }))
         break;
 
       case 'triggerNote':
