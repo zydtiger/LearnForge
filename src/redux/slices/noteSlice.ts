@@ -10,7 +10,7 @@ interface NoteState {
 }
 
 const initialState: NoteState = {
-  noteViewNode: DefaultRootNode,
+  noteViewNode: DefaultRootNode(),
   isNoteSaved: true,
 };
 

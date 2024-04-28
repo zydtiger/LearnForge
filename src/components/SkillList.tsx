@@ -42,7 +42,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
         break;
 
       case 'clear':
-        listDataClone = convertToListData(DefaultRootNode, handleOnChange, keysCollect);
+        listDataClone = convertToListData(DefaultRootNode(), handleOnChange, keysCollect);
         setExpandedKeys(keysCollect);
         listDataClone[0].children = []; // manual override
         dispatch(pushMessage({

@@ -7,8 +7,8 @@ export const DefaultNode = (): SkillsetRawNode => ({
   progressPercent: 0
 });
 
-export const DefaultRootNode: SkillsetRawNode = {
+export const DefaultRootNode = (): SkillsetRawNode => ({
   id: 'root',
   name: 'Root',
   progressPercent: 0
-};
+});

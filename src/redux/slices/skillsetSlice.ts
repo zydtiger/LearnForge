@@ -25,7 +25,7 @@ interface SkillsetState {
 }
 
 const initialState: SkillsetState = {
-  data: DefaultRootNode,
+  data: DefaultRootNode(),
   isInitialBoot: false,
   lastSaveTime: new Date().toISOString(),
   isFirstTimeLoading: true,
