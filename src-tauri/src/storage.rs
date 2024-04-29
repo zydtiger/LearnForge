@@ -2,7 +2,6 @@ use crate::error::Error;
 use chrono::Local;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::io::prelude::*;
 use std::{fs, io, path};
 use tauri::{
     plugin::{Builder, TauriPlugin},
@@ -85,10 +84,8 @@ fn resolve_data_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathB
 /// # Errors
 ///
 /// 1. Resolve data file path failed
-/// 2. `File::create` failed when data file does not exist
-/// 3. `write_all` failed when filling new data file with default
-/// 4. `File::open` failed when opening data file for read
-/// 5. `read_to_string` failed when reading
+/// 2. `write` failed when filling new data file with default
+/// 3. `read_to_string` failed when reading data file
 ///
 /// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 ///
@@ -97,16 +94,12 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<SkillsetState, Error> {
     let data_file = resolve_data_file(app_handle)?;
 
     if !data_file.exists() {
-        let mut file = fs::File::create(&data_file)?;
         let default = serde_json::to_string(&SkillsetState::default())?;
-        file.write_all(default.as_bytes())?;
+        fs::write(&data_file, default)?;
     }
 
-    let mut contents = String::new();
-    let mut file = fs::File::open(&data_file)?;
-    file.read_to_string(&mut contents)?;
-
-    Ok(serde_json::from_str(&contents)?)
+    let content = fs::read_to_string(&data_file)?;
+    Ok(serde_json::from_str(&content)?)
 }
 
 /// Handles writing to data file with frontend data.
@@ -114,15 +107,13 @@ fn read<R: Runtime>(app_handle: AppHandle<R>) -> Result<SkillsetState, Error> {
 /// # Errors
 ///
 /// 1. Resolve data file path failed
-/// 2. `File::create` failed when opening data file for write
-/// 3. `write_all` failed when filling data file with `content`
+/// 2. `write` failed when filling data file with `content`
 ///
 #[tauri::command]
 fn write<R: Runtime>(app_handle: AppHandle<R>, state: SkillsetState) -> Result<(), Error> {
     let data_file = resolve_data_file(app_handle)?;
-    let mut file = fs::File::create(&data_file)?;
     let content = serde_json::to_string(&state)?;
-    file.write_all(content.as_bytes())?;
+    fs::write(&data_file, content)?;
     Ok(())
 }
 
@@ -132,11 +123,22 @@ fn write<R: Runtime>(app_handle: AppHandle<R>, state: SkillsetState) -> Result<(
 ///
 /// 1. Resolve data file path failed
 /// 2. `copy` failed when copying data file to path
+/// 3. `write` failed when filling target file with payload
 ///
 #[tauri::command]
-fn export<R: Runtime>(app_handle: AppHandle<R>, file_path: String) -> Result<(), Error> {
-    let data_file = resolve_data_file(app_handle)?;
-    fs::copy(data_file, file_path)?;
+fn export<R: Runtime>(
+    app_handle: AppHandle<R>,
+    file_path: String,
+    payload: Option<String>,
+) -> Result<(), Error> {
+    let parts: Vec<&str> = file_path.split('.').collect();
+    let extension = parts[parts.len() - 1];
+    if extension == "lf" {
+        let data_file = resolve_data_file(app_handle)?;
+        fs::copy(&data_file, &file_path)?;
+    } else {
+        fs::write(&file_path, payload.unwrap_or("".into()))?;
+    }
     Ok(())
 }
 
