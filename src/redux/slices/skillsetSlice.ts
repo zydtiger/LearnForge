@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { pushMessage } from './messageSlice';
 import { RawNodeDatum } from "react-d3-tree";
 import { invoke } from "@tauri-apps/api";
 import {
@@ -13,6 +14,7 @@ import { openDialog, saveDialog } from '../../lib/dialogs';
 import { nanoid } from 'nanoid';
 import { EditHistory } from '../../lib/editHistory';
 import { findNodeInTree } from '../../lib/skillTree';
+import { TreeSVGExport } from '../../lib/export';
 
 interface SkillsetState {
   data: RawNodeDatum;         // skillset data
@@ -98,7 +100,22 @@ export const exportSkillset = createAsyncThunk(
   async (_, { dispatch }) => {
     await dispatch(saveSkillset()); // saves the current workspace
     const filePath = await saveDialog();
-    invoke(getStorageExportEndpoint(), { filePath });
+    if (!filePath) return; // don't do anything if user cancels
+
+    const parts = filePath.split('.');
+    const extension = parts[parts.length - 1];
+
+    if (extension == 'lf') {
+      invoke(getStorageExportEndpoint(), { filePath });
+    } else if (extension == 'svg') {
+      const payload = TreeSVGExport();
+      invoke(getStorageExportEndpoint(), { filePath, payload });
+    } else {
+      dispatch(pushMessage({
+        type: 'error',
+        content: `Exporting to extension .${extension} is undefined`
+      }));
+    }
   }
 );
 

@@ -33,7 +33,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       />
 
       {/* Title */}
-      <foreignObject x={-width / 2 + 10} y={-height / 2 + 10} width={width - 30} height={60}>
+      <foreignObject className="title" x={-width / 2 + 10} y={-height / 2 + 10} width={width - 30} height={60}>
         <Flex align="center">
           <Tooltip title={nodeDatum.name}>
             <p style={{
@@ -51,7 +51,7 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       </foreignObject>
 
       {/* Percentage */}
-      <foreignObject x={width / 2 - 55} y={height / 2 - 30} width={50} height={20}>
+      <foreignObject className="percentage" x={width / 2 - 55} y={height / 2 - 30} width={50} height={20}>
         <Flex justify="flex-end" align="center">
           <p style={{ fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
           {/* Only allow percentage change if at leaf node */}
