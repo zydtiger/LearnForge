@@ -1,6 +1,5 @@
 import { Menu } from 'antd';
 import { FileFilled, EditFilled, EyeFilled, QuestionCircleOutlined } from '@ant-design/icons';
-import { useAppDispatch } from '../redux/hooks';
 import { bindShortcuts, convertMenuToDisplayMode, invokeAction } from '../lib/menu';
 
 // define menu items
@@ -72,12 +71,11 @@ const items = [
 ];
 
 function AppMenu() {
-  const dispatch = useAppDispatch();
-  bindShortcuts(dispatch);
+  bindShortcuts();
 
   return <Menu
     mode="horizontal"
-    onClick={({ key }) => invokeAction(key, dispatch)}
+    onClick={({ key }) => invokeAction(key)}
     selectable={false}
     items={convertMenuToDisplayMode(items)}
     style={{ lineHeight: '30px' }
