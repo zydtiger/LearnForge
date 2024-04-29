@@ -74,11 +74,11 @@ function convertToRawData(currentNode: SkillListDataNode): SkillsetRawNode {
 }
 
 /**
-   * Finds the target key in siblings recursively.
-   * @param siblings the current siblings set to look at
-   * @param key the target key to find
-   * @returns [siblings, index, node]
-   */
+ * Finds the target key in siblings recursively.
+ * @param siblings the current siblings set to look at
+ * @param key the target key to find
+ * @returns [siblings, index, node]
+ */
 function findListNode(siblings: SkillListDataNode[], key: React.Key): [SkillListDataNode[], number, SkillListDataNode] | null {
   for (let i = 0; i < siblings.length; i++) {
     if (siblings[i].key == key) {
