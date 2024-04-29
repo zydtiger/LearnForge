@@ -129,7 +129,7 @@ fn write<R: Runtime>(app_handle: AppHandle<R>, state: SkillsetState) -> Result<(
 fn export<R: Runtime>(
     app_handle: AppHandle<R>,
     file_path: String,
-    payload: Option<String>,
+    payload: Option<Vec<u8>>,
 ) -> Result<(), Error> {
     let parts: Vec<&str> = file_path.split('.').collect();
     let extension = parts[parts.len() - 1];
@@ -137,7 +137,7 @@ fn export<R: Runtime>(
         let data_file = resolve_data_file(app_handle)?;
         fs::copy(&data_file, &file_path)?;
     } else {
-        fs::write(&file_path, payload.unwrap_or("".into()))?;
+        fs::write(&file_path, payload.unwrap_or(b"".into()))?;
     }
     Ok(())
 }
