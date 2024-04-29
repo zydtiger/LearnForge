@@ -22,7 +22,7 @@ function convertToListDataRecursive(
   const key = parentKey + '-' + String(index);
   keysCollect.push(key);
 
-  const node: SkillListDataNode = {
+  return {
     key,
     title: SkillListNode({
       nodeDatum: currentNode,
@@ -37,17 +37,10 @@ function convertToListDataRecursive(
     id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
+    mdNote: currentNode.mdNote,
+    children: currentNode.children
+      ?.map((val, index) => convertToListDataRecursive(val, key, index, onChange, keysCollect))
   };
-
-  if (currentNode.mdNote) {
-    node.mdNote = currentNode.mdNote;
-  }
-
-  if (currentNode.children) {
-    node.children = currentNode.children.map((val, index) => convertToListDataRecursive(val, key, index, onChange, keysCollect));
-  }
-
-  return node;
 }
 
 /**
@@ -71,21 +64,13 @@ function convertToListData(
  * @returns converted current node
  */
 function convertToRawData(currentNode: SkillListDataNode): SkillsetRawNode {
-  const node: SkillsetRawNode = {
+  return {
     id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
+    mdNote: currentNode.mdNote,
+    children: currentNode.children?.map((val: SkillListDataNode) => convertToRawData(val))
   };
-
-  if (currentNode.mdNote) {
-    node.mdNote = currentNode.mdNote;
-  }
-
-  if (currentNode.children) {
-    node.children = currentNode.children.map((val: SkillListDataNode) => convertToRawData(val));
-  }
-
-  return node;
 }
 
 /**

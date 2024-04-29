@@ -11,23 +11,14 @@ export interface SkillsetRawNode {
   children?: SkillsetRawNode[];
 }
 
-/* Augment the node datum to contain progress percentage */
+/* Override RawNodeDatum for rendering purposes */
 declare module 'react-d3-tree' {
-  export interface RawNodeDatum {
-    id: string;
-    name: string;
-    progressPercent: number;
-    mdNote?: string,
-    attributes?: Record<string, string | number | boolean>;
-    children?: RawNodeDatum[];
+  export interface RawNodeDatum extends SkillsetRawNode {
+    children?: RawNodeDatum[]
   }
 }
 
-/* Augment the data node to contain extra information for regeneration */
-export type SkillListDataNode = TreeDataNode & {
-  id: string;
-  name: string;
-  progressPercent: number;
-  mdNote?: string,
-  children?: SkillListDataNode[];
+/* Override TreeDataNode to contain extra information for regeneration */
+export type SkillListDataNode = TreeDataNode & SkillsetRawNode & {
+  children?: SkillListDataNode[]
 };
