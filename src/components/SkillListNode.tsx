@@ -1,4 +1,3 @@
-import { RawNodeDatum } from "react-d3-tree";
 import { Button, Flex, Progress } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { SyntheticEvent } from "react";
@@ -7,9 +6,10 @@ import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 import ClearBtn from "./common/ClearBtn";
 import { calcProgressColor } from "../constants/color";
+import { SkillsetRawNode } from "../types";
 
 interface SkillListNodeProps {
-  nodeDatum: RawNodeDatum,
+  nodeDatum: SkillsetRawNode,
   onChange: (event: SyntheticEvent) => void;
   isRoot: boolean;
 }

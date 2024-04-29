@@ -1,11 +1,11 @@
-import { RawNodeDatum } from 'react-d3-tree';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { SkillsetRawNode } from '../../types';
 import { DefaultRootNode } from '../../types/defaults';
 import { RootState } from '../store';
 import { EditHistory } from '../../lib/editHistory';
 
 interface NoteState {
-  noteViewNode: RawNodeDatum;   // the current node to edit in note view
+  noteViewNode: SkillsetRawNode;// the current node to edit in note view
   isNoteSaved: boolean;         // whether the current note is saved into skillset tree
 }
 
@@ -22,7 +22,7 @@ const noteSlice = createSlice({
   name: 'note',
   initialState,
   reducers: {
-    setNoteViewNode(state, action: PayloadAction<RawNodeDatum>) {
+    setNoteViewNode(state, action: PayloadAction<SkillsetRawNode>) {
       state.noteViewNode = action.payload;
       history.clear();
       history.push(state.noteViewNode.mdNote || '');
