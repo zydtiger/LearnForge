@@ -14,7 +14,11 @@ export const saveDialog = async () => {
       {
         name: 'Scalable Vector Graphics',
         extensions: ['svg']
-      }
+      },
+      {
+        name: 'Portable Network Graphics',
+        extensions: ['png']
+      },
     ]
   });
   return filePath;
