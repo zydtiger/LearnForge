@@ -131,4 +131,4 @@ function handleNodeChange(
   postupdate?.();
 }
 
-export { findNode, handleNodeChange };
+export { findNode, updatePercentages, handleNodeChange };

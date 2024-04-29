@@ -5,8 +5,8 @@ import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
 import React, { SyntheticEvent, useEffect, useState } from "react";
 
-import { convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
-import { handleNodeChange } from "../lib/skillset";
+import { convertToListData, convertToRawData, findListNode } from '../lib/skillList';
+import { updatePercentages, handleNodeChange } from "../lib/skillset";
 
 function SkillList({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
@@ -57,11 +57,11 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
     const listDataClone = [...listData];
 
     // finds dragNode and removes it from its siblings
-    const [dragSiblings, dragIndex, dragNode] = findNode(listDataClone, dragKey)!;
+    const [dragSiblings, dragIndex, dragNode] = findListNode(listDataClone, dragKey)!;
     dragSiblings.splice(dragIndex, 1);
 
     // inserts dragNode at correct location
-    const [dropSiblings, dropIndex, dropNode] = findNode(listDataClone, dropKey)!;
+    const [dropSiblings, dropIndex, dropNode] = findListNode(listDataClone, dropKey)!;
     if (relPos == 0) { // if dropped on a parent
       dropNode.children = dropNode.children || []; // in case the children is null
       dropNode.children.unshift(dragNode);
@@ -69,7 +69,7 @@ function SkillList({ data }: { data: RawNodeDatum; }) {
       dropSiblings.splice(dropIndex + 1, 0, dragNode);
     }
 
-    const newTreeData = convertToTreeData(listDataClone[0]);
+    const newTreeData = convertToRawData(listDataClone[0]);
     updatePercentages(newTreeData);
     dispatch(setSkillset(newTreeData));
   };

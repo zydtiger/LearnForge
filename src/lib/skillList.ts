@@ -1,6 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { SkillListDataNode } from '../types';
-import { RawNodeDatum } from 'react-d3-tree';
+import { SkillListDataNode, SkillsetRawNode } from '../types';
 
 import SkillListNode from '../components/SkillListNode';
 
@@ -14,7 +13,7 @@ import SkillListNode from '../components/SkillListNode';
  * @returns converted current node
  */
 function convertToListDataRecursive(
-  currentNode: RawNodeDatum,
+  currentNode: SkillsetRawNode,
   parentKey: React.Key,
   index: number,
   onChange: (event: SyntheticEvent) => void,
@@ -59,7 +58,7 @@ function convertToListDataRecursive(
  * @returns generated tree data
  */
 function convertToListData(
-  rootNode: RawNodeDatum,
+  rootNode: SkillsetRawNode,
   onChange: (event: SyntheticEvent) => void,
   keysCollect: React.Key[]
 ): SkillListDataNode[] {
@@ -71,8 +70,8 @@ function convertToListData(
  * @param currentNode current node to convert
  * @returns converted current node
  */
-function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
-  const node: RawNodeDatum = {
+function convertToRawData(currentNode: SkillListDataNode): SkillsetRawNode {
+  const node: SkillsetRawNode = {
     id: currentNode.id,
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
@@ -83,7 +82,7 @@ function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
   }
 
   if (currentNode.children) {
-    node.children = currentNode.children.map((val: SkillListDataNode) => convertToTreeData(val));
+    node.children = currentNode.children.map((val: SkillListDataNode) => convertToRawData(val));
   }
 
   return node;
@@ -95,34 +94,17 @@ function convertToTreeData(currentNode: SkillListDataNode): RawNodeDatum {
    * @param key the target key to find
    * @returns [siblings, index, node]
    */
-function findNode(siblings: SkillListDataNode[], key: React.Key): [SkillListDataNode[], number, SkillListDataNode] | null {
+function findListNode(siblings: SkillListDataNode[], key: React.Key): [SkillListDataNode[], number, SkillListDataNode] | null {
   for (let i = 0; i < siblings.length; i++) {
     if (siblings[i].key == key) {
       return [siblings, i, siblings[i]];
     }
     if (siblings[i].children) {
-      const res = findNode(siblings[i].children!, key);
+      const res = findListNode(siblings[i].children!, key);
       if (res) return res;
     }
   }
   return null;
 };
 
-/**
- * Updates percentages at node by calling
- * the recursive inner function.
- */
-function updatePercentages(nodeDatum: RawNodeDatum) {
-  const generatePercentagesAtNode = (nodeDatum: RawNodeDatum): number => {
-    if (nodeDatum.children && nodeDatum.children.length != 0) { // if NOT leaf node
-      const childrenPercentageSum = nodeDatum.children.reduce((acc: number, current: RawNodeDatum) => {
-        return acc + generatePercentagesAtNode(current);
-      }, 0);
-      nodeDatum.progressPercent = childrenPercentageSum / nodeDatum.children.length;
-    }
-    return nodeDatum.progressPercent;
-  };
-  generatePercentagesAtNode(nodeDatum);
-}
-
-export { convertToListData, convertToTreeData, findNode, updatePercentages };
+export { convertToListData, convertToRawData, findListNode };
