@@ -28,7 +28,7 @@ function convertToListDataRecursive(
     title: SkillListNode({
       nodeDatum: currentNode,
       onChange: (event) => {
-        event.type += `|${key}`; // exposes the key of the current node for event location
+        event.type += `|${currentNode.id}`; // exposes the key of the current node for event location
         onChange(event);
       },
       isRoot: parentKey == '0'
@@ -125,4 +125,4 @@ function updatePercentages(nodeDatum: RawNodeDatum) {
   generatePercentagesAtNode(nodeDatum);
 }
 
-export { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages };
+export { convertToListData, convertToTreeData, findNode, updatePercentages };

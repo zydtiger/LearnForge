@@ -1,83 +1,33 @@
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
-import { setViewMode } from '../redux/slices/viewSlice';
-import { setNoteViewNode } from '../redux/slices/noteSlice';
-import { pushMessage } from "../redux/slices/messageSlice";
 import { RawNodeDatum } from 'react-d3-tree';
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
 import React, { SyntheticEvent, useEffect, useState } from "react";
-import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
-import { convertToListDataRecursive, convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
+import { convertToListData, convertToTreeData, findNode, updatePercentages } from '../lib/skillList';
+import { handleNodeChange } from "../lib/skillset";
 
 function SkillList({ data }: { data: RawNodeDatum; }) {
   const dispatch = useAppDispatch();
 
   const handleOnChange = (event: SyntheticEvent) => {
-    const [type, key] = event.type.split('|');
+    const [eventType, id] = event.type.split('|');
     const value = (event.target as HTMLInputElement).value;
-    let listDataClone = [...listData];
-    const [siblings, index, node] = findNode(listDataClone, key)!;
-    const keysCollect: React.Key[] = [];
 
-    let isUpdatePercentNeeded = false;
-    switch (type) {
+    switch (eventType) {
       case 'changeName':
-        node.name = value;
-        break;
-
       case 'changePercent':
-        node.progressPercent = Number(value);
-        isUpdatePercentNeeded = true;
-        break;
-
-      case 'deleteNode':
-        siblings.splice(index, 1);
-        isUpdatePercentNeeded = true;
-        dispatch(pushMessage({
-          type: 'success',
-          content: 'Successfully deleted node!'
-        }))
-        break;
-
-      case 'clear':
-        listDataClone = convertToListData(DefaultRootNode(), handleOnChange, keysCollect);
-        setExpandedKeys(keysCollect);
-        listDataClone[0].children = []; // manual override
-        dispatch(pushMessage({
-          type: 'success',
-          content: 'Successfully cleared tree!'
-        }))
-        break;
-
       case 'addNode':
-        node.children = node.children || [];
-        const insertIndex = node.children.length;
-        const defaultRawNode = DefaultNode();
-        if (insertIndex == 0) { // if inserting as first child, inherit progress set in parent
-          defaultRawNode.progressPercent = node.progressPercent;
-        }
-        const defaultNode = convertToListDataRecursive(defaultRawNode, node.key, insertIndex, handleOnChange, keysCollect);
-        setExpandedKeys([...expandedKeys, ...keysCollect]);
-        node.children.push(defaultNode);
-        isUpdatePercentNeeded = true;
-        break;
-
+      case 'deleteNode':
+      case 'clear':
       case 'triggerNote':
-        dispatch(setNoteViewNode(convertToTreeData(node)));
-        dispatch(setViewMode('note'));
-        return; // skip store updating
+        handleNodeChange(id, eventType, value);
+        break;
 
       default:
         break;
     }
-
-    const newTreeData = convertToTreeData(listDataClone[0]);
-    if (isUpdatePercentNeeded) {
-      updatePercentages(newTreeData);
-    }
-    dispatch(setSkillset(newTreeData));
   };
 
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
