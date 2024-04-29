@@ -16,7 +16,6 @@ import SkillBtns from './components/SkillBtns';
 // redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
 import {
-  selectSkillset,
   selectIsInitialBoot,
   selectIsFirstTimeLoading,
   fetchSkillset,
@@ -32,7 +31,6 @@ import {
 
 function App() {
   const dispatch = useAppDispatch();
-  const skillset = useAppSelector(selectSkillset);
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
 
   useEffect(() => {
@@ -43,11 +41,11 @@ function App() {
   const ports = {
     tree: {
       Icon: <UnorderedListOutlined />,
-      Component: <SkillTree data={skillset} />
+      Component: <SkillTree />
     },
     list: {
       Icon: <SisternodeOutlined />,
-      Component: <SkillList data={skillset} />
+      Component: <SkillList />
     },
     note: {
       Icon: <FormOutlined />,

@@ -1,6 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setSkillset, selectIsFirstTimeLoading } from "../redux/slices/skillsetSlice";
-import { RawNodeDatum } from 'react-d3-tree';
+import { setSkillset, selectIsFirstTimeLoading, selectSkillset } from "../redux/slices/skillsetSlice";
 import { Tree, ConfigProvider, Typography, Divider } from 'antd';
 import type { TreeProps } from 'antd';
 import React, { SyntheticEvent, useEffect, useState } from "react";
@@ -8,7 +7,8 @@ import React, { SyntheticEvent, useEffect, useState } from "react";
 import { convertToListData, convertToRawData, findListNode } from '../lib/skillList';
 import { updatePercentages, handleNodeChange } from "../lib/skillset";
 
-function SkillList({ data }: { data: RawNodeDatum; }) {
+function SkillList() {
+  const data = useAppSelector(selectSkillset);
   const dispatch = useAppDispatch();
 
   const handleOnChange = (event: SyntheticEvent) => {

@@ -1,13 +1,16 @@
 import { Ref, useRef } from "react";
-import { RawNodeDatum, Point, TreeProps } from "react-d3-tree";
+import { Point, TreeProps } from "react-d3-tree";
 import { FloatButton } from "antd";
 import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
 import SkillTreeNode from "./SkillTreeNode";
 
 import { handleNodeChange } from "../lib/skillset";
+import { useAppSelector } from "../redux/hooks";
+import { selectSkillset } from "../redux/slices/skillsetSlice";
 
-function SkillTree({ data }: { data: RawNodeDatum; }) {
+function SkillTree() {
+  const data = useAppSelector(selectSkillset);
   const tree: Ref<SkillTreeInner> = useRef(null);
 
   const initialZoom = 0.8;
