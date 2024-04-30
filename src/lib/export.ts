@@ -1,4 +1,4 @@
-function TreeSVGExport() {
+function TreeSVGExport(): string {
   // extract the svg element
   const treeSVG = document.querySelector('svg.rd3t-svg')!;
   const treeSVGClone = treeSVG.cloneNode(true) as SVGElement;
@@ -58,4 +58,23 @@ function TreeSVGExport() {
   return serializer.serializeToString(treeSVGClone);
 }
 
-export { TreeSVGExport };
+async function TreeImageExport(): Promise<Uint8Array> {
+  // load svg content into img
+  const svgContent = TreeSVGExport();
+  const imgElement = new Image();
+  imgElement.src = 'data:image/svg+xml;base64,' + btoa(svgContent);
+
+  return new Promise((resolve, _reject) => {
+    imgElement.onload = async () => {
+      // use canvas to convert img into png blob
+      const canvas = new OffscreenCanvas(imgElement.width, imgElement.height);
+      const context = canvas.getContext('2d');
+      context?.drawImage(imgElement, 0, 0);
+      const pngBlob = await canvas.convertToBlob({ type: 'image/png' });
+      const pngBuffer = await pngBlob.arrayBuffer();
+      resolve(new Uint8Array(pngBuffer));
+    };
+  });
+}
+
+export { TreeSVGExport, TreeImageExport };

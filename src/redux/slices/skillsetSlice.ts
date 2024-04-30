@@ -14,7 +14,7 @@ import { openDialog, saveDialog } from '../../lib/dialogs';
 import { nanoid } from 'nanoid';
 import { EditHistory } from '../../lib/editHistory';
 import { findNodeInTree } from '../../lib/skillTree';
-import { TreeSVGExport } from '../../lib/export';
+import { TreeSVGExport, TreeImageExport } from '../../lib/export';
 
 interface SkillsetState {
   data: RawNodeDatum;         // skillset data
@@ -108,7 +108,11 @@ export const exportSkillset = createAsyncThunk(
     if (extension == 'lf') {
       invoke(getStorageExportEndpoint(), { filePath });
     } else if (extension == 'svg') {
-      const payload = TreeSVGExport();
+      const encoder = new TextEncoder();
+      const payload = Array.from(encoder.encode(TreeSVGExport()));
+      invoke(getStorageExportEndpoint(), { filePath, payload });
+    } else if (extension == 'png') {
+      const payload = Array.from(await TreeImageExport());
       invoke(getStorageExportEndpoint(), { filePath, payload });
     } else {
       dispatch(pushMessage({
