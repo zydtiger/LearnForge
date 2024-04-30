@@ -18,10 +18,8 @@ import {
   selectIsRedoable,
   undo,
   redo,
-  exportSkillset,
-  importSkillset,
-  saveSkillset,
 } from '../redux/slices/skillsetSlice';
+import { exportSkillset, importSkillset, saveSkillset } from '../redux/thunks/skillsetThunks';
 import { setIsManualModalOpen } from '../redux/slices/viewSlice';
 
 interface SkillBtnsProps {

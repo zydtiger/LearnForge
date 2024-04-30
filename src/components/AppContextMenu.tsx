@@ -1,6 +1,5 @@
 import { Dropdown, MenuProps } from 'antd';
 import { convertMenuToDisplayMode, invokeAction } from '../lib/menu';
-import { useAppDispatch } from '../redux/hooks';
 
 const items: MenuProps['items'] = [
   {
@@ -43,13 +42,11 @@ const items: MenuProps['items'] = [
 ];
 
 function SkillContextMenu(props: React.PropsWithChildren) {
-  const dispatch = useAppDispatch();
-
   return (
     <Dropdown
       menu={{
         items: convertMenuToDisplayMode(items),
-        onClick: ({ key }) => invokeAction(key, dispatch)
+        onClick: ({ key }) => invokeAction(key)
       }}
       trigger={['contextMenu']}
     >

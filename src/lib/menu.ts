@@ -1,5 +1,6 @@
 import store from '../redux/store';
-import { importSkillset, exportSkillset, saveSkillset, undo, redo, setSkillsetNodeById } from '../redux/slices/skillsetSlice';
+import { undo, redo, setSkillsetNodeById } from '../redux/slices/skillsetSlice';
+import { importSkillset, exportSkillset, saveSkillset } from '../redux/thunks/skillsetThunks';
 import { setViewMode, setIsManualModalOpen, selectViewMode, selectPrevViewBeforeNote } from '../redux/slices/viewSlice';
 import { undo as noteUndo, redo as noteRedo } from '../redux/slices/noteSlice';
 import { MenuProps } from 'antd';
