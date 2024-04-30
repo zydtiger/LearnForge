@@ -58,7 +58,7 @@ function TreeSVGExport(): string {
   return serializer.serializeToString(treeSVGClone);
 }
 
-async function TreeImageExport(): Promise<Uint8Array> {
+async function TreeImageExport(type: 'png' | 'jpeg'): Promise<Uint8Array> {
   // load svg content into img
   const svgContent = TreeSVGExport();
   const imgElement = new Image();
@@ -68,11 +68,16 @@ async function TreeImageExport(): Promise<Uint8Array> {
     imgElement.onload = async () => {
       // use canvas to convert img into png blob
       const canvas = new OffscreenCanvas(imgElement.width, imgElement.height);
-      const context = canvas.getContext('2d');
-      context?.drawImage(imgElement, 0, 0);
-      const pngBlob = await canvas.convertToBlob({ type: 'image/png' });
-      const pngBuffer = await pngBlob.arrayBuffer();
-      resolve(new Uint8Array(pngBuffer));
+      const context = canvas.getContext('2d')!;
+      context.drawImage(imgElement, 0, 0);
+      if (type == 'jpeg') { // set the background to be #f6f6f6
+        context.globalCompositeOperation = 'destination-over';
+        context.fillStyle = '#f6f6f6';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      const imgBlob = await canvas.convertToBlob({ type: 'image/' + type });
+      const imgBuffer = await imgBlob.arrayBuffer();
+      resolve(new Uint8Array(imgBuffer));
     };
   });
 }

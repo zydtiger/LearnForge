@@ -112,7 +112,10 @@ export const exportSkillset = createAsyncThunk(
       const payload = Array.from(encoder.encode(TreeSVGExport()));
       invoke(getStorageExportEndpoint(), { filePath, payload });
     } else if (extension == 'png') {
-      const payload = Array.from(await TreeImageExport());
+      const payload = Array.from(await TreeImageExport('png'));
+      invoke(getStorageExportEndpoint(), { filePath, payload });
+    } else if (extension == 'jpg' || extension == 'jpeg') {
+      const payload = Array.from(await TreeImageExport('jpeg'));
       invoke(getStorageExportEndpoint(), { filePath, payload });
     } else {
       dispatch(pushMessage({
