@@ -6,10 +6,24 @@ import { save, open } from "@tauri-apps/api/dialog";
  */
 export const saveDialog = async () => {
   const filePath = await save({
-    filters: [{
-      name: 'LearnForge',
-      extensions: ['lf']
-    }]
+    filters: [
+      {
+        name: 'LearnForge',
+        extensions: ['lf']
+      },
+      {
+        name: 'Scalable Vector Graphics',
+        extensions: ['svg']
+      },
+      {
+        name: 'Portable Network Graphics',
+        extensions: ['png']
+      },
+      {
+        name: 'Joint Photographic Experts Group',
+        extensions: ['jpg', 'jpeg']
+      }
+    ]
   });
   return filePath;
 };

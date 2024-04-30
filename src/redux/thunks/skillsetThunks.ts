@@ -3,12 +3,14 @@ import { invoke } from "@tauri-apps/api";
 import { openDialog, saveDialog } from '../../lib/dialogs';
 import { RootState } from "../store";
 import { SkillsetState } from "../slices/skillsetSlice";
+import { pushMessage } from '../slices/messageSlice';
 import {
   getStorageReadEndpoint,
   getStorageWriteEndpoint,
   getStorageExportEndpoint,
   getStorageImportEndpoint
 } from "../../constants/endpoints";
+import { TreeSVGExport, TreeImageExport } from '../../lib/export';
 
 /**
  * Fetches the skillset from backend.
@@ -62,7 +64,29 @@ export const exportSkillset = createAsyncThunk(
   async (_, { dispatch }) => {
     await dispatch(saveSkillset()); // saves the current workspace
     const filePath = await saveDialog();
-    invoke(getStorageExportEndpoint(), { filePath });
+    if (!filePath) return; // don't do anything if user cancels
+
+    const parts = filePath.split('.');
+    const extension = parts[parts.length - 1];
+
+    if (extension == 'lf') {
+      invoke(getStorageExportEndpoint(), { filePath });
+    } else if (extension == 'svg') {
+      const encoder = new TextEncoder();
+      const payload = Array.from(encoder.encode(TreeSVGExport()));
+      invoke(getStorageExportEndpoint(), { filePath, payload });
+    } else if (extension == 'png') {
+      const payload = Array.from(await TreeImageExport('png'));
+      invoke(getStorageExportEndpoint(), { filePath, payload });
+    } else if (extension == 'jpg' || extension == 'jpeg') {
+      const payload = Array.from(await TreeImageExport('jpeg'));
+      invoke(getStorageExportEndpoint(), { filePath, payload });
+    } else {
+      dispatch(pushMessage({
+        type: 'error',
+        content: `Exporting to extension .${extension} is undefined`
+      }));
+    }
   }
 );
 
