@@ -5,7 +5,7 @@ import type { TreeProps } from 'antd';
 import React, { SyntheticEvent, useEffect, useState } from "react";
 
 import { convertToListData, convertToRawData, findListNode } from '../lib/skillList';
-import { updatePercentages, handleNodeChange } from "../lib/skillset";
+import { NodeEventTypes, updatePercentages, handleNodeChange } from "../lib/skillset";
 
 function SkillList() {
   const data = useAppSelector(selectSkillset);
@@ -15,18 +15,10 @@ function SkillList() {
     const [eventType, id] = event.type.split('|');
     const value = (event.target as HTMLInputElement).value;
 
-    switch (eventType) {
-      case 'changeName':
-      case 'changePercent':
-      case 'addNode':
-      case 'deleteNode':
-      case 'clear':
-      case 'triggerNote':
-        handleNodeChange(id, eventType, value);
-        break;
-
-      default:
-        break;
+    if (NodeEventTypes.includes(eventType)) {
+      handleNodeChange(id, eventType, value);
+    } else {
+      console.error('Undefined node event is triggered');
     }
   };
 

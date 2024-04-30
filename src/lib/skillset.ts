@@ -6,7 +6,8 @@ import { pushMessage } from "../redux/slices/messageSlice";
 import { SkillsetRawNode } from "../types";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
-type EventType = 'changeName' | 'changePercent' | 'addNode' | 'deleteNode' | 'clear' | 'triggerNote';
+export const NodeEventTypes = ['changeName', 'changePercent', 'addNode', 'deleteNode', 'clear', 'triggerNote']
+type NodeEventType = typeof NodeEventTypes[number];
 
 /**
  * Finds the target node in the designated subtree.
@@ -71,7 +72,7 @@ function updatePercentages(node: SkillsetRawNode): number {
  */
 function handleNodeChange(
   nodeId: string,
-  eventType: EventType,
+  eventType: NodeEventType,
   payload?: string,
   preupdate?: () => void,
   postupdate?: () => void

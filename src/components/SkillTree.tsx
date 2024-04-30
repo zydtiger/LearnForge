@@ -5,7 +5,7 @@ import { ExpandOutlined } from "@ant-design/icons";
 import SkillTreeInner from "./SkillTreeInner";
 import SkillTreeNode from "./SkillTreeNode";
 
-import { handleNodeChange } from "../lib/skillset";
+import { NodeEventTypes, handleNodeChange } from "../lib/skillset";
 import { useAppSelector } from "../redux/hooks";
 import { selectSkillset } from "../redux/slices/skillsetSlice";
 
@@ -17,38 +17,28 @@ function SkillTree() {
   const initialTranslate: Point = { x: 200, y: window.innerHeight / 2 };
 
   const handleOnNodeClick: TreeProps['onNodeClick'] = (node, event) => {
-    switch (event.type) {
-      case 'toggleNode':
-        tree.current!.handleToggleNode(node.data);
-        break;
-
-      case 'changeName':
-      case 'changePercent':
-      case 'addNode':
-      case 'deleteNode':
-      case 'clear':
-      case 'triggerNote':
-        let oldCollapseState: any;
-        handleNodeChange(
-          node.data.id,
-          event.type,
-          (event.target as HTMLInputElement).value, // this will automatically be undefined for actions like deleteNode
-          // preupdate
-          () => {
-            oldCollapseState = tree.current!.geteCollapseState();
-            tree.current!.setFrozen(true); // freeze rendering before update finished
-          },
-          // postupdate
-          () => {
-            setTimeout(() => {
-              tree.current!.setCollapseState(oldCollapseState);
-              tree.current!.setFrozen(false); // allow rendering to continue
-            });
+    if (NodeEventTypes.includes(event.type)) {
+      let oldCollapseState: any;
+      handleNodeChange(
+        node.data.id,
+        event.type,
+        (event.target as HTMLInputElement).value, // this will automatically be undefined for actions like deleteNode
+        // preupdate
+        () => {
+          oldCollapseState = tree.current!.geteCollapseState();
+          tree.current!.setFrozen(true); // freeze rendering before update finished
+        },
+        // postupdate
+        () => {
+          setTimeout(() => {
+            tree.current!.setCollapseState(oldCollapseState);
+            tree.current!.setFrozen(false); // allow rendering to continue
           });
-        break;
-
-      default:
-        break;
+        });
+    } else if (event.type == 'toggleNode') {
+      tree.current!.handleToggleNode(node.data);
+    } else {
+      console.error('Undefined node event is triggered');
     }
   };
 
