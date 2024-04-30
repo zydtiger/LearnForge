@@ -15,7 +15,6 @@ export interface SkillsetState {
   // fields below should not be persisted
   isFirstTimeLoading: boolean;// whether to show loading page
   isSaved: boolean;           // whether the current state is persisted
-  history: EditHistory<SkillsetRawNode>; // edit history
 }
 
 const initialState: SkillsetState = {
@@ -24,7 +23,6 @@ const initialState: SkillsetState = {
   lastSaveTime: new Date().toISOString(),
   isFirstTimeLoading: true,
   isSaved: true,
-  history: new EditHistory()
 };
 
 const generateIds = (state: SkillsetState) => {
@@ -46,6 +44,8 @@ const loadData = (state: SkillsetState, payload: SkillsetRawNode) => {
   state.isSaved = false;
 };
 
+export const history = new EditHistory<SkillsetRawNode>();
+
 const skillsetSlice = createSlice({
   name: 'skillset',
   initialState,
@@ -55,21 +55,21 @@ const skillsetSlice = createSlice({
     // to decrease lag.
     setSkillset(state, action: PayloadAction<SkillsetRawNode>) {
       loadData(state, action.payload);
-      state.history.push({ ...state.data }); // pushes in state
+      history.push({ ...state.data }); // pushes in state
     },
     setSkillsetNodeById(state, action: PayloadAction<SkillsetRawNode>) {
       const targetNode = findNode(state.data, action.payload.id)!;
       Object.assign(targetNode, action.payload);
-      state.history.push({ ...state.data });
+      history.push({ ...state.data });
       state.isSaved = false;
     },
     undo(state) {
-      state.history.undo();
-      loadData(state, state.history.current()!);
+      history.undo();
+      loadData(state, history.current()!);
     },
     redo(state) {
-      state.history.redo();
-      loadData(state, state.history.current()!);
+      history.redo();
+      loadData(state, history.current()!);
     }
   },
   extraReducers(builder) {
@@ -77,8 +77,8 @@ const skillsetSlice = createSlice({
       .addCase(fetchSkillset.fulfilled, (state, action) => {
         Object.assign(state, action.payload);
         generateIds(state);
-        if (state.history.length() == 0) {
-          state.history.push({ ...state.data }); // init history
+        if (history.length() == 0) {
+          history.push({ ...state.data }); // init history
         }
         state.isFirstTimeLoading = false;
       })
@@ -97,8 +97,8 @@ export const selectSkillset = (state: RootState) => state.skillset.data;
 export const selectIsInitialBoot = (state: RootState) => state.skillset.isInitialBoot;
 export const selectLastSaveTime = (state: RootState) => state.skillset.lastSaveTime;
 export const selectIsSaved = (state: RootState) => state.skillset.isSaved;
-export const selectIsUndoable = (state: RootState) => state.skillset.history.isUndoable();
-export const selectIsRedoable = (state: RootState) => state.skillset.history.isRedoable();
+export const selectIsUndoable = () => history.isUndoable();
+export const selectIsRedoable = () => history.isRedoable();
 export const selectIsFirstTimeLoading = (state: RootState) => state.skillset.isFirstTimeLoading;
 
 export default skillsetSlice.reducer;

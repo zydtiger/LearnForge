@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { invoke } from "@tauri-apps/api";
 import { openDialog, saveDialog } from '../../lib/dialogs';
 import { RootState } from "../store";
-import { SkillsetState } from "../slices/skillsetSlice";
+import { SkillsetState, history } from "../slices/skillsetSlice";
 import { pushMessage } from '../slices/messageSlice';
 import {
   getStorageReadEndpoint,
@@ -102,6 +102,6 @@ export const importSkillset = createAsyncThunk(
 
     // push current state to history after import
     const state = { ...unwrapState(getState()) };
-    state.history.push({ ...state.data });
+    history.push({ ...state.data });
   }
 );
