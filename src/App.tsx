@@ -15,13 +15,8 @@ import SkillBtns from './components/SkillBtns';
 
 // redux imports
 import { useAppSelector, useAppDispatch } from './redux/hooks';
-import {
-  selectIsInitialBoot,
-  selectIsFirstTimeLoading,
-  fetchSkillset,
-  setNotInitialBoot,
-  saveSkillset,
-} from './redux/slices/skillsetSlice';
+import { selectIsInitialBoot, selectIsFirstTimeLoading } from './redux/slices/skillsetSlice';
+import { fetchSkillset, setNotInitialBoot, saveSkillset } from './redux/thunks/skillsetThunks';
 import {
   selectViewMode,
   selectIsManualModalOpen,
