@@ -19,6 +19,10 @@ export const saveDialog = async () => {
         name: 'Portable Network Graphics',
         extensions: ['png']
       },
+      {
+        name: 'Joint Photographic Experts Group',
+        extensions: ['jpg', 'jpeg']
+      }
     ]
   });
   return filePath;
