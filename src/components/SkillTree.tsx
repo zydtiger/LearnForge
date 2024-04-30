@@ -18,23 +18,8 @@ function SkillTree() {
 
   const handleOnNodeClick: TreeProps['onNodeClick'] = (node, event) => {
     if (NodeEventTypes.includes(event.type)) {
-      let oldCollapseState: any;
-      handleNodeChange(
-        node.data.id,
-        event.type,
-        (event.target as HTMLInputElement).value, // this will automatically be undefined for actions like deleteNode
-        // preupdate
-        () => {
-          oldCollapseState = tree.current!.geteCollapseState();
-          tree.current!.setFrozen(true); // freeze rendering before update finished
-        },
-        // postupdate
-        () => {
-          setTimeout(() => {
-            tree.current!.setCollapseState(oldCollapseState);
-            tree.current!.setFrozen(false); // allow rendering to continue
-          });
-        });
+      const value = (event.target as HTMLInputElement).value
+      handleNodeChange(node.data.id, event.type, value);
     } else if (event.type == 'toggleNode') {
       tree.current!.handleToggleNode(node.data);
     } else {

@@ -67,16 +67,8 @@ function updatePercentages(node: SkillsetRawNode): number {
  * @param nodeId node id to update
  * @param eventType event type to trigger
  * @param payload some events depend on payload
- * @param preupdate callback to call before updating store
- * @param postupdate callback to call after updating store
  */
-function handleNodeChange(
-  nodeId: string,
-  eventType: NodeEventType,
-  payload?: string,
-  preupdate?: () => void,
-  postupdate?: () => void
-) {
+function handleNodeChange(nodeId: string, eventType: NodeEventType, payload?: string) {
   const rootNode = selectSkillset(store.getState());
   const rootNodeClone = JSON.parse(JSON.stringify(rootNode)); // deep clone through JSON
   const targetNode = findNode(rootNodeClone, nodeId)!;
@@ -127,9 +119,7 @@ function handleNodeChange(
       return; // skip store updating
   }
 
-  preupdate?.();
   store.dispatch(setSkillset(rootNodeClone));
-  postupdate?.();
 }
 
 export { findNode, updatePercentages, handleNodeChange };
