@@ -1,3 +1,7 @@
+/**
+ * Extracts tree view into svg content.
+ * @returns svg content in string
+ */
 function TreeSVGExport(): string {
   // extract the svg element
   const treeSVG = document.querySelector('svg.rd3t-svg')!;
@@ -58,6 +62,11 @@ function TreeSVGExport(): string {
   return serializer.serializeToString(treeSVGClone);
 }
 
+/**
+ * Extracts tree view into image through svg.
+ * @param type specify which type of image to export to
+ * @returns promise of image byte array
+ */
 async function TreeImageExport(type: 'png' | 'jpeg'): Promise<Uint8Array> {
   // load svg content into img
   const svgContent = TreeSVGExport();
