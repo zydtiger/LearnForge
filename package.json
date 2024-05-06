@@ -13,17 +13,20 @@
     "@reduxjs/toolkit": "^2.2.1",
     "@tauri-apps/api": "^1",
     "@uiw/react-md-editor": "^4.0.4",
-    "rehype-sanitize": "^6.0.0",
     "antd": "^5.15.3",
+    "katex": "^0.16.10",
     "nanoid": "^5.0.7",
     "react": "^18.2.0",
     "react-d3-tree": "^3.6.2",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.0.1",
-    "react-redux": "^9.1.0"
+    "react-redux": "^9.1.0",
+    "rehype-rewrite": "^4.0.2",
+    "rehype-sanitize": "^6.0.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1",
+    "@types/katex": "^0.16.7",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.2.1",
