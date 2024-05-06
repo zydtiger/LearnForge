@@ -1,3 +1,13 @@
+<div align="center">
+  <img src=".github/learnforge.png" alt="LearnForge" width="200" height="200" />
+</div>
+<br/>
+
+[![status](https://img.shields.io/badge/status-beta-light.svg)](https://github.com/zydtiger/LearnForge)
+[![version](https://img.shields.io/github/package-json/v/zydtiger/LearnForge)](https://github.com/zydtiger/LearnForge)
+[![top language](https://img.shields.io/github/languages/top/zydtiger/LearnForge)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 # LearnForge - Learning Goal Management and Logging App
 
 LearnForge is a comprehensive app that empowers you to manage and track your learning goals with ease. This README file provides an overview of LearnForge, its features, and instructions for getting started. To install the app, refer to the [Installation Guide](#installation-guide).
