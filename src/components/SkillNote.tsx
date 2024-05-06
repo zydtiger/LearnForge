@@ -89,14 +89,14 @@ function SkillNote() {
                 const html = katex.renderToString(children.replace(/^\$(.*)\$/, '$1'), { throwOnError: false, output: 'mathml' });
                 return <li dangerouslySetInnerHTML={{ __html: html }} style={{ background: 'transparent' }} />;
               }
-              return <li className={String(className)}>{children}</li>
+              return <li className={String(className)}>{children}</li>;
             },
             p: ({ children = [], className }) => {
               if (typeof children === 'string' && /^\$(.*)\$/.test(children)) {
                 const html = katex.renderToString(children.replace(/^\$(.*)\$/, '$1'), { throwOnError: false, output: 'mathml' });
                 return <p dangerouslySetInnerHTML={{ __html: html }} style={{ background: 'transparent' }} />;
               }
-              return <p className={String(className)}>{children}</p>
+              return <p className={String(className)}>{children}</p>;
             },
             code: ({ children = [], className, ...props }) => {
               const code = props.node && props.node.children ? getCodeString(props.node.children) : children;
@@ -115,33 +115,30 @@ function SkillNote() {
         }}
       />
 
-      {/* Functional Btns */}
-      <>
-        {/* Save Btn */}
-        <FloatButton
-          type={isNoteSaved ? 'default' : 'primary'}
-          style={{ right: 20, bottom: 20 }}
-          tooltip="Done"
-          icon={<CheckOutlined />}
-          onClick={handleDone}
-        />
+      {/* Save Btn */}
+      <FloatButton
+        type={isNoteSaved ? 'default' : 'primary'}
+        style={{ right: 20, bottom: 20 }}
+        tooltip="Done"
+        icon={<CheckOutlined />}
+        onClick={handleDone}
+      />
 
-        {/* Undo / Redo Btns */}
-        <FloatButton
-          type={isUndoable ? "primary" : "default"}
-          style={{ left: 20, bottom: 72 }}
-          tooltip={"Undo"}
-          icon={<UndoOutlined />}
-          onClick={() => dispatch(undo())}
-        />
-        <FloatButton
-          type={isRedoable ? "primary" : "default"}
-          style={{ left: 20, bottom: 20 }}
-          tooltip={"Redo"}
-          icon={<RedoOutlined />}
-          onClick={() => dispatch(redo())}
-        />
-      </>
+      {/* Undo / Redo Btns */}
+      <FloatButton
+        type={isUndoable ? "primary" : "default"}
+        style={{ left: 20, bottom: 72 }}
+        tooltip={"Undo"}
+        icon={<UndoOutlined />}
+        onClick={() => dispatch(undo())}
+      />
+      <FloatButton
+        type={isRedoable ? "primary" : "default"}
+        style={{ left: 20, bottom: 20 }}
+        tooltip={"Redo"}
+        icon={<RedoOutlined />}
+        onClick={() => dispatch(redo())}
+      />
     </div>
   );
 }
