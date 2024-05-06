@@ -6,8 +6,15 @@ import { pushMessage } from "../redux/slices/messageSlice";
 import { SkillsetRawNode } from "../types";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
 
-export const NodeEventTypes = ['changeName', 'changePercent', 'addNode', 'deleteNode', 'clear', 'triggerNote']
-type NodeEventType = typeof NodeEventTypes[number];
+export const NodeEventTypes = [
+  "changeName",
+  "changePercent",
+  "addNode",
+  "deleteNode",
+  "clear",
+  "triggerNote",
+];
+type NodeEventType = (typeof NodeEventTypes)[number];
 
 /**
  * Finds the target node in the designated subtree.
@@ -15,7 +22,10 @@ type NodeEventType = typeof NodeEventTypes[number];
  * @param targetId target id to find
  * @returns node if found, null if not found
  */
-function findNode(currentNode: SkillsetRawNode, targetId: string): SkillsetRawNode | null {
+function findNode(
+  currentNode: SkillsetRawNode,
+  targetId: string,
+): SkillsetRawNode | null {
   if (currentNode.id == targetId) {
     return currentNode;
   }
@@ -34,7 +44,10 @@ function findNode(currentNode: SkillsetRawNode, targetId: string): SkillsetRawNo
  * @param targetId target id to search for
  * @returns [siblings, index]
  */
-function findSiblingsWithNode(siblings: SkillsetRawNode[], targetId: string): [SkillsetRawNode[], number] | null {
+function findSiblingsWithNode(
+  siblings: SkillsetRawNode[],
+  targetId: string,
+): [SkillsetRawNode[], number] | null {
   for (let i = 0; i < siblings.length; i++) {
     if (siblings[i].id == targetId) {
       return [siblings, i];
@@ -53,10 +66,14 @@ function findSiblingsWithNode(siblings: SkillsetRawNode[], targetId: string): [S
  * @returns calculated percentage of the node to propagate upwards
  */
 function updatePercentages(node: SkillsetRawNode): number {
-  if (node.children && node.children.length != 0) { // if NOT leaf node
-    const childrenPercentageSum = node.children.reduce((acc: number, current: SkillsetRawNode) => {
-      return acc + updatePercentages(current);
-    }, 0);
+  if (node.children && node.children.length != 0) {
+    // if NOT leaf node
+    const childrenPercentageSum = node.children.reduce(
+      (acc: number, current: SkillsetRawNode) => {
+        return acc + updatePercentages(current);
+      },
+      0,
+    );
     node.progressPercent = childrenPercentageSum / node.children.length;
   }
   return node.progressPercent;
@@ -68,22 +85,26 @@ function updatePercentages(node: SkillsetRawNode): number {
  * @param eventType event type to trigger
  * @param payload some events depend on payload
  */
-function handleNodeChange(nodeId: string, eventType: NodeEventType, payload?: string) {
+function handleNodeChange(
+  nodeId: string,
+  eventType: NodeEventType,
+  payload?: string,
+) {
   const rootNode = selectSkillset(store.getState());
   const rootNodeClone = JSON.parse(JSON.stringify(rootNode)); // deep clone through JSON
   const targetNode = findNode(rootNodeClone, nodeId)!;
 
   switch (eventType) {
-    case 'changeName':
+    case "changeName":
       targetNode.name = payload!;
       break;
 
-    case 'changePercent':
+    case "changePercent":
       targetNode.progressPercent = Number(payload!);
       updatePercentages(rootNodeClone); // triggers update cascade
       break;
 
-    case 'addNode':
+    case "addNode":
       targetNode.children = targetNode.children || []; // in case the children is null
       const defaultNode = DefaultNode(); // get default node
       // inherit progress percent from parent if adding to a leaf node
@@ -94,28 +115,35 @@ function handleNodeChange(nodeId: string, eventType: NodeEventType, payload?: st
       updatePercentages(rootNodeClone);
       break;
 
-    case 'deleteNode':
-      const [siblings, index] = findSiblingsWithNode([rootNodeClone], targetNode.id)!;
+    case "deleteNode":
+      const [siblings, index] = findSiblingsWithNode(
+        [rootNodeClone],
+        targetNode.id,
+      )!;
       siblings.splice(index, 1);
       updatePercentages(rootNodeClone);
-      store.dispatch(pushMessage({
-        type: 'success',
-        content: 'Successfully deleted node!'
-      }));
+      store.dispatch(
+        pushMessage({
+          type: "success",
+          content: "Successfully deleted node!",
+        }),
+      );
       break;
 
-    case 'clear':
+    case "clear":
       Object.assign(rootNodeClone, DefaultRootNode());
       rootNodeClone.children = []; // manual override
-      store.dispatch(pushMessage({
-        type: 'success',
-        content: 'Successfully cleared tree!'
-      }));
+      store.dispatch(
+        pushMessage({
+          type: "success",
+          content: "Successfully cleared tree!",
+        }),
+      );
       break;
 
-    case 'triggerNote':
+    case "triggerNote":
       store.dispatch(setNoteViewNode(targetNode));
-      store.dispatch(setViewMode('note'));
+      store.dispatch(setViewMode("note"));
       return; // skip store updating
   }
 

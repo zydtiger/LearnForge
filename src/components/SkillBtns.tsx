@@ -1,16 +1,16 @@
 // external imports
-import { FloatButton } from 'antd';
+import { FloatButton } from "antd";
 import {
   QuestionCircleOutlined,
   SaveOutlined,
   UndoOutlined,
   RedoOutlined,
   LogoutOutlined,
-  LoginOutlined
-} from '@ant-design/icons';
+  LoginOutlined,
+} from "@ant-design/icons";
 
 // redux imports
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   selectLastSaveTime,
   selectIsSaved,
@@ -18,14 +18,18 @@ import {
   selectIsRedoable,
   undo,
   redo,
-} from '../redux/slices/skillsetSlice';
-import { exportSkillset, importSkillset, saveSkillset } from '../redux/thunks/skillsetThunks';
-import { setIsManualModalOpen } from '../redux/slices/viewSlice';
+} from "../redux/slices/skillsetSlice";
+import {
+  exportSkillset,
+  importSkillset,
+  saveSkillset,
+} from "../redux/thunks/skillsetThunks";
+import { setIsManualModalOpen } from "../redux/slices/viewSlice";
 
 interface SkillBtnsProps {
   toggleViewBtn: {
-    tooltip: string,
-    Icon: any,
+    tooltip: string;
+    Icon: any;
   };
   onToggleView: () => void;
 }
@@ -41,10 +45,7 @@ function SkillBtns({ toggleViewBtn, onToggleView }: SkillBtnsProps) {
   return (
     <>
       {/* Import/Export Btns */}
-      <FloatButton.Group
-        trigger='click'
-        style={{ right: 20, bottom: 176 }}
-      >
+      <FloatButton.Group trigger="click" style={{ right: 20, bottom: 176 }}>
         <FloatButton
           tooltip={"Import"}
           icon={<LoginOutlined />}
@@ -59,7 +60,7 @@ function SkillBtns({ toggleViewBtn, onToggleView }: SkillBtnsProps) {
 
       {/* Save Btn */}
       <FloatButton
-        type={isSaved ? 'default' : 'primary'}
+        type={isSaved ? "default" : "primary"}
         style={{ right: 20, bottom: 124 }}
         badge={{ dot: !isSaved }}
         tooltip={"Last Saved " + new Date(lastSaveTime).toLocaleString()}

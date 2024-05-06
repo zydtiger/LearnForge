@@ -1,7 +1,7 @@
-import React, { SyntheticEvent } from 'react';
-import { SkillListDataNode, SkillsetRawNode } from '../types';
+import React, { SyntheticEvent } from "react";
+import { SkillListDataNode, SkillsetRawNode } from "../types";
 
-import SkillListNode from '../components/SkillListNode';
+import SkillListNode from "../components/SkillListNode";
 
 /**
  * Generates list data recursively from data prop.
@@ -17,9 +17,9 @@ function convertToListDataRecursive(
   parentKey: React.Key,
   index: number,
   onChange: (event: SyntheticEvent) => void,
-  keysCollect: React.Key[]
+  keysCollect: React.Key[],
 ): SkillListDataNode {
-  const key = parentKey + '-' + String(index);
+  const key = parentKey + "-" + String(index);
   keysCollect.push(key);
 
   return {
@@ -30,7 +30,7 @@ function convertToListDataRecursive(
         event.type += `|${currentNode.id}`; // exposes the key of the current node for event location
         onChange(event);
       },
-      isRoot: parentKey == '0'
+      isRoot: parentKey == "0",
     }),
 
     // stores name and progress for regeneration
@@ -38,8 +38,9 @@ function convertToListDataRecursive(
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
     mdNote: currentNode.mdNote,
-    children: currentNode.children
-      ?.map((val, index) => convertToListDataRecursive(val, key, index, onChange, keysCollect))
+    children: currentNode.children?.map((val, index) =>
+      convertToListDataRecursive(val, key, index, onChange, keysCollect),
+    ),
   };
 }
 
@@ -53,9 +54,9 @@ function convertToListDataRecursive(
 function convertToListData(
   rootNode: SkillsetRawNode,
   onChange: (event: SyntheticEvent) => void,
-  keysCollect: React.Key[]
+  keysCollect: React.Key[],
 ): SkillListDataNode[] {
-  return [convertToListDataRecursive(rootNode, '0', 0, onChange, keysCollect)];
+  return [convertToListDataRecursive(rootNode, "0", 0, onChange, keysCollect)];
 }
 
 /**
@@ -69,7 +70,9 @@ function convertToRawData(currentNode: SkillListDataNode): SkillsetRawNode {
     name: currentNode.name,
     progressPercent: currentNode.progressPercent,
     mdNote: currentNode.mdNote,
-    children: currentNode.children?.map((val: SkillListDataNode) => convertToRawData(val))
+    children: currentNode.children?.map((val: SkillListDataNode) =>
+      convertToRawData(val),
+    ),
   };
 }
 
@@ -79,7 +82,10 @@ function convertToRawData(currentNode: SkillListDataNode): SkillsetRawNode {
  * @param key the target key to find
  * @returns [siblings, index, node]
  */
-function findListNode(siblings: SkillListDataNode[], key: React.Key): [SkillListDataNode[], number, SkillListDataNode] | null {
+function findListNode(
+  siblings: SkillListDataNode[],
+  key: React.Key,
+): [SkillListDataNode[], number, SkillListDataNode] | null {
   for (let i = 0; i < siblings.length; i++) {
     if (siblings[i].key == key) {
       return [siblings, i, siblings[i]];
@@ -90,6 +96,6 @@ function findListNode(siblings: SkillListDataNode[], key: React.Key): [SkillList
     }
   }
   return null;
-};
+}
 
 export { convertToListData, convertToRawData, findListNode };

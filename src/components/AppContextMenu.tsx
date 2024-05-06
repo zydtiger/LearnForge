@@ -1,44 +1,44 @@
-import { Dropdown, MenuProps } from 'antd';
-import { convertMenuToDisplayMode, invokeAction } from '../lib/menu';
+import { Dropdown, MenuProps } from "antd";
+import { convertMenuToDisplayMode, invokeAction } from "../lib/menu";
 
-const items: MenuProps['items'] = [
+const items: MenuProps["items"] = [
   {
-    label: 'Save',
-    key: 'save'
+    label: "Save",
+    key: "save",
   },
   {
-    type: 'divider'
+    type: "divider",
   },
   {
-    label: 'Undo',
-    key: 'undo',
+    label: "Undo",
+    key: "undo",
   },
   {
-    label: 'Redo',
-    key: 'redo',
+    label: "Redo",
+    key: "redo",
   },
   {
-    type: 'divider'
+    type: "divider",
   },
   {
-    label: 'Reset View',
-    key: 'reset',
+    label: "Reset View",
+    key: "reset",
   },
   {
-    label: 'Tree',
-    key: 'tree'
+    label: "Tree",
+    key: "tree",
   },
   {
-    label: 'List',
-    key: 'list'
+    label: "List",
+    key: "list",
   },
   {
-    type: 'divider'
+    type: "divider",
   },
   {
-    label: 'Help',
-    key: 'help',
-  }
+    label: "Help",
+    key: "help",
+  },
 ];
 
 function SkillContextMenu(props: React.PropsWithChildren) {
@@ -46,9 +46,9 @@ function SkillContextMenu(props: React.PropsWithChildren) {
     <Dropdown
       menu={{
         items: convertMenuToDisplayMode(items),
-        onClick: ({ key }) => invokeAction(key)
+        onClick: ({ key }) => invokeAction(key),
       }}
-      trigger={['contextMenu']}
+      trigger={["contextMenu"]}
     >
       {props.children}
     </Dropdown>

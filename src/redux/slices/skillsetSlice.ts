@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { DefaultRootNode } from "../../types/defaults";
-import { nanoid } from 'nanoid';
-import { EditHistory } from '../../lib/editHistory';
-import { findNode } from '../../lib/skillset';
+import { nanoid } from "nanoid";
+import { EditHistory } from "../../lib/editHistory";
+import { findNode } from "../../lib/skillset";
 import { SkillsetRawNode } from "../../types";
 import { fetchSkillset, saveSkillset } from "../thunks/skillsetThunks";
 
 export interface SkillsetState {
-  data: SkillsetRawNode;      // skillset data
-  isInitialBoot: boolean;     // whether to show manual modal on app opening
-  lastSaveTime: string;       // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
+  data: SkillsetRawNode; // skillset data
+  isInitialBoot: boolean; // whether to show manual modal on app opening
+  lastSaveTime: string; // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
 
   // fields below should not be persisted
-  isFirstTimeLoading: boolean;// whether to show loading page
-  isSaved: boolean;           // whether the current state is persisted
+  isFirstTimeLoading: boolean; // whether to show loading page
+  isSaved: boolean; // whether the current state is persisted
 }
 
 const initialState: SkillsetState = {
@@ -27,8 +27,9 @@ const initialState: SkillsetState = {
 
 const generateIds = (state: SkillsetState) => {
   const generateIdsRecursive = (node: SkillsetRawNode, isRoot: boolean) => {
-    if (!node.id) { // assigns node.id only when it does not exist
-      node.id = isRoot ? 'root' : nanoid();
+    if (!node.id) {
+      // assigns node.id only when it does not exist
+      node.id = isRoot ? "root" : nanoid();
     }
     if (node.children) {
       for (const child of node.children) {
@@ -47,7 +48,7 @@ const loadData = (state: SkillsetState, payload: SkillsetRawNode) => {
 export const history = new EditHistory<SkillsetRawNode>();
 
 const skillsetSlice = createSlice({
-  name: 'skillset',
+  name: "skillset",
   initialState,
   reducers: {
     // reducer is here to update state locally.
@@ -70,7 +71,7 @@ const skillsetSlice = createSlice({
     redo(state) {
       history.redo();
       loadData(state, history.current()!);
-    }
+    },
   },
   extraReducers(builder) {
     builder
@@ -88,17 +89,21 @@ const skillsetSlice = createSlice({
       .addCase(saveSkillset.fulfilled, (state, _) => {
         state.isSaved = true;
       });
-  }
+  },
 });
 
-export const { setSkillset, setSkillsetNodeById, undo, redo } = skillsetSlice.actions;
+export const { setSkillset, setSkillsetNodeById, undo, redo } =
+  skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
-export const selectIsInitialBoot = (state: RootState) => state.skillset.isInitialBoot;
-export const selectLastSaveTime = (state: RootState) => state.skillset.lastSaveTime;
+export const selectIsInitialBoot = (state: RootState) =>
+  state.skillset.isInitialBoot;
+export const selectLastSaveTime = (state: RootState) =>
+  state.skillset.lastSaveTime;
 export const selectIsSaved = (state: RootState) => state.skillset.isSaved;
 export const selectIsUndoable = () => history.isUndoable();
 export const selectIsRedoable = () => history.isRedoable();
-export const selectIsFirstTimeLoading = (state: RootState) => state.skillset.isFirstTimeLoading;
+export const selectIsFirstTimeLoading = (state: RootState) =>
+  state.skillset.isFirstTimeLoading;
 
 export default skillsetSlice.reducer;

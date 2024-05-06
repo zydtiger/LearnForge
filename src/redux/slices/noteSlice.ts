@@ -1,12 +1,12 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { SkillsetRawNode } from '../../types';
-import { DefaultRootNode } from '../../types/defaults';
-import { RootState } from '../store';
-import { EditHistory } from '../../lib/editHistory';
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { SkillsetRawNode } from "../../types";
+import { DefaultRootNode } from "../../types/defaults";
+import { RootState } from "../store";
+import { EditHistory } from "../../lib/editHistory";
 
 interface NoteState {
-  noteViewNode: SkillsetRawNode;// the current node to edit in note view
-  isNoteSaved: boolean;         // whether the current note is saved into skillset tree
+  noteViewNode: SkillsetRawNode; // the current node to edit in note view
+  isNoteSaved: boolean; // whether the current note is saved into skillset tree
 }
 
 const initialState: NoteState = {
@@ -19,13 +19,13 @@ let editCounter = 0;
 const EditSensitivity = 5; // determines how many edits triggers history management
 
 const noteSlice = createSlice({
-  name: 'note',
+  name: "note",
   initialState,
   reducers: {
     setNoteViewNode(state, action: PayloadAction<SkillsetRawNode>) {
       state.noteViewNode = action.payload;
       history.clear();
-      history.push(state.noteViewNode.mdNote || '');
+      history.push(state.noteViewNode.mdNote || "");
       state.isNoteSaved = true;
     },
     updateMarkdownNote(state, action: PayloadAction<string>) {
@@ -48,11 +48,12 @@ const noteSlice = createSlice({
     redo(state) {
       history.redo();
       state.noteViewNode.mdNote = history.current()!;
-    }
-  }
+    },
+  },
 });
 
-export const { setNoteViewNode, updateMarkdownNote, updateName, undo, redo } = noteSlice.actions;
+export const { setNoteViewNode, updateMarkdownNote, updateName, undo, redo } =
+  noteSlice.actions;
 
 export const selectNoteViewNode = (state: RootState) => state.note.noteViewNode;
 export const selectIsNoteSaved = (state: RootState) => state.note.isNoteSaved;

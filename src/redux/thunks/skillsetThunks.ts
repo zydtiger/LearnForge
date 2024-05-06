@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { invoke } from "@tauri-apps/api";
-import { openDialog, saveDialog } from '../../lib/dialogs';
+import { openDialog, saveDialog } from "../../lib/dialogs";
 import { RootState } from "../store";
 import { SkillsetState, history } from "../slices/skillsetSlice";
-import { pushMessage } from '../slices/messageSlice';
+import { pushMessage } from "../slices/messageSlice";
 import {
   getStorageReadEndpoint,
   getStorageWriteEndpoint,
   getStorageExportEndpoint,
-  getStorageImportEndpoint
+  getStorageImportEndpoint,
 } from "../../constants/endpoints";
-import { TreeSVGExport, TreeImageExport } from '../../lib/export';
+import { TreeSVGExport, TreeImageExport } from "../../lib/export";
 
 /**
  * Fetches the skillset from backend.
@@ -20,7 +20,7 @@ export const fetchSkillset = createAsyncThunk(
   async () => {
     const response = await invoke(getStorageReadEndpoint());
     return response;
-  }
+  },
 );
 
 const unwrapState = (state: unknown) => {
@@ -41,7 +41,7 @@ export const saveSkillset = createAsyncThunk(
     const state = { ...unwrapState(getState()) };
     state.lastSaveTime = new Date().toISOString();
     writeState(state, () => dispatch(fetchSkillset()));
-  }
+  },
 );
 
 /**
@@ -53,7 +53,7 @@ export const setNotInitialBoot = createAsyncThunk(
     const state = { ...unwrapState(getState()) };
     state.isInitialBoot = false;
     writeState(state, () => dispatch(fetchSkillset()));
-  }
+  },
 );
 
 /**
@@ -66,28 +66,30 @@ export const exportSkillset = createAsyncThunk(
     const filePath = await saveDialog();
     if (!filePath) return; // don't do anything if user cancels
 
-    const parts = filePath.split('.');
+    const parts = filePath.split(".");
     const extension = parts[parts.length - 1];
 
-    if (extension == 'lf') {
+    if (extension == "lf") {
       invoke(getStorageExportEndpoint(), { filePath });
-    } else if (extension == 'svg') {
+    } else if (extension == "svg") {
       const encoder = new TextEncoder();
       const payload = Array.from(encoder.encode(TreeSVGExport()));
       invoke(getStorageExportEndpoint(), { filePath, payload });
-    } else if (extension == 'png') {
-      const payload = Array.from(await TreeImageExport('png'));
+    } else if (extension == "png") {
+      const payload = Array.from(await TreeImageExport("png"));
       invoke(getStorageExportEndpoint(), { filePath, payload });
-    } else if (extension == 'jpg' || extension == 'jpeg') {
-      const payload = Array.from(await TreeImageExport('jpeg'));
+    } else if (extension == "jpg" || extension == "jpeg") {
+      const payload = Array.from(await TreeImageExport("jpeg"));
       invoke(getStorageExportEndpoint(), { filePath, payload });
     } else {
-      dispatch(pushMessage({
-        type: 'error',
-        content: `Exporting to extension .${extension} is undefined`
-      }));
+      dispatch(
+        pushMessage({
+          type: "error",
+          content: `Exporting to extension .${extension} is undefined`,
+        }),
+      );
     }
-  }
+  },
 );
 
 /**
@@ -103,5 +105,5 @@ export const importSkillset = createAsyncThunk(
     // push current state to history after import
     const state = { ...unwrapState(getState()) };
     history.push({ ...state.data });
-  }
+  },
 );

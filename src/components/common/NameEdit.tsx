@@ -3,7 +3,7 @@ import { Flex, Popover, Input, Button, ButtonProps } from "antd";
 import { EditOutlined, CheckOutlined } from "@ant-design/icons";
 
 interface NameEditProps {
-  size: ButtonProps['size'],
+  size: ButtonProps["size"];
   defaultValue: string;
   onChange: (event: SyntheticEvent) => void;
 }
@@ -15,7 +15,7 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
 
   const emitEvent = (event: SyntheticEvent) => {
     setOpen(false);
-    event.type = 'changeName';
+    event.type = "changeName";
     // @ts-ignore
     event.target.value = value; // fake event.target.value for downstream processing
     onChange(event);
@@ -35,7 +35,9 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
             }}
             onPressEnter={emitEvent}
           />
-          {edited && <Button type="link" icon={<CheckOutlined />} onClick={emitEvent} />}
+          {edited && (
+            <Button type="link" icon={<CheckOutlined />} onClick={emitEvent} />
+          )}
         </Flex>
       }
       open={open}
@@ -54,9 +56,9 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
 }
 
 NameEdit.defaultProps = {
-  size: 'middle',
-  defaultValue: '',
-  onChange: () => { }
+  size: "middle",
+  defaultValue: "",
+  onChange: () => {},
 };
 
 export default NameEdit;

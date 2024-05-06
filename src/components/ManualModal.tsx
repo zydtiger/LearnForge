@@ -1,7 +1,7 @@
-import { Button, Modal, Tabs, Table } from 'antd';
-import { useEffect, useState } from 'react';
-import Markdown from 'react-markdown';
-import { actions, convertToPlatformShortcuts } from '../lib/menu';
+import { Button, Modal, Tabs, Table } from "antd";
+import { useEffect, useState } from "react";
+import Markdown from "react-markdown";
+import { actions, convertToPlatformShortcuts } from "../lib/menu";
 
 interface ManualModalProps {
   isModalOpen: boolean;
@@ -10,13 +10,13 @@ interface ManualModalProps {
 
 const tableColumns = [
   {
-    title: 'Action',
-    dataIndex: 'action',
+    title: "Action",
+    dataIndex: "action",
   },
   {
-    title: 'Shortcuts',
-    dataIndex: 'shortcuts',
-  }
+    title: "Shortcuts",
+    dataIndex: "shortcuts",
+  },
 ];
 
 function convertShortcutsToTableData() {
@@ -26,16 +26,17 @@ function convertShortcutsToTableData() {
       key: action,
       action,
       shortcuts: convertToPlatformShortcuts(actions[action].shortcuts)
-        .map((elem) => elem.toUpperCase()).toString(),
+        .map((elem) => elem.toUpperCase())
+        .toString(),
     });
   }
   return data;
 }
 
 function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
-  const [intro, setIntro] = useState('');
+  const [intro, setIntro] = useState("");
   useEffect(() => {
-    fetch('/Manual.md').then((res) => {
+    fetch("/Manual.md").then((res) => {
       res.text().then(setIntro);
     });
   });
@@ -43,20 +44,22 @@ function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
   // define tab items
   const items = [
     {
-      key: 'intro',
-      label: 'Introduction',
-      children: <Markdown>{intro}</Markdown>
+      key: "intro",
+      label: "Introduction",
+      children: <Markdown>{intro}</Markdown>,
     },
     {
-      key: 'shortcuts',
-      label: 'Shortcuts',
-      children: <Table
-        size="small"
-        pagination={false}
-        columns={tableColumns}
-        dataSource={convertShortcutsToTableData()}
-      />
-    }
+      key: "shortcuts",
+      label: "Shortcuts",
+      children: (
+        <Table
+          size="small"
+          pagination={false}
+          columns={tableColumns}
+          dataSource={convertShortcutsToTableData()}
+        />
+      ),
+    },
   ];
 
   return (
@@ -66,7 +69,9 @@ function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
       open={isModalOpen}
       onCancel={closeModal}
       footer={() => (
-        <Button type='primary' onClick={closeModal}>OK</Button>
+        <Button type="primary" onClick={closeModal}>
+          OK
+        </Button>
       )}
     >
       <Tabs items={items} />

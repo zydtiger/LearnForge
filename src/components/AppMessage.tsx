@@ -1,7 +1,7 @@
-import { message } from 'antd';
-import { useEffect } from 'react';
-import { useAppSelector } from '../redux/hooks';
-import { selectMessageQueue } from '../redux/slices/messageSlice';
+import { message } from "antd";
+import { useEffect } from "react";
+import { useAppSelector } from "../redux/hooks";
+import { selectMessageQueue } from "../redux/slices/messageSlice";
 
 function AppMessage() {
   const [messageApi, contextHolder] = message.useMessage();

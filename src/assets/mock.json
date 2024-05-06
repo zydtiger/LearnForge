@@ -1,11 +1,14 @@
 {
   "data": {
     "name": "Skillset",
-    "children": [{
+    "children": [
+      {
         "name": "Software",
-        "children": [{
+        "children": [
+          {
             "name": "Website",
-            "children": [{
+            "children": [
+              {
                 "name": "Nginx",
                 "progressPercent": 80
               },
@@ -18,7 +21,8 @@
           },
           {
             "name": "Utilities",
-            "children": [{
+            "children": [
+              {
                 "name": "Docker",
                 "progressPercent": 60
               },
@@ -34,7 +38,8 @@
       },
       {
         "name": "Hardware",
-        "children": [{
+        "children": [
+          {
             "name": "ESP32",
             "progressPercent": 50
           },

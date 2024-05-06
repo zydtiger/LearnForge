@@ -16,14 +16,14 @@ function SkillTree() {
   const initialZoom = 0.8;
   const initialTranslate: Point = { x: 200, y: window.innerHeight / 2 };
 
-  const handleOnNodeClick: TreeProps['onNodeClick'] = (node, event) => {
+  const handleOnNodeClick: TreeProps["onNodeClick"] = (node, event) => {
     if (NodeEventTypes.includes(event.type)) {
-      const value = (event.target as HTMLInputElement).value
+      const value = (event.target as HTMLInputElement).value;
       handleNodeChange(node.data.id, event.type, value);
-    } else if (event.type == 'toggleNode') {
+    } else if (event.type == "toggleNode") {
       tree.current!.handleToggleNode(node.data);
     } else {
-      console.error('Undefined node event is triggered');
+      console.error("Undefined node event is triggered");
     }
   };
 
@@ -44,7 +44,8 @@ function SkillTree() {
         tooltip={"Reset View"}
         icon={<ExpandOutlined />}
         style={{ top: 50, right: 20 }}
-        onClick={() => window.location.reload()} />
+        onClick={() => window.location.reload()}
+      />
     </>
   );
 }

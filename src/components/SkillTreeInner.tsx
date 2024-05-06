@@ -7,7 +7,10 @@ class SkillTreeInner extends Tree {
    * @param targetId target id to find
    * @returns node if found, null if not found
    */
-  findNodeInTree(currentNode: TreeNodeDatum, targetId: string): TreeNodeDatum | null {
+  findNodeInTree(
+    currentNode: TreeNodeDatum,
+    targetId: string,
+  ): TreeNodeDatum | null {
     if (currentNode.__rd3t.id == targetId) {
       return currentNode;
     }
@@ -34,7 +37,7 @@ class SkillTreeInner extends Tree {
     }
 
     this.setState({ data: dataClone });
-  };
+  }
 
   /**
    * Expands recursively at the target node.
@@ -42,7 +45,7 @@ class SkillTreeInner extends Tree {
    */
   static override expandNode(nodeDatum: TreeNodeDatum): void {
     super.expandNode(nodeDatum);
-    nodeDatum.children?.forEach(child => SkillTreeInner.expandNode(child));
+    nodeDatum.children?.forEach((child) => SkillTreeInner.expandNode(child));
   }
 }
 

@@ -8,22 +8,22 @@ export const saveDialog = async () => {
   const filePath = await save({
     filters: [
       {
-        name: 'LearnForge',
-        extensions: ['lf']
+        name: "LearnForge",
+        extensions: ["lf"],
       },
       {
-        name: 'Scalable Vector Graphics',
-        extensions: ['svg']
+        name: "Scalable Vector Graphics",
+        extensions: ["svg"],
       },
       {
-        name: 'Portable Network Graphics',
-        extensions: ['png']
+        name: "Portable Network Graphics",
+        extensions: ["png"],
       },
       {
-        name: 'Joint Photographic Experts Group',
-        extensions: ['jpg', 'jpeg']
-      }
-    ]
+        name: "Joint Photographic Experts Group",
+        extensions: ["jpg", "jpeg"],
+      },
+    ],
   });
   return filePath;
 };
@@ -35,10 +35,12 @@ export const saveDialog = async () => {
 export const openDialog = async () => {
   const filePath = await open({
     multiple: false,
-    filters: [{
-      name: 'LearnForge',
-      extensions: ['lf']
-    }]
+    filters: [
+      {
+        name: "LearnForge",
+        extensions: ["lf"],
+      },
+    ],
   });
   return filePath;
 };

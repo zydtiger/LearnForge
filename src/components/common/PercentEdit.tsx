@@ -1,6 +1,10 @@
 import { SyntheticEvent, useState } from "react";
 import { Button, Flex, Popover, Slider, InputNumber } from "antd";
-import { EditOutlined, CheckOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  CheckOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
 
 interface PercentEditProps {
   defaultValue: number;
@@ -19,7 +23,7 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
 
   const emitEvent = (event: SyntheticEvent, value: number) => {
     setOpen(false);
-    event.type = 'changePercent';
+    event.type = "changePercent";
     // @ts-ignore
     event.target.value = value; // fake event.target.value for downstream processing
     onChange(event);
@@ -30,13 +34,18 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
       placement="bottom"
       content={
         <Flex align="center">
-          <Button type="link" icon={<CheckCircleOutlined />} onClick={(event) => emitEvent(event, 100)} />
+          <Button
+            type="link"
+            icon={<CheckCircleOutlined />}
+            onClick={(event) => emitEvent(event, 100)}
+          />
           <Slider
             min={0}
             max={100}
             value={value}
             style={{ width: 100, marginRight: 10 }}
-            onChange={changeValue} />
+            onChange={changeValue}
+          />
           <InputNumber
             min={0}
             max={100}
@@ -45,7 +54,13 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
             onChange={(value) => changeValue(value ?? 0)}
             onPressEnter={(event) => emitEvent(event, value)}
           />
-          {edited && <Button type="link" icon={<CheckOutlined />} onClick={(event) => emitEvent(event, value)} />}
+          {edited && (
+            <Button
+              type="link"
+              icon={<CheckOutlined />}
+              onClick={(event) => emitEvent(event, value)}
+            />
+          )}
         </Flex>
       }
       open={open}
@@ -65,7 +80,7 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
 
 PercentEdit.defaultProps = {
   defaultValue: 0,
-  onChange: () => { },
+  onChange: () => {},
 };
 
 export default PercentEdit;

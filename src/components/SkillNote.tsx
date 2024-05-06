@@ -1,15 +1,15 @@
-import { KeyboardEventHandler, useEffect } from 'react';
+import { KeyboardEventHandler, useEffect } from "react";
 import { FloatButton, Typography } from "antd";
 import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
-import MDEditor from '@uiw/react-md-editor';
-import rehypeSanitize from 'rehype-sanitize';
-import { getCodeString } from 'rehype-rewrite';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
+import { getCodeString } from "rehype-rewrite";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   selectPrevViewBeforeNote,
   selectViewMode,
-  setViewMode
-} from '../redux/slices/viewSlice';
+  setViewMode,
+} from "../redux/slices/viewSlice";
 import {
   selectNoteViewNode,
   selectIsNoteSaved,
@@ -18,10 +18,10 @@ import {
   updateMarkdownNote,
   updateName,
   undo,
-  redo
-} from '../redux/slices/noteSlice';
-import { setSkillsetNodeById } from '../redux/slices/skillsetSlice';
-import katex from 'katex';
+  redo,
+} from "../redux/slices/noteSlice";
+import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
+import katex from "katex";
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -44,15 +44,15 @@ function SkillNote() {
   };
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
-    if (event.key == 'Escape') {
+    if (event.key == "Escape") {
       quitToPrev();
     }
   };
 
   useEffect(() => {
     // auto focus on the editor if note view is shown
-    if (viewMode == 'note') {
-      document.querySelector('textarea')?.focus();
+    if (viewMode == "note") {
+      document.querySelector("textarea")?.focus();
     }
   }, [viewMode]);
 
@@ -67,7 +67,7 @@ function SkillNote() {
         editable={{
           onChange: (value) => {
             dispatch(updateName(value));
-          }
+          },
         }}
         style={{ top: 0, left: 0 }}
       >
@@ -76,7 +76,7 @@ function SkillNote() {
 
       {/* Editor */}
       <MDEditor
-        height={'calc(100vh - 145px)'}
+        height={"calc(100vh - 145px)"}
         visibleDragbar={false}
         value={nodeDatum.mdNote}
         onChange={(val) => dispatch(updateMarkdownNote(val!))}
@@ -85,39 +85,66 @@ function SkillNote() {
           components: {
             // KATEX rendering
             li: ({ children = [], className }) => {
-              if (typeof children === 'string' && /^\$(.*)\$/.test(children)) {
-                const html = katex.renderToString(children.replace(/^\$(.*)\$/, '$1'), { throwOnError: false, output: 'mathml' });
-                return <li dangerouslySetInnerHTML={{ __html: html }} style={{ background: 'transparent' }} />;
+              if (typeof children === "string" && /^\$(.*)\$/.test(children)) {
+                const html = katex.renderToString(
+                  children.replace(/^\$(.*)\$/, "$1"),
+                  { throwOnError: false, output: "mathml" },
+                );
+                return (
+                  <li
+                    dangerouslySetInnerHTML={{ __html: html }}
+                    style={{ background: "transparent" }}
+                  />
+                );
               }
               return <li className={String(className)}>{children}</li>;
             },
             p: ({ children = [], className }) => {
-              if (typeof children === 'string' && /^\$(.*)\$/.test(children)) {
-                const html = katex.renderToString(children.replace(/^\$(.*)\$/, '$1'), { throwOnError: false, output: 'mathml' });
-                return <p dangerouslySetInnerHTML={{ __html: html }} style={{ background: 'transparent' }} />;
+              if (typeof children === "string" && /^\$(.*)\$/.test(children)) {
+                const html = katex.renderToString(
+                  children.replace(/^\$(.*)\$/, "$1"),
+                  { throwOnError: false, output: "mathml" },
+                );
+                return (
+                  <p
+                    dangerouslySetInnerHTML={{ __html: html }}
+                    style={{ background: "transparent" }}
+                  />
+                );
               }
               return <p className={String(className)}>{children}</p>;
             },
             code: ({ children = [], className, ...props }) => {
-              const code = props.node && props.node.children ? getCodeString(props.node.children) : children;
+              const code =
+                props.node && props.node.children
+                  ? getCodeString(props.node.children)
+                  : children;
               if (
-                typeof code === 'string' &&
-                typeof className === 'string' &&
+                typeof code === "string" &&
+                typeof className === "string" &&
                 /^language-katex/.test(className.toLocaleLowerCase())
               ) {
-                const html = katex.renderToString(code, { throwOnError: false, output: 'mathml', displayMode: true });
-                return <code style={{ fontSize: '150%' }} dangerouslySetInnerHTML={{ __html: html }} />;
+                const html = katex.renderToString(code, {
+                  throwOnError: false,
+                  output: "mathml",
+                  displayMode: true,
+                });
+                return (
+                  <code
+                    style={{ fontSize: "150%" }}
+                    dangerouslySetInnerHTML={{ __html: html }}
+                  />
+                );
               }
               return <code className={String(className)}>{children}</code>;
             },
           },
-
         }}
       />
 
       {/* Save Btn */}
       <FloatButton
-        type={isNoteSaved ? 'default' : 'primary'}
+        type={isNoteSaved ? "default" : "primary"}
         style={{ right: 20, bottom: 20 }}
         tooltip="Done"
         icon={<CheckOutlined />}

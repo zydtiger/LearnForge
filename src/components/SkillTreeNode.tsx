@@ -1,13 +1,17 @@
 import { CustomNodeElementProps } from "react-d3-tree";
-import { Flex, Button, Tooltip } from 'antd';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { Flex, Button, Tooltip } from "antd";
+import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import NameEdit from "./common/NameEdit";
 import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 import ClearBtn from "./common/ClearBtn";
 import { calcProgressColor } from "../constants/color";
 
-function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNodeElementProps) {
+function SkillTreeNode({
+  nodeDatum,
+  hierarchyPointNode,
+  onNodeClick,
+}: CustomNodeElementProps) {
   const maxWidth = 250;
   const width = Math.min(nodeDatum.name.length * 8 + 100, maxWidth);
   const height = 75;
@@ -16,33 +20,54 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
   const isCollapsed = nodeDatum.__rd3t.collapsed;
 
   return (
-    <g onClick={(event) => {
-      if (event.detail == 2) { // this means a double click on the node
-        event.type = 'triggerNote';
-        setTimeout(() => onNodeClick(event)); // solves node rendering error by queueing
-      }
-    }}>
+    <g
+      onClick={(event) => {
+        if (event.detail == 2) {
+          // this means a double click on the node
+          event.type = "triggerNote";
+          setTimeout(() => onNodeClick(event)); // solves node rendering error by queueing
+        }
+      }}
+    >
       {/* Background */}
-      <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="white" stroke="none" />
+      <rect
+        width={width}
+        height={height}
+        x={-width / 2}
+        y={-height / 2}
+        fill="white"
+        stroke="none"
+      />
 
       {/* Progress Bar */}
       <rect
-        width={nodeDatum.progressPercent / 100 * width} height={height}
-        x={-width / 2} y={-height / 2}
-        fill={calcProgressColor(nodeDatum.progressPercent)} stroke="none"
+        width={(nodeDatum.progressPercent / 100) * width}
+        height={height}
+        x={-width / 2}
+        y={-height / 2}
+        fill={calcProgressColor(nodeDatum.progressPercent)}
+        stroke="none"
       />
 
       {/* Title */}
-      <foreignObject className="title" x={-width / 2 + 10} y={-height / 2 + 10} width={width - 30} height={60}>
+      <foreignObject
+        className="title"
+        x={-width / 2 + 10}
+        y={-height / 2 + 10}
+        width={width - 30}
+        height={60}
+      >
         <Flex align="center">
           <Tooltip title={nodeDatum.name}>
-            <p style={{
-              fontWeight: isLeafNode ? 'normal' : '600',
-              maxWidth: width - 80,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis'
-            }}>
+            <p
+              style={{
+                fontWeight: isLeafNode ? "normal" : "600",
+                maxWidth: width - 80,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
               {nodeDatum.name}
             </p>
           </Tooltip>
@@ -51,42 +76,85 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
       </foreignObject>
 
       {/* Percentage */}
-      <foreignObject className="percentage" x={width / 2 - 55} y={height / 2 - 30} width={50} height={20}>
+      <foreignObject
+        className="percentage"
+        x={width / 2 - 55}
+        y={height / 2 - 30}
+        width={50}
+        height={20}
+      >
         <Flex justify="flex-end" align="center">
-          <p style={{ fontSize: 12 }}>{Math.round(nodeDatum.progressPercent)}%</p>
+          <p style={{ fontSize: 12 }}>
+            {Math.round(nodeDatum.progressPercent)}%
+          </p>
           {/* Only allow percentage change if at leaf node */}
-          {isLeafNode ?
-            <PercentEdit defaultValue={nodeDatum.progressPercent} onChange={onNodeClick} /> :
-            <div style={{ width: 10 }}></div> // placeholder for aligning percentage label
+          {
+            isLeafNode ? (
+              <PercentEdit
+                defaultValue={nodeDatum.progressPercent}
+                onChange={onNodeClick}
+              />
+            ) : (
+              <div style={{ width: 10 }}></div>
+            ) // placeholder for aligning percentage label
           }
         </Flex>
       </foreignObject>
 
       {/* Delete Btn */}
-      {!isRootNode &&
-        <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
-          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+      {!isRootNode && (
+        <foreignObject
+          x={width / 2 - 45}
+          y={-height / 2 - 5}
+          width={50}
+          height={50}
+        >
+          <Flex
+            justify="center"
+            align="center"
+            style={{ width: "100%", height: "100%" }}
+          >
             <DeleteBtn onClick={onNodeClick} />
           </Flex>
         </foreignObject>
-      }
+      )}
 
       {/* Clear Btn */}
-      {isRootNode &&
-        <foreignObject x={width / 2 - 45} y={-height / 2 - 5} width={50} height={50}>
-          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+      {isRootNode && (
+        <foreignObject
+          x={width / 2 - 45}
+          y={-height / 2 - 5}
+          width={50}
+          height={50}
+        >
+          <Flex
+            justify="center"
+            align="center"
+            style={{ width: "100%", height: "100%" }}
+          >
             <ClearBtn onClick={onNodeClick} />
           </Flex>
         </foreignObject>
-      }
+      )}
 
       {/* Border */}
-      <rect width={width} height={height} x={-width / 2} y={-height / 2} fill="none" stroke="black" />
+      <rect
+        width={width}
+        height={height}
+        x={-width / 2}
+        y={-height / 2}
+        fill="none"
+        stroke="black"
+      />
 
       {/* Expand / Collapse Btn */}
-      {!isLeafNode &&
+      {!isLeafNode && (
         <foreignObject x={width / 2 - 10} y={-25} width={50} height={50}>
-          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+          <Flex
+            justify="center"
+            align="center"
+            style={{ width: "100%", height: "100%" }}
+          >
             <Button
               type="primary"
               size="small"
@@ -94,30 +162,39 @@ function SkillTreeNode({ nodeDatum, hierarchyPointNode, onNodeClick }: CustomNod
               danger={!isCollapsed}
               icon={isCollapsed ? <PlusOutlined /> : <MinusOutlined />}
               onClick={(event) => {
-                event.type = 'toggleNode';
+                event.type = "toggleNode";
                 onNodeClick(event);
               }}
             />
           </Flex>
         </foreignObject>
-      }
+      )}
 
       {/* Add Btn */}
-      {!isCollapsed &&
-        <foreignObject x={isLeafNode ? width / 2 - 10 : 150} y={-25} width={50} height={50}>
-          <Flex justify="center" align="center" style={{ width: '100%', height: '100%' }}>
+      {!isCollapsed && (
+        <foreignObject
+          x={isLeafNode ? width / 2 - 10 : 150}
+          y={-25}
+          width={50}
+          height={50}
+        >
+          <Flex
+            justify="center"
+            align="center"
+            style={{ width: "100%", height: "100%" }}
+          >
             <Button
               type="primary"
               size="small"
               icon={<PlusOutlined />}
               onClick={(event) => {
-                event.type = 'addNode';
+                event.type = "addNode";
                 onNodeClick(event);
               }}
             />
           </Flex>
         </foreignObject>
-      }
+      )}
     </g>
   );
 }
