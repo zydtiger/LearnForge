@@ -103,4 +103,4 @@ If you encounter any issues, have suggestions for new features, or need assistan
 
 ## License
 
-LearnForge is released under the [MIT License](https://opensource.org/licenses/MIT). Please refer to the LICENSE file for more details.
+LearnForge is released under the [MIT License](https://raw.githubusercontent.com/zydtiger/LearnForge/dev/LICENSE).
