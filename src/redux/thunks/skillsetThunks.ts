@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { invoke } from "@tauri-apps/api";
+import { invoke } from "../../lib/persistData";
 import { openDialog, saveDialog } from "../../lib/dialogs";
 import { RootState } from "../store";
 import { SkillsetState, history } from "../slices/skillsetSlice";
