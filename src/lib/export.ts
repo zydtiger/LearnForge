@@ -41,9 +41,14 @@ function TreeSVGExport(): string {
   removeUnnecessary(treeSVGClone);
   // calculate bounds
   const nodes = treeSVGClone.children[0].querySelectorAll("g");
-  let minY = Infinity;
-  let maxY = 0;
-  let maxX = 0;
+  let minYPos = Infinity;
+  let minYHeight = 0;
+  let maxYPos = 0;
+  let maxYHeight = 0;
+  let minXPos = Infinity;
+  let minXWidth = 0;
+  let maxXPos = 0;
+  let maxXWidth = 0;
   nodes.forEach((node) => {
     const transform = node.getAttribute("transform");
     if (!transform) return;
@@ -52,16 +57,37 @@ function TreeSVGExport(): string {
     const leftParenthesisPos = transform.indexOf(")");
     const xPos = Number(transform.slice(rightParenthesisPos + 1, commaPos));
     const yPos = Number(transform.slice(commaPos + 1, leftParenthesisPos));
-    if (yPos < minY) minY = yPos;
-    if (yPos > maxY) maxY = yPos;
-    if (xPos > maxX) maxX = xPos;
+    if (yPos < minYPos) {
+      minYPos = yPos;
+      minYHeight = Number(node.querySelector("rect")?.getAttribute("height"));
+    }
+    if (yPos > maxYPos) {
+      maxYPos = yPos;
+      maxYHeight = Number(node.querySelector("rect")?.getAttribute("height"));
+    }
+    if (xPos < minXPos) {
+      minXPos = xPos;
+      minXWidth = Number(node.querySelector("rect")?.getAttribute("width"));
+    }
+    if (xPos > maxXPos) {
+      maxXPos = xPos;
+      maxXWidth = Number(node.querySelector("rect")?.getAttribute("width"));
+    }
   });
+  const padding = 100;
+  const minYBound = minYPos - minYHeight / 2;
+  const maxYBound = maxYPos + maxYHeight / 2;
+  const minXBound = minXPos - minXWidth / 2;
+  const maxXBound = maxXPos + maxXWidth / 2;
+  const width = maxXBound - minXBound + 2 * padding;
+  const height = maxYBound - minYBound + 2 * padding;
+  const rootCoord = [padding + minXWidth / 2, padding - minYBound];
   // set bounds
-  treeSVGClone.setAttribute("width", `${maxX + 400}px`);
-  treeSVGClone.setAttribute("height", `${maxY - minY + 200}px`);
+  treeSVGClone.setAttribute("width", `${width}px`);
+  treeSVGClone.setAttribute("height", `${height}px`);
   treeSVGClone.children[0].setAttribute(
     "transform",
-    `translate(200, ${(maxY - minY) / 2 - 100})`,
+    `translate(${rootCoord[0]}, ${rootCoord[1]})`,
   );
   // serialize
   const serializer = new XMLSerializer();
