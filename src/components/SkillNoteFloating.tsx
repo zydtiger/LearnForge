@@ -6,6 +6,7 @@ import {
   selectNoteViewNode,
 } from "../redux/slices/noteSlice";
 import { useRef } from "react";
+import rehypeSanitize from "rehype-sanitize";
 
 function SkillNoteFloating() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -44,7 +45,9 @@ function SkillNoteFloating() {
             height: 170,
           }}
         >
-          <Markdown>{nodeDatum.mdNote}</Markdown>
+          <Markdown rehypePlugins={[rehypeSanitize]}>
+            {nodeDatum.mdNote}
+          </Markdown>
         </div>
 
         {/* Ellipsis for overflow */}
