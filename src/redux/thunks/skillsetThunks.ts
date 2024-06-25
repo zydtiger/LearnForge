@@ -11,6 +11,7 @@ import {
   getStorageImportEndpoint,
 } from "../../constants/endpoints";
 import { TreeSVGExport, TreeImageExport } from "../../lib/export";
+import { TAURI_ENV } from "../../constants/env";
 
 /**
  * Fetches the skillset from backend.
@@ -66,7 +67,8 @@ export const exportSkillset = createAsyncThunk(
     const filePath = await saveDialog();
     if (!filePath) return; // don't do anything if user cancels
 
-    const parts = filePath.split(".");
+    const filename = TAURI_ENV ? filePath : filePath.name;
+    const parts = filename.split(".");
     const extension = parts[parts.length - 1];
 
     if (extension == "lf") {
