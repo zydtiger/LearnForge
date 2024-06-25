@@ -16,12 +16,9 @@ const DefaultPersistedSillset = () => ({
 });
 
 function readStorage(): Object {
-  const data = sessionStorage.getItem("skillset");
+  const data = localStorage.getItem("skillset");
   if (data == null) {
-    sessionStorage.setItem(
-      "skillset",
-      JSON.stringify(DefaultPersistedSillset()),
-    );
+    localStorage.setItem("skillset", JSON.stringify(DefaultPersistedSillset()));
     return DefaultPersistedSillset();
   }
   return JSON.parse(data);
@@ -29,7 +26,7 @@ function readStorage(): Object {
 
 function writeStorage({ state }: { state: SkillsetState }) {
   const { data, isInitialBoot, lastSaveTime } = state;
-  sessionStorage.setItem(
+  localStorage.setItem(
     "skillset",
     JSON.stringify({ data, isInitialBoot, lastSaveTime }),
   );
