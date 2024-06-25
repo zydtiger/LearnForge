@@ -6,6 +6,8 @@ import {
 } from "../constants/endpoints";
 import { invoke as tauriInvoke, tauri } from "@tauri-apps/api";
 import { DefaultRootNode } from "../types/defaults";
+import { SkillsetState } from "../redux/slices/skillsetSlice";
+import { TAURI_ENV } from "../constants/env";
 
 const DefaultPersistedSillset = () => ({
   data: DefaultRootNode(),
@@ -25,9 +27,7 @@ function readStorage(): Object {
   return JSON.parse(data);
 }
 
-// @ts-ignore
-function writeStorage({ state }: Object) {
-  // @ts-ignore
+function writeStorage({ state }: { state: SkillsetState }) {
   const { data, isInitialBoot, lastSaveTime } = state;
   sessionStorage.setItem(
     "skillset",
@@ -35,24 +35,37 @@ function writeStorage({ state }: Object) {
   );
 }
 
-export async function invoke(endpoint: string, payload?: Object) {
+export async function invoke(endpoint: string, args?: Object) {
+  if (TAURI_ENV) {
+    return await tauriInvoke(endpoint, args as tauri.InvokeArgs);
+  }
+  // browser environment
   switch (endpoint) {
     case getStorageReadEndpoint():
       return readStorage();
-      // return tauriInvoke(endpoint);
-      break;
 
     case getStorageWriteEndpoint():
-      writeStorage(payload!);
-      // return tauriInvoke(endpoint, payload as tauri.InvokeArgs);
+      writeStorage(args as { state: SkillsetState });
       break;
 
     case getStorageImportEndpoint():
-      return tauriInvoke(endpoint, payload as tauri.InvokeArgs);
+      // TODO:
       break;
 
     case getStorageExportEndpoint():
-      return tauriInvoke(endpoint, payload as tauri.InvokeArgs);
+      const { filePath } = args as { filePath: FileSystemFileHandle };
+      const parts = filePath.name.split(".");
+      const extension = parts[parts.length - 1];
+      let contents: string | Uint8Array;
+      if (extension == "lf") {
+        contents = JSON.stringify(readStorage());
+      } else {
+        const { payload } = args as { payload: ArrayBuffer };
+        contents = new Uint8Array(payload);
+      }
+      const writableStream = await filePath.createWritable();
+      await writableStream.write(contents);
+      await writableStream.close();
       break;
 
     default:
