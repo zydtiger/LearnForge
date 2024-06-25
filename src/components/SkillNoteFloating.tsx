@@ -10,10 +10,11 @@ import rehypeSanitize from "rehype-sanitize";
 
 function SkillNoteFloating() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
-  const isShow = useAppSelector(selectIsHovered);
+  const isHovered = useAppSelector(selectIsHovered);
   const mouseCoords = useAppSelector(selectMouseCoords);
 
   const mdRef = useRef(null);
+  const isShow = isHovered && nodeDatum.mdNote && nodeDatum.mdNote.length > 0;
   const isShowMore = (() => {
     if (mdRef.current) {
       const mdDisplay = mdRef.current as HTMLElement;
