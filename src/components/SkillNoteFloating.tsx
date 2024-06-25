@@ -33,7 +33,7 @@ function SkillNoteFloating() {
           width: 300,
           height: 200,
           boxSizing: "border-box",
-          background: "rgba(255,255,255,0.5)",
+          background: "rgba(255,255,255,0.9)",
           border: "1px solid black",
           padding: 10,
         }}
@@ -56,13 +56,14 @@ function SkillNoteFloating() {
           <div
             style={{
               position: "absolute",
-              bottom: 10,
+              bottom: 4,
               left: 10,
-              fontSize: 30,
+              fontSize: 14,
+              textDecoration: "underline",
               color: "#1677FF",
             }}
           >
-            ...
+            More...
           </div>
         )}
       </div>
