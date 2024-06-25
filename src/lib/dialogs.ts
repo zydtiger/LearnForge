@@ -3,7 +3,7 @@ import { TAURI_ENV } from "../constants/env";
 
 /**
  * Opens a dialog to prompt the selection of saving path.
- * @returns file path to export to
+ * @returns file path | file handle to export to
  */
 export const saveDialog = async () => {
   if (TAURI_ENV) {
@@ -54,17 +54,28 @@ export const saveDialog = async () => {
 
 /**
  * Opens a dialog to prompt the selection of opening path.
- * @returns file path to import from
+ * @returns file path | file handle to import from
  */
 export const openDialog = async () => {
-  const filePath = await open({
-    multiple: false,
-    filters: [
+  if (TAURI_ENV) {
+    return await open({
+      multiple: false,
+      filters: [
+        {
+          name: "LearnForge",
+          extensions: ["lf"],
+        },
+      ],
+    });
+  }
+  // browser environment
+  return await window.showSaveFilePicker({
+    startIn: "downloads",
+    types: [
       {
-        name: "LearnForge",
-        extensions: ["lf"],
+        description: "LearnForge",
+        accept: { "application/json": [".lf"] },
       },
     ],
   });
-  return filePath;
 };
