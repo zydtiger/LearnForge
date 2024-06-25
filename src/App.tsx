@@ -16,6 +16,7 @@ import AppMenu from "./components/AppMenu";
 import AppMessage from "./components/AppMessage";
 import AppContextMenu from "./components/AppContextMenu";
 import SkillBtns from "./components/SkillBtns";
+import SkillNoteFloating from "./components/SkillNoteFloating";
 
 // redux imports
 import { useAppSelector, useAppDispatch } from "./redux/hooks";
@@ -124,6 +125,9 @@ function App() {
                 dispatch(setViewMode(viewMode == "tree" ? "list" : "tree"))
               }
             />
+
+            {/* Floating note view */}
+            <SkillNoteFloating />
           </div>
 
           {/* Note view port */}
