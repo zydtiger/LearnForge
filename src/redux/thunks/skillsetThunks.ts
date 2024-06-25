@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { invoke } from "../../lib/persistData";
+import { invoke } from "../../middleware/storage";
 import { openDialog, saveDialog } from "../../lib/dialogs";
 import { RootState } from "../store";
 import { SkillsetState, history } from "../slices/skillsetSlice";
