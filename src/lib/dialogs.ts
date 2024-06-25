@@ -69,7 +69,7 @@ export const openDialog = async () => {
     });
   }
   // browser environment
-  return await window.showSaveFilePicker({
+  return await window.showOpenFilePicker({
     startIn: "downloads",
     types: [
       {
