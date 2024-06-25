@@ -1,6 +1,7 @@
 import { Button, Modal, Tabs, Table } from "antd";
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
 import { actions, convertToPlatformShortcuts } from "../lib/menu";
 
 interface ManualModalProps {
@@ -46,7 +47,7 @@ function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
     {
       key: "intro",
       label: "Introduction",
-      children: <Markdown>{intro}</Markdown>,
+      children: <Markdown rehypePlugins={[rehypeSanitize]}>{intro}</Markdown>,
     },
     {
       key: "shortcuts",

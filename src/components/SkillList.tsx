@@ -26,8 +26,7 @@ function SkillList() {
   const handleOnChange = (event: SyntheticEvent) => {
     const [eventType, id] = event.type.split("|");
     if (NodeEventTypes.includes(eventType)) {
-      const value = (event.target as HTMLInputElement).value;
-      handleNodeChange(id, eventType, value);
+      handleNodeChange(id, event);
     } else {
       console.error("Undefined node event is triggered");
     }

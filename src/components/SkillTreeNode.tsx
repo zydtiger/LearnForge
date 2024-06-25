@@ -28,6 +28,14 @@ function SkillTreeNode({
           setTimeout(() => onNodeClick(event)); // solves node rendering error by queueing
         }
       }}
+      onMouseMove={(event) => {
+        event.type = "openFloatNote";
+        onNodeClick(event);
+      }}
+      onMouseLeave={(event) => {
+        event.type = "closeFloatNote";
+        onNodeClick(event);
+      }}
     >
       {/* Background */}
       <rect

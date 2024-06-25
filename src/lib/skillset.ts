@@ -1,10 +1,15 @@
 import store from "../redux/store";
 import { setViewMode } from "../redux/slices/viewSlice";
-import { setNoteViewNode } from "../redux/slices/noteSlice";
+import {
+  setIsHovered,
+  setMouseCoords,
+  setNoteViewNode,
+} from "../redux/slices/noteSlice";
 import { selectSkillset, setSkillset } from "../redux/slices/skillsetSlice";
 import { pushMessage } from "../redux/slices/messageSlice";
 import { SkillsetRawNode } from "../types";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
+import { SyntheticEvent } from "react";
 
 export const NodeEventTypes = [
   "changeName",
@@ -13,8 +18,9 @@ export const NodeEventTypes = [
   "deleteNode",
   "clear",
   "triggerNote",
+  "openFloatNote",
+  "closeFloatNote",
 ];
-type NodeEventType = (typeof NodeEventTypes)[number];
 
 /**
  * Finds the target node in the designated subtree.
@@ -82,14 +88,12 @@ function updatePercentages(node: SkillsetRawNode): number {
 /**
  * Handles generic node change actions.
  * @param nodeId node id to update
- * @param eventType event type to trigger
- * @param payload some events depend on payload
+ * @param event event to process
  */
-function handleNodeChange(
-  nodeId: string,
-  eventType: NodeEventType,
-  payload?: string,
-) {
+function handleNodeChange(nodeId: string, event: SyntheticEvent) {
+  const eventType = event.type;
+  const payload = (event.target as HTMLInputElement).value;
+
   const rootNode = selectSkillset(store.getState());
   const rootNodeClone = JSON.parse(JSON.stringify(rootNode)); // deep clone through JSON
   const targetNode = findNode(rootNodeClone, nodeId)!;
@@ -145,6 +149,22 @@ function handleNodeChange(
       store.dispatch(setNoteViewNode(targetNode));
       store.dispatch(setViewMode("note"));
       return; // skip store updating
+
+    case "openFloatNote":
+      const mouseEvent = event.nativeEvent as MouseEvent;
+      store.dispatch(setNoteViewNode(targetNode));
+      store.dispatch(
+        setMouseCoords([mouseEvent.pageX + 10, mouseEvent.pageY + 10]),
+      );
+      store.dispatch(setIsHovered(true));
+      return;
+
+    case "closeFloatNote":
+      store.dispatch(setIsHovered(false));
+      return;
+
+    default:
+      return;
   }
 
   store.dispatch(setSkillset(rootNodeClone));
