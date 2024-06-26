@@ -29,6 +29,7 @@ export const saveDialog = async () => {
     });
   }
   // browser environment
+  // @ts-ignore
   return await window.showSaveFilePicker({
     startIn: "downloads",
     types: [
@@ -69,6 +70,7 @@ export const openDialog = async () => {
     });
   }
   // browser environment
+  // @ts-ignore
   return await window.showOpenFilePicker({
     startIn: "downloads",
     types: [
