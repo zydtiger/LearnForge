@@ -36,17 +36,33 @@ Navigate the the releases page and download the latest installer.
 
 ### Linux
 
+#### Tauri
+
 > Not tested
 
-Follow the [Getting Started](#getting-started) section and run `yarn tauri build`. Refer to [Tauri Linux Bundle](https://tauri.app/v1/guides/building/linux/).
+Follow the [Getting Started](#getting-started) tauri section and run `yarn tauri build`. Refer to [Tauri Linux Bundle](https://tauri.app/v1/guides/building/linux/).
+
+#### Web App
+
+Follow the [Getting Started](#getting-started) web app section and run `sudo ./src-web/install_linux.sh` after verifying with `./src-web/serve_prod.sh`. Run `sudo ./src-web/uninstall_linux.sh` to uninstall.
 
 ### Mac
 
+#### Tauri
+
 > Not tested
 
-Follow the [Getting Started](#getting-started) section and run `yarn tauri build`. Refer to the [Tauri macOS Bundle](https://tauri.app/v1/guides/building/macos).
+Follow the [Getting Started](#getting-started) tauri section and run `yarn tauri build`. Refer to the [Tauri macOS Bundle](https://tauri.app/v1/guides/building/macos).
+
+#### Web App
+
+> Not tested
+
+Follow [Linux Web App](#web-app) instructions. However, there is no install script available for MacOS yet. To serve the web app locally, just use `./src-web/serve_prod.sh`.
 
 ## Getting Started
+
+### Tauri
 
 To run LearnForge locally on your machine, follow these steps:
 
@@ -88,10 +104,41 @@ To run LearnForge locally on your machine, follow these steps:
       at GetAddrInfoReqWrap.onlookup [as oncomplete] (node:dns:109:8)
     ```
 
-1. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
+7. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
     ```
     > yarn tauri build
     ```
+
+### Web App
+1. **Install Environment**: You only need to install the [latest Node.js LTS](https://nodejs.org/en). Verify that your installation is successful by typing the following.
+    ```
+    > node -v
+    v20.12.1
+    ```
+
+2. **Clone the Repository**: Clone the LearnForge repository to your local machine using the following command:
+    ```
+    > git clone https://github.com/zydtiger/LearnForge.git
+    ```
+
+3. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies by running the following command:
+    ```
+    > cd LearnForge
+    > yarn
+    ```
+
+4. **Run the App**: Once the installation is complete, you can launch LearnForge by executing the following command:
+    ```
+    > yarn dev
+    ```
+
+5. **Test App in Production**: You can launch the production version of the app by executing the following:
+    ```
+    > chmod +x ./src-web/serve_prod.sh
+    > ./src-web/serve_prod.sh
+    ```
+The script automatically builds the app to `./dist/` with `yarn build`.
+
 
 ## Contributing
 
