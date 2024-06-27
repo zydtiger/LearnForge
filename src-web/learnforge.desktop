@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=LearnForge
+Comment=Learning Goal Management and Logging App
+Exec=/usr/bin/python -m http.server -d /opt/top.ohzyd.learnforge/
+Icon=learnforge
+Terminal=true
+Type=Application

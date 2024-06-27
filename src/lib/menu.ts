@@ -165,6 +165,7 @@ function bindShortcuts() {
             ? shortcutKeys[2].toUpperCase()
             : shortcutKeys[1];
         if (event.key == targetKey) {
+          event.preventDefault();
           action.exec();
           return;
         }

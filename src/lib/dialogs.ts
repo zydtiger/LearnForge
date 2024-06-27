@@ -1,46 +1,83 @@
 import { save, open } from "@tauri-apps/api/dialog";
+import { TAURI_ENV } from "../constants/env";
 
 /**
  * Opens a dialog to prompt the selection of saving path.
- * @returns file path to export to
+ * @returns file path | file handle to export to
  */
 export const saveDialog = async () => {
-  const filePath = await save({
-    filters: [
+  if (TAURI_ENV) {
+    return await save({
+      filters: [
+        {
+          name: "LearnForge",
+          extensions: ["lf"],
+        },
+        {
+          name: "Scalable Vector Graphics",
+          extensions: ["svg"],
+        },
+        {
+          name: "Portable Network Graphics",
+          extensions: ["png"],
+        },
+        {
+          name: "Joint Photographic Experts Group",
+          extensions: ["jpg", "jpeg"],
+        },
+      ],
+    });
+  }
+  // browser environment
+  // @ts-ignore
+  return await window.showSaveFilePicker({
+    startIn: "downloads",
+    types: [
       {
-        name: "LearnForge",
-        extensions: ["lf"],
+        description: "LearnForge",
+        accept: { "application/json": [".lf"] },
       },
       {
-        name: "Scalable Vector Graphics",
-        extensions: ["svg"],
+        description: "Scalable Vector Graphics",
+        accept: { "image/svg+xml": [".svg"] },
       },
       {
-        name: "Portable Network Graphics",
-        extensions: ["png"],
+        description: "Portable Network Graphics",
+        accept: { "image/png": [".png"] },
       },
       {
-        name: "Joint Photographic Experts Group",
-        extensions: ["jpg", "jpeg"],
+        description: "Joint Photographic Experts Group",
+        accept: { "image/jpeg": [".jpg", ".jpeg"] },
       },
     ],
   });
-  return filePath;
 };
 
 /**
  * Opens a dialog to prompt the selection of opening path.
- * @returns file path to import from
+ * @returns file path | file handle to import from
  */
 export const openDialog = async () => {
-  const filePath = await open({
-    multiple: false,
-    filters: [
+  if (TAURI_ENV) {
+    return await open({
+      multiple: false,
+      filters: [
+        {
+          name: "LearnForge",
+          extensions: ["lf"],
+        },
+      ],
+    });
+  }
+  // browser environment
+  // @ts-ignore
+  return await window.showOpenFilePicker({
+    startIn: "downloads",
+    types: [
       {
-        name: "LearnForge",
-        extensions: ["lf"],
+        description: "LearnForge",
+        accept: { "application/json": [".lf"] },
       },
     ],
   });
-  return filePath;
 };
