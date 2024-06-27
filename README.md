@@ -12,6 +12,26 @@
 
 LearnForge is a comprehensive app that empowers you to manage and track your learning goals with ease. This README file provides an overview of LearnForge, its features, and instructions for getting started. To install the app, refer to the [Installation Guide](#installation-guide).
 
+## Table of Contents
+- [LearnForge - Learning Goal Management and Logging App](#learnforge---learning-goal-management-and-logging-app)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Demo](#demo)
+  - [Installation Guide](#installation-guide)
+    - [Windows](#windows)
+    - [Linux](#linux)
+      - [Tauri](#tauri)
+      - [Web App](#web-app)
+    - [Mac](#mac)
+      - [Tauri](#tauri-1)
+      - [Web App](#web-app-1)
+  - [Getting Started](#getting-started)
+    - [Tauri](#tauri-2)
+    - [Web App](#web-app-2)
+  - [Contributing](#contributing)
+  - [Feedback and Issues](#feedback-and-issues)
+  - [License](#license)
+
 ## Features
 
 - **Skill Tree Visualizer**: LearnForge features a captivating "skill tree" interface, reminiscent of tech trees in games like Stellaris. This visual representation allows you to organize and track your acquired skills under different categories, such as software, hardware, machine learning, and more.
