@@ -7,6 +7,9 @@ import {
 } from "../redux/slices/noteSlice";
 import { useRef } from "react";
 import rehypeSanitize from "rehype-sanitize";
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
+import "katex/dist/katex.min.css";
 
 function SkillNoteFloating() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -46,7 +49,10 @@ function SkillNoteFloating() {
             height: 170,
           }}
         >
-          <Markdown rehypePlugins={[rehypeSanitize]}>
+          <Markdown
+            remarkPlugins={[remarkMath]}
+            rehypePlugins={[rehypeSanitize, rehypeKatex]}
+          >
             {nodeDatum.mdNote}
           </Markdown>
         </div>
