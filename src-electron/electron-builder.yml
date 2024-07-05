@@ -9,7 +9,12 @@ files:
 linux:
   target:
     - appImage
+    - flatpak
   category: Utility
 appImage:
   artifactName: ${productName}-${version}.${ext}
+flatpak:
+  artifactName: ${productName}-${version}.${ext}
+  runtimeVersion: 23.08
+  baseVersion: 23.08
 npmRebuild: false

@@ -21,6 +21,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
   - [Getting Started](#getting-started)
     - [Tauri](#tauri)
     - [Electron](#electron)
+      - [Extras](#extras)
   - [Contributing](#contributing)
   - [Feedback and Issues](#feedback-and-issues)
   - [License](#license)
@@ -125,6 +126,13 @@ The script automatically builds the app to `src-tauri/target/`.
     ```
 The script automatically builds the app to `src-electron/target/`.
 
+#### Extras
+To build the app in flatpak, you would need dependencies `flatpak` and `flatpak-builder`. You would also need to install the required platform, SDK, and base app using `flatpak`:
+- org.freedesktop.Platform
+- org.freedesktop.Sdk
+- org.electronjs.Electron2.BaseApp
+
+In order to find out the required version, take a look at the flatpak entry of [builder config](./src-electron/electron-builder.yml).
 
 ## Contributing
 
