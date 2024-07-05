@@ -24,6 +24,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
   - [Contributing](#contributing)
   - [Feedback and Issues](#feedback-and-issues)
   - [License](#license)
+  - [Frameworks](#frameworks)
 
 ## Features
 
@@ -136,3 +137,13 @@ If you encounter any issues, have suggestions for new features, or need assistan
 ## License
 
 LearnForge is released under the [MIT License](https://raw.githubusercontent.com/zydtiger/LearnForge/dev/LICENSE).
+
+## Frameworks
+<div style="display: flex; gap: 20px">
+  <img src=".github/frameworks/antd.svg" alt="Ant-design" tooltip="hello" width="100" height="100" />
+  <img src=".github/frameworks/vite.svg" alt="Vite" width="100" height="100" />
+  <img src=".github/frameworks/react.svg" alt="React" width="100" height="100" />
+  <img src=".github/frameworks/tauri.png" alt="Tauri" width="100" height="100" />
+  <img src=".github/frameworks/electron.svg" alt="Electron" width="100" height="100" />
+  <img src=".github/frameworks/typescript.svg" alt="Typescript" style="margin-left: 10px" width="100" height="100" />
+</div>
