@@ -36,7 +36,13 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
         <Flex align="center">
           <Button
             type="link"
-            icon={<CheckCircleOutlined />}
+            icon={
+              <CheckCircleOutlined
+                style={{
+                  paddingTop: 3,
+                }}
+              />
+            }
             onClick={(event) => emitEvent(event, 100)}
           />
           <Slider
