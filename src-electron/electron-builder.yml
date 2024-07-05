@@ -1,0 +1,15 @@
+appId: top.ohzyd.learnforge
+productName: LearnForge
+directories:
+  output: "src-electron/target/${version}"
+  buildResources: build
+files:
+  - dist
+  - src-electron/dist
+linux:
+  target:
+    - appImage
+  category: Utility
+appImage:
+  artifactName: ${productName}-${version}.${ext}
+npmRebuild: false
