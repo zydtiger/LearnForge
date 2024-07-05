@@ -22,6 +22,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
     - [Tauri (Windows)](#tauri-windows)
     - [Electron (Linux)](#electron-linux)
       - [Extras](#extras)
+    - [Browser Only (Any Platform)](#browser-only-any-platform)
   - [Contributing](#contributing)
   - [Feedback and Issues](#feedback-and-issues)
   - [License](#license)
@@ -133,6 +134,35 @@ To build the app in flatpak, you would need dependencies `flatpak` and `flatpak-
 - org.electronjs.Electron2.BaseApp
 
 In order to find out the required version, take a look at the flatpak entry of [builder config](./src-electron/electron-builder.yml).
+
+### Browser Only (Any Platform)
+1. **Install Environment**: You only need to install the [latest Node.js LTS](https://nodejs.org/en). Verify that your installation is successful by typing the following.
+    ```
+    > node -v
+    v20.12.1
+    ```
+
+2. **Clone the Repository**: Clone the LearnForge repository to your local machine using the following command:
+    ```
+    > git clone https://github.com/zydtiger/LearnForge.git
+    ```
+
+3. **Install Dependencies**: Navigate to the project directory and install the necessary dependencies by running the following command:
+    ```
+    > cd LearnForge
+    > yarn
+    ```
+
+4. **Run the App**: Once the installation is complete, you can launch LearnForge by executing the following command:
+    ```
+    > yarn dev
+    ```
+
+5. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
+    ```
+    > yarn build
+    ```
+The script automatically builds the app to `dist/`. You will only need a static file server and serve that directory to run the app as a pure webpage.
 
 ## Contributing
 
