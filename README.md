@@ -18,16 +18,9 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
   - [Features](#features)
   - [Demo](#demo)
   - [Installation Guide](#installation-guide)
-    - [Windows](#windows)
-    - [Linux](#linux)
-      - [Tauri](#tauri)
-      - [Web App](#web-app)
-    - [Mac](#mac)
-      - [Tauri](#tauri-1)
-      - [Web App](#web-app-1)
   - [Getting Started](#getting-started)
-    - [Tauri](#tauri-2)
-    - [Web App](#web-app-2)
+    - [Tauri](#tauri)
+    - [Electron](#electron)
   - [Contributing](#contributing)
   - [Feedback and Issues](#feedback-and-issues)
   - [License](#license)
@@ -50,35 +43,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
 
 ## Installation Guide
 
-### Windows
-
-Navigate the the releases page and download the latest installer.
-
-### Linux
-
-#### Tauri
-
-> Not tested
-
-Follow the [Getting Started](#getting-started) tauri section and run `yarn tauri build`. Refer to [Tauri Linux Bundle](https://tauri.app/v1/guides/building/linux/).
-
-#### Web App
-
-Follow the [Getting Started](#getting-started) web app section and run `sudo ./src-web/install_linux.sh` after verifying with `./src-web/serve_prod.sh`. Run `sudo ./src-web/uninstall_linux.sh` to uninstall.
-
-### Mac
-
-#### Tauri
-
-> Not tested
-
-Follow the [Getting Started](#getting-started) tauri section and run `yarn tauri build`. Refer to the [Tauri macOS Bundle](https://tauri.app/v1/guides/building/macos).
-
-#### Web App
-
-> Not tested
-
-Follow [Linux Web App](#web-app) instructions. However, there is no install script available for MacOS yet. To serve the web app locally, just use `./src-web/serve_prod.sh`.
+Windows and Linux is supported with binary executables in [Releases](https://github.com/zydtiger/LearnForge/releases). Currently, Linux only supplies the AppImage format (other formats coming soon).
 
 ## Getting Started
 
@@ -128,8 +93,9 @@ To run LearnForge locally on your machine, follow these steps:
     ```
     > yarn tauri build
     ```
+The script automatically builds the app to `src-tauri/target/`.
 
-### Web App
+### Electron
 1. **Install Environment**: You only need to install the [latest Node.js LTS](https://nodejs.org/en). Verify that your installation is successful by typing the following.
     ```
     > node -v
@@ -149,15 +115,14 @@ To run LearnForge locally on your machine, follow these steps:
 
 4. **Run the App**: Once the installation is complete, you can launch LearnForge by executing the following command:
     ```
-    > yarn dev
+    > yarn dev:electron
     ```
 
-5. **Test App in Production**: You can launch the production version of the app by executing the following:
+5. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
     ```
-    > chmod +x ./src-web/serve_prod.sh
-    > ./src-web/serve_prod.sh
+    > yarn build:electron
     ```
-The script automatically builds the app to `./dist/` with `yarn build`.
+The script automatically builds the app to `src-electron/target/`.
 
 
 ## Contributing
