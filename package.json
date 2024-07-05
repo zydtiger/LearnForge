@@ -1,6 +1,6 @@
 {
   "name": "learnforge",
-  "private": true,
+  "author": "https://github.com/zydtiger",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
