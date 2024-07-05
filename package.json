@@ -1,5 +1,6 @@
 {
   "name": "learnforge",
+  "description": "Learning Goal Management and Logging App",
   "private": true,
   "version": "0.1.0",
   "type": "module",
