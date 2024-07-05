@@ -49,7 +49,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
 
 - **Category-based Organization**: Categorize your skills based on different domains, such as programming languages, frameworks, or specific areas of expertise. This categorization simplifies navigation and enables you to focus on specific skill sets.
 
-- **Cross-Platform Compatibility**: LearnForge is built using Tauri, React, and TypeScript (ts). This technology stack ensures cross-platform compatibility, allowing you to run the app locally on various operating systems.
+- **Cross-Platform Compatibility**: LearnForge is built using Electron, Tauri, React, and TypeScript. This technology stack ensures cross-platform compatibility, allowing you to run the app locally on various operating systems.
   `;
 
   // define tab items

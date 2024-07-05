@@ -19,8 +19,8 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
   - [Demo](#demo)
   - [Installation Guide](#installation-guide)
   - [Getting Started](#getting-started)
-    - [Tauri](#tauri)
-    - [Electron](#electron)
+    - [Tauri (Windows)](#tauri-windows)
+    - [Electron (Linux)](#electron-linux)
       - [Extras](#extras)
   - [Contributing](#contributing)
   - [Feedback and Issues](#feedback-and-issues)
@@ -49,7 +49,7 @@ Windows and Linux is supported with binary executables in [Releases](https://git
 
 ## Getting Started
 
-### Tauri
+### Tauri (Windows)
 
 To run LearnForge locally on your machine, follow these steps:
 
@@ -97,7 +97,7 @@ To run LearnForge locally on your machine, follow these steps:
     ```
 The script automatically builds the app to `src-tauri/target/`.
 
-### Electron
+### Electron (Linux)
 1. **Install Environment**: You only need to install the [latest Node.js LTS](https://nodejs.org/en). Verify that your installation is successful by typing the following.
     ```
     > node -v
