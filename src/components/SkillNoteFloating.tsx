@@ -9,7 +9,7 @@ import { useRef } from "react";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
-import "katex/dist/katex.min.css";
+import "../md-viewer.css";
 
 function SkillNoteFloating() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
