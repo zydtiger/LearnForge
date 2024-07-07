@@ -1,5 +1,6 @@
 import { Button, Modal, Tabs, Table } from "antd";
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import { actions, convertToPlatformShortcuts } from "../lib/menu";
 
 interface ManualModalProps {
@@ -58,7 +59,7 @@ Version: 0.1.0
 
 License: MIT
 
-Github: https://github.com/zydtiger/LearnForge
+Github: <a href="https://github.com/zydtiger/LearnForge" target="_blank">https://github.com/zydtiger/LearnForge</a>
   `;
 
   // define tab items
@@ -83,7 +84,7 @@ Github: https://github.com/zydtiger/LearnForge
     {
       key: "about",
       label: "About",
-      children: <Markdown>{about}</Markdown>,
+      children: <Markdown rehypePlugins={[rehypeRaw]}>{about}</Markdown>,
     },
   ];
 
