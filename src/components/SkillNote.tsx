@@ -1,5 +1,5 @@
 import { KeyboardEventHandler, useEffect } from "react";
-import { FloatButton, Typography } from "antd";
+import { FloatButton, Tooltip, Typography } from "antd";
 import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 
 // markdown
@@ -87,29 +87,32 @@ function SkillNote() {
       />
 
       {/* Save Btn */}
-      <FloatButton
-        type={isNoteSaved ? "default" : "primary"}
-        style={{ right: 20, bottom: 20 }}
-        tooltip="Done"
-        icon={<CheckOutlined />}
-        onClick={handleDone}
-      />
+      <Tooltip title={"Done"}>
+        <FloatButton
+          type={isNoteSaved ? "default" : "primary"}
+          style={{ right: 20, bottom: 20 }}
+          icon={<CheckOutlined />}
+          onClick={handleDone}
+        />
+      </Tooltip>
 
       {/* Undo / Redo Btns */}
-      <FloatButton
-        type={isUndoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 20 }}
-        tooltip={"Undo"}
-        icon={<UndoOutlined />}
-        onClick={() => dispatch(undo())}
-      />
-      <FloatButton
-        type={isRedoable ? "primary" : "default"}
-        style={{ left: 72, bottom: 20 }}
-        tooltip={"Redo"}
-        icon={<RedoOutlined />}
-        onClick={() => dispatch(redo())}
-      />
+      <Tooltip title={"Undo"}>
+        <FloatButton
+          type={isUndoable ? "primary" : "default"}
+          style={{ left: 20, bottom: 20 }}
+          icon={<UndoOutlined />}
+          onClick={() => dispatch(undo())}
+        />
+      </Tooltip>
+      <Tooltip title={"Redo"}>
+        <FloatButton
+          type={isRedoable ? "primary" : "default"}
+          style={{ left: 72, bottom: 20 }}
+          icon={<RedoOutlined />}
+          onClick={() => dispatch(redo())}
+        />
+      </Tooltip>
     </div>
   );
 }

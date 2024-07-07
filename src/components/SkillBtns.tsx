@@ -1,5 +1,5 @@
 // external imports
-import { FloatButton } from "antd";
+import { FloatButton, Tooltip } from "antd";
 import {
   QuestionCircleOutlined,
   SaveOutlined,
@@ -86,20 +86,22 @@ function SkillBtns({ toggleViewBtn, onToggleView }: SkillBtnsProps) {
       />
 
       {/* Undo / Redo Btns */}
-      <FloatButton
-        type={isUndoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 20 }}
-        tooltip={"Undo"}
-        icon={<UndoOutlined />}
-        onClick={() => dispatch(undo())}
-      />
-      <FloatButton
-        type={isRedoable ? "primary" : "default"}
-        style={{ left: 72, bottom: 20 }}
-        tooltip={"Redo"}
-        icon={<RedoOutlined />}
-        onClick={() => dispatch(redo())}
-      />
+      <Tooltip title={"Undo"}>
+        <FloatButton
+          type={isUndoable ? "primary" : "default"}
+          style={{ left: 20, bottom: 20 }}
+          icon={<UndoOutlined />}
+          onClick={() => dispatch(undo())}
+        />
+      </Tooltip>
+      <Tooltip title={"Redo"}>
+        <FloatButton
+          type={isRedoable ? "primary" : "default"}
+          style={{ left: 72, bottom: 20 }}
+          icon={<RedoOutlined />}
+          onClick={() => dispatch(redo())}
+        />
+      </Tooltip>
     </>
   );
 }
