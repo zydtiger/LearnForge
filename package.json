@@ -12,7 +12,7 @@
     "build:electron": "tsc && vite build -c src-electron/vite.config.ts && electron-builder -c src-electron/electron-builder.yml",
     "preview": "vite preview",
     "tauri": "tauri",
-    "prettier": "prettier --write ."
+    "pretty": "prettier --write ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",

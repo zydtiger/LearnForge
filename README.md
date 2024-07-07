@@ -100,8 +100,9 @@ To run LearnForge locally on your machine, follow these steps:
    ```
 
 7. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
-   `     > yarn tauri build
-    `
+   ```
+   > yarn tauri build
+   ```
    The script automatically builds the app to `src-tauri/target/`.
 
 ### Electron (Linux)
@@ -133,8 +134,9 @@ To run LearnForge locally on your machine, follow these steps:
    ```
 
 5. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
-   `     > yarn build:electron
-    `
+   ```
+   > yarn build:electron
+   ```
    The script automatically builds the app to `src-electron/target/`.
 
 #### Extras
@@ -176,8 +178,9 @@ In order to find out the required version, take a look at the flatpak entry of [
    ```
 
 5. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
-   `     > yarn build
-    `
+   ```
+   > yarn build
+   ```
    The script automatically builds the app to `dist/`. You will only need a static file server and serve that directory to run the app as a pure webpage.
 
 ## Contributing
