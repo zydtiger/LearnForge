@@ -1,9 +1,12 @@
 import { KeyboardEventHandler, useEffect } from "react";
 import { FloatButton, Typography } from "antd";
 import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
-import { getCodeString } from "rehype-rewrite";
+
+// markdown
+import { MdEditor } from "md-editor-rt";
+import "md-editor-rt/lib/style.css";
+
+// redux
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   selectPrevViewBeforeNote,
@@ -21,7 +24,6 @@ import {
   redo,
 } from "../redux/slices/noteSlice";
 import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
-import katex from "katex";
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -71,71 +73,15 @@ function SkillNote() {
       </Typography.Title>
 
       {/* Editor */}
-      <MDEditor
-        height={"calc(100vh - 145px)"}
-        visibleDragbar={false}
-        value={nodeDatum.mdNote}
-        onChange={(val) => dispatch(updateMarkdownNote(val!))}
-        previewOptions={{
-          rehypePlugins: [[rehypeSanitize]],
-          components: {
-            // KATEX rendering
-            li: ({ children = [], className }) => {
-              if (typeof children === "string" && /^\$(.*)\$/.test(children)) {
-                const html = katex.renderToString(
-                  children.replace(/^\$(.*)\$/, "$1"),
-                  { throwOnError: false, output: "mathml" },
-                );
-                return (
-                  <li
-                    dangerouslySetInnerHTML={{ __html: html }}
-                    style={{ background: "transparent" }}
-                  />
-                );
-              }
-              return <li className={String(className)}>{children}</li>;
-            },
-            p: ({ children = [], className }) => {
-              if (typeof children === "string" && /^\$(.*)\$/.test(children)) {
-                const html = katex.renderToString(
-                  children.replace(/^\$(.*)\$/, "$1"),
-                  { throwOnError: false, output: "mathml" },
-                );
-                return (
-                  <p
-                    dangerouslySetInnerHTML={{ __html: html }}
-                    style={{ background: "transparent" }}
-                  />
-                );
-              }
-              return <p className={String(className)}>{children}</p>;
-            },
-            code: ({ children = [], className, ...props }) => {
-              const code =
-                props.node && props.node.children
-                  ? getCodeString(props.node.children)
-                  : children;
-              if (
-                typeof code === "string" &&
-                typeof className === "string" &&
-                /^language-katex/.test(className.toLocaleLowerCase())
-              ) {
-                const html = katex.renderToString(code, {
-                  throwOnError: false,
-                  output: "mathml",
-                  displayMode: true,
-                });
-                return (
-                  <code
-                    style={{ fontSize: "150%" }}
-                    dangerouslySetInnerHTML={{ __html: html }}
-                  />
-                );
-              }
-              return <code className={String(className)}>{children}</code>;
-            },
-          },
+      <MdEditor
+        theme="light"
+        language="en-US"
+        style={{
+          height: "calc(100vh - 180px)",
         }}
+        toolbarsExclude={["image", "revoke", "next", "save", "github"]}
+        modelValue={nodeDatum.mdNote || ""}
+        onChange={(val) => dispatch(updateMarkdownNote(val))}
       />
 
       {/* Save Btn */}
