@@ -27,6 +27,18 @@ function SkillListNode({ nodeDatum, onChange, isRoot }: SkillListNodeProps) {
           onChange(event);
         }
       }}
+      onMouseMove={(event) => {
+        event.type = "openFloatNote";
+        // @ts-ignore
+        event.target.value = `${event.pageX}:${event.pageY}`;
+        onChange(event);
+      }}
+      onMouseLeave={(event) => {
+        event.type = "closeFloatNote";
+        // @ts-ignore
+        event.target.value = `${event.pageX}:${event.pageY}`;
+        onChange(event);
+      }}
     >
       {/* Add Btn */}
       <Button
