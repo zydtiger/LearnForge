@@ -9,7 +9,6 @@ import { selectSkillset, setSkillset } from "../redux/slices/skillsetSlice";
 import { pushMessage } from "../redux/slices/messageSlice";
 import { SkillsetRawNode } from "../types";
 import { DefaultNode, DefaultRootNode } from "../types/defaults";
-import { SyntheticEvent } from "react";
 
 export const NodeEventTypes = [
   "changeName",
@@ -21,6 +20,8 @@ export const NodeEventTypes = [
   "openFloatNote",
   "closeFloatNote",
 ];
+
+type NodeEventType = (typeof NodeEventTypes)[number];
 
 /**
  * Finds the target node in the designated subtree.
@@ -88,12 +89,14 @@ function updatePercentages(node: SkillsetRawNode): number {
 /**
  * Handles generic node change actions.
  * @param nodeId node id to update
- * @param event event to process
+ * @param eventType event type to trigger
+ * @param payload some events depend on payload
  */
-function handleNodeChange(nodeId: string, event: SyntheticEvent) {
-  const eventType = event.type;
-  const payload = (event.target as HTMLInputElement).value;
-
+function handleNodeChange(
+  nodeId: string,
+  eventType: NodeEventType,
+  payload?: string,
+) {
   const rootNode = selectSkillset(store.getState());
   const rootNodeClone = JSON.parse(JSON.stringify(rootNode)); // deep clone through JSON
   const targetNode = findNode(rootNodeClone, nodeId)!;
@@ -151,11 +154,10 @@ function handleNodeChange(nodeId: string, event: SyntheticEvent) {
       return; // skip store updating
 
     case "openFloatNote":
-      const mouseEvent = event.nativeEvent as MouseEvent;
+      const mouseCoords = payload!.split(":");
+      const [x, y] = [Number(mouseCoords[0]), Number(mouseCoords[1])];
       store.dispatch(setNoteViewNode(targetNode));
-      store.dispatch(
-        setMouseCoords([mouseEvent.pageX + 10, mouseEvent.pageY + 10]),
-      );
+      store.dispatch(setMouseCoords([x + 10, y + 10]));
       store.dispatch(setIsHovered(true));
       return;
 
