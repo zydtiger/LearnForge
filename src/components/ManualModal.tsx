@@ -1,6 +1,5 @@
 import { Button, Modal, Tabs, Table } from "antd";
 import Markdown from "react-markdown";
-import rehypeSanitize from "rehype-sanitize";
 import { actions, convertToPlatformShortcuts } from "../lib/menu";
 
 interface ManualModalProps {
@@ -35,11 +34,11 @@ function convertShortcutsToTableData() {
 
 function ManualModal({ isModalOpen, closeModal }: ManualModalProps) {
   const intro = `
-# LearnForge - Learning Goal Management and Logging App
+## LearnForge - Learning Goal Management and Logging App
 
 LearnForge is a comprehensive app that empowers you to manage and track your learning goals with ease. This helper provides an overview of LearnForge and its features.
 
-## Features
+### Features
 
 - **Skill Tree Visualizer**: LearnForge features a captivating "skill tree" interface, reminiscent of tech trees in games like Stellaris. This visual representation allows you to organize and track your acquired skills under different categories, such as software, hardware, machine learning, and more.
 
@@ -52,12 +51,22 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
 - **Cross-Platform Compatibility**: LearnForge is built using Electron, Tauri, React, and TypeScript. This technology stack ensures cross-platform compatibility, allowing you to run the app locally on various operating systems.
   `;
 
+  const about = `
+## About LearnForge (FOSS)
+
+Version: 0.1.0
+
+License: MIT
+
+Github: https://github.com/zydtiger/LearnForge
+  `;
+
   // define tab items
   const items = [
     {
       key: "intro",
       label: "Introduction",
-      children: <Markdown rehypePlugins={[rehypeSanitize]}>{intro}</Markdown>,
+      children: <Markdown>{intro}</Markdown>,
     },
     {
       key: "shortcuts",
@@ -70,6 +79,11 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
           dataSource={convertShortcutsToTableData()}
         />
       ),
+    },
+    {
+      key: "about",
+      label: "About",
+      children: <Markdown>{about}</Markdown>,
     },
   ];
 
