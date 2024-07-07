@@ -46,7 +46,7 @@ function SkillNoteFloating() {
           ref={mdRef}
           style={{
             overflow: "hidden",
-            height: 170,
+            height: 165,
           }}
         >
           <Markdown
@@ -62,7 +62,6 @@ function SkillNoteFloating() {
           <div
             style={{
               position: "absolute",
-              bottom: 4,
               left: 10,
               fontSize: 14,
               textDecoration: "underline",
