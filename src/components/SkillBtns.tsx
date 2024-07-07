@@ -88,14 +88,14 @@ function SkillBtns({ toggleViewBtn, onToggleView }: SkillBtnsProps) {
       {/* Undo / Redo Btns */}
       <FloatButton
         type={isUndoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 72 }}
+        style={{ left: 20, bottom: 20 }}
         tooltip={"Undo"}
         icon={<UndoOutlined />}
         onClick={() => dispatch(undo())}
       />
       <FloatButton
         type={isRedoable ? "primary" : "default"}
-        style={{ left: 20, bottom: 20 }}
+        style={{ left: 72, bottom: 20 }}
         tooltip={"Redo"}
         icon={<RedoOutlined />}
         onClick={() => dispatch(redo())}
