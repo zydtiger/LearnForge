@@ -34,18 +34,14 @@ function SkillNote() {
 
   const dispatch = useAppDispatch();
 
-  const quitToPrev = () => {
-    dispatch(setViewMode(prevView)); // quits note view
-  };
-
   const handleDone = () => {
     dispatch(setSkillsetNodeById(nodeDatum));
-    quitToPrev();
+    dispatch(setViewMode(prevView)); // quits note view
   };
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (event.key == "Escape") {
-      quitToPrev();
+      dispatch(setViewMode(prevView)); // quits note view
     }
   };
 
