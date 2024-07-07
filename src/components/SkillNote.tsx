@@ -5,6 +5,7 @@ import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 // markdown
 import { MdEditor } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
+import "../md-editor.css";
 
 // redux
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -76,6 +77,7 @@ function SkillNote() {
       <MdEditor
         theme="light"
         language="en-US"
+        editorId="md-editor-rt"
         style={{
           height: "calc(100vh - 180px)",
         }}
