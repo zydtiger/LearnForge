@@ -55,7 +55,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
   const about = `
 ## About LearnForge (FOSS)
 
-Version: 0.1.0
+Version: 1.0.0
 
 License: MIT
 
