@@ -186,7 +186,7 @@ In order to find out the required version, take a look at the flatpak entry of [
 
 ## Contributing
 
-When contributing to this repo, first fork your own repo and merge through PR.
+When contributing to this repo, first fork your own repo and merge through PR. For a general guideline read [Contributing Guide](./CONTRIBUTING.md).
 
 ## Feedback and Issues
 
