@@ -3,7 +3,7 @@
 </div>
 <br/>
 
-[![status](https://img.shields.io/badge/status-beta-light.svg)](https://github.com/zydtiger/LearnForge)
+[![status](https://img.shields.io/badge/status-stable-light.svg)](https://github.com/zydtiger/LearnForge)
 [![version](https://img.shields.io/github/package-json/v/zydtiger/LearnForge)](https://github.com/zydtiger/LearnForge)
 [![top language](https://img.shields.io/github/languages/top/zydtiger/LearnForge)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
@@ -45,6 +45,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
 
 ![Tree View Demo](.github/tree-view-demo.png)
 ![List View Demo](.github/list-view-demo.png)
+![List View Demo](.github/note-view-demo.png)
 
 ## Installation Guide
 
