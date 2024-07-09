@@ -31,13 +31,13 @@ function SkillTreeNode({
       onMouseMove={(event) => {
         event.type = "openFloatNote";
         // @ts-ignore
-        event.target.value = `${event.pageX}:${event.pageY}`;
+        event.value = `${event.pageX}:${event.pageY}`;
         onNodeClick(event);
       }}
       onMouseLeave={(event) => {
         event.type = "closeFloatNote";
         // @ts-ignore
-        event.target.value = `${event.pageX}:${event.pageY}`;
+        event.value = `${event.pageX}:${event.pageY}`;
         onNodeClick(event);
       }}
     >

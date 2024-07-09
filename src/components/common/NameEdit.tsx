@@ -17,7 +17,7 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
     setOpen(false);
     event.type = "changeName";
     // @ts-ignore
-    event.target.value = value; // fake event.target.value for downstream processing
+    event.value = value;
     onChange(event);
   };
 

@@ -25,7 +25,7 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
     setOpen(false);
     event.type = "changePercent";
     // @ts-ignore
-    event.target.value = value; // fake event.target.value for downstream processing
+    event.value = value;
     onChange(event);
   };
 

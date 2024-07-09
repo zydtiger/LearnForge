@@ -18,8 +18,8 @@ function SkillTree() {
 
   const handleOnNodeClick: TreeProps["onNodeClick"] = (node, event) => {
     if (NodeEventTypes.includes(event.type)) {
-      const value = (event.target as HTMLInputElement).value;
-      handleNodeChange(node.data.id, event.type, value);
+      // @ts-ignore
+      handleNodeChange(node.data.id, event.type, event.value);
     } else if (event.type == "toggleNode") {
       tree.current!.handleToggleNode(node.data);
     } else {
