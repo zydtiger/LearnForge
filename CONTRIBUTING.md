@@ -1,7 +1,9 @@
 # Contributing Guide
+
 This project is FOSS under the MIT License. Contributions including feature addition and bug fixes are highly welcomed. This basic contributing guide will walk you through the project structure and good git practices.
 
 ## Project structure
+
 ```
 .
 ├── src - react frontend
@@ -21,18 +23,20 @@ This project is FOSS under the MIT License. Contributions including feature addi
     └── target - compiled release targets (win32)
 ```
 
-
 ## Version tags
+
 ```
 x.y.z
 ^ ^ ^
-^ ^ Minor version (basic bug fixes) 
+^ ^ Minor version (basic bug fixes)
 ^ Middle version (bug fixes, config edits)
 Major version (big feature changes)
 ```
 
 ## Git branch / commit messages
+
 The following are currently accepted git prefixes:
+
 - `ui`: ui style tuning.
 - `fix`: bug fix.
 - `ref`: code refractor.
