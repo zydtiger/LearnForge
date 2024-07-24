@@ -6,10 +6,14 @@ import SkillTreeInner from "./SkillTreeInner";
 import SkillTreeNode from "./SkillTreeNode";
 
 import { NodeEventTypes, handleNodeChange } from "../lib/skillset";
-import { useAppSelector } from "../redux/hooks";
-import { selectSkillset } from "../redux/slices/skillsetSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+  selectSkillset,
+  setSelectedNodeId,
+} from "../redux/slices/skillsetSlice";
 
 function SkillTree() {
+  const dispatch = useAppDispatch();
   const data = useAppSelector(selectSkillset);
   const tree: Ref<SkillTreeInner> = useRef(null);
 
@@ -22,6 +26,8 @@ function SkillTree() {
       handleNodeChange(node.data.id, event.type, event.value);
     } else if (event.type == "toggleNode") {
       tree.current!.handleToggleNode(node.data);
+    } else if (event.type == "selectNode") {
+      dispatch(setSelectedNodeId(node.data.id));
     } else {
       console.error("Undefined node event is triggered");
     }

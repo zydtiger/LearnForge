@@ -15,6 +15,7 @@ export interface SkillsetState {
   // fields below should not be persisted
   isFirstTimeLoading: boolean; // whether to show loading page
   isSaved: boolean; // whether the current state is persisted
+  selectedNodeId: SkillsetRawNode["id"] | null; // currently selected node id by single click
 }
 
 const initialState: SkillsetState = {
@@ -23,6 +24,7 @@ const initialState: SkillsetState = {
   lastSaveTime: new Date().toISOString(),
   isFirstTimeLoading: true,
   isSaved: true,
+  selectedNodeId: null,
 };
 
 const generateIds = (state: SkillsetState) => {
@@ -64,6 +66,9 @@ const skillsetSlice = createSlice({
       history.push({ ...state.data });
       state.isSaved = false;
     },
+    setSelectedNodeId(state, action: PayloadAction<SkillsetRawNode["id"]>) {
+      state.selectedNodeId = action.payload;
+    },
     undo(state) {
       history.undo();
       loadData(state, history.current()!);
@@ -92,8 +97,13 @@ const skillsetSlice = createSlice({
   },
 });
 
-export const { setSkillset, setSkillsetNodeById, undo, redo } =
-  skillsetSlice.actions;
+export const {
+  setSkillset,
+  setSkillsetNodeById,
+  setSelectedNodeId,
+  undo,
+  redo,
+} = skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
 export const selectIsInitialBoot = (state: RootState) =>

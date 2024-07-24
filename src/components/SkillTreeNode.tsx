@@ -6,6 +6,7 @@ import PercentEdit from "./common/PercentEdit";
 import DeleteBtn from "./common/DeleteBtn";
 import ClearBtn from "./common/ClearBtn";
 import { calcProgressColor } from "../constants/color";
+import SkillTreeNodeHighlight from "./SkillTreeNodeHighlight";
 
 function SkillTreeNode({
   nodeDatum,
@@ -26,6 +27,9 @@ function SkillTreeNode({
           // this means a double click on the node
           event.type = "triggerNote";
           setTimeout(() => onNodeClick(event)); // solves node rendering error by queueing
+        } else {
+          event.type = "selectNode";
+          onNodeClick(event);
         }
       }}
       onMouseMove={(event) => {
@@ -41,6 +45,20 @@ function SkillTreeNode({
         onNodeClick(event);
       }}
     >
+      {/* Highlight */}
+      <foreignObject
+        x={-width / 2 - 8}
+        y={-height / 2 - 8}
+        width={width + 16}
+        height={height + 16}
+      >
+        <SkillTreeNodeHighlight
+          width={width}
+          height={height}
+          currentNodeId={nodeDatum.id}
+        />
+      </foreignObject>
+
       {/* Background */}
       <rect
         width={width}
