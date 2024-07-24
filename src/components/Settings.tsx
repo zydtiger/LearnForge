@@ -4,16 +4,31 @@ import {
   selectGlobalTheme,
   selectMdPreviewTheme,
   setGlobalTheme,
+  setIsSettingsOpen,
   setMdPreviewTheme,
 } from "../redux/slices/settingsSlice";
 
 function Settings() {
   const dispatch = useAppDispatch();
+  const isModalOpen = useAppSelector((state) => state.settings.isSettingsOpen);
   const globalTheme = useAppSelector(selectGlobalTheme);
   const mdPreviewTheme = useAppSelector(selectMdPreviewTheme);
 
   return (
-    <Modal centered width={800} open={true} footer={<Button>Quit</Button>}>
+    <Modal
+      centered
+      width={800}
+      open={isModalOpen}
+      onCancel={() => dispatch(setIsSettingsOpen(false))}
+      footer={
+        <Button
+          type="primary"
+          onClick={() => dispatch(setIsSettingsOpen(false))}
+        >
+          Quit
+        </Button>
+      }
+    >
       <Typography.Title level={2}>Settings</Typography.Title>
 
       <Typography.Title level={4}>Global Theme</Typography.Title>

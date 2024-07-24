@@ -3,11 +3,13 @@ import { PreviewThemes } from "md-editor-rt";
 import { RootState } from "../store";
 
 interface SettingsState {
+  isSettingsOpen: boolean;
   globalTheme: "light" | "dark" | "system";
   mdPreviewTheme: PreviewThemes;
 }
 
 const initialState: SettingsState = {
+  isSettingsOpen: true, // ! debug
   globalTheme: "system",
   mdPreviewTheme: "default",
 };
@@ -16,6 +18,9 @@ const settingsSlice = createSlice({
   name: "settings",
   initialState,
   reducers: {
+    setIsSettingsOpen(state, action: PayloadAction<boolean>) {
+      state.isSettingsOpen = action.payload;
+    },
     setGlobalTheme(state, action: PayloadAction<SettingsState["globalTheme"]>) {
       state.globalTheme = action.payload;
     },
@@ -25,7 +30,8 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { setGlobalTheme, setMdPreviewTheme } = settingsSlice.actions;
+export const { setIsSettingsOpen, setGlobalTheme, setMdPreviewTheme } =
+  settingsSlice.actions;
 
 export const selectGlobalTheme = (state: RootState) =>
   state.settings.globalTheme;
