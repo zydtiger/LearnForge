@@ -1,0 +1,19 @@
+.rd3t-link {
+  /* stroke: black !important; */
+  stroke: #ececec !important;
+}
+
+.rd3t-node rect.background {
+  /* fill: white !important; */
+  fill: black !important;
+}
+
+.rd3t-node rect.border {
+  /* stroke: black !important; */
+  stroke: #ececec !important;
+}
+
+.rd3t-leaf-node rect.border {
+  /* stroke: black !important; */
+  stroke: #ececec !important;
+}

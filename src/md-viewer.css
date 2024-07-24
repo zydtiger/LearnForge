@@ -1,6 +1,8 @@
 blockquote {
-  background: #ececec;
-  border-left: 5px solid rgb(194, 194, 194);
+  /* background: #ececec; */
+  /* border-left: 5px solid rgb(194, 194, 194); */
+  background: #232323;
+  border-left: 5px solid rgb(82, 82, 82);
   padding-left: 10px;
   margin-bottom: 10px;
 }

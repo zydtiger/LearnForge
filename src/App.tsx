@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ConfigProvider, theme } from "antd";
 
 // component imports
 import AppContextMenu from "./components/AppContextMenu";
@@ -43,18 +44,20 @@ function App() {
 
   return (
     <div className="app">
-      <AppContextMenu>
-        <div className="main viewport">
-          {isFirstTimeLoading && <LoadingSpin />}
-          <AppMenu />
-          <AppMessage />
-          <ManualModal
-            isModalOpen={isManualModalOpen || isInitialBoot}
-            closeModal={closeModal}
-          />
-          <Viewport />
-        </div>
-      </AppContextMenu>
+      <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+        <AppContextMenu>
+          <div className="main viewport">
+            {isFirstTimeLoading && <LoadingSpin />}
+            <AppMenu />
+            <AppMessage />
+            <ManualModal
+              isModalOpen={isManualModalOpen || isInitialBoot}
+              closeModal={closeModal}
+            />
+            <Viewport />
+          </div>
+        </AppContextMenu>
+      </ConfigProvider>
     </div>
   );
 }

@@ -36,8 +36,10 @@ function SkillNoteFloating() {
           width: 300,
           height: 200,
           boxSizing: "border-box",
-          background: "rgba(255,255,255,0.9)",
-          border: "1px solid black",
+          // background: "rgba(255,255,255,0.9)",
+          // border: "1px solid black",
+          background: "rgba(10,10,10,0.9)",
+          border: "1px solid white",
           padding: 10,
         }}
       >
