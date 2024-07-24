@@ -25,6 +25,7 @@ import {
   redo,
 } from "../redux/slices/noteSlice";
 import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
+import { pushMessage } from "../redux/slices/messageSlice";
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -40,6 +41,12 @@ function SkillNote() {
   const handleDone = () => {
     dispatch(setSkillsetNodeById(nodeDatum));
     dispatch(setViewMode(prevView)); // quits note view
+    dispatch(
+      pushMessage({
+        type: "success",
+        content: "Successfully saved note!",
+      }),
+    );
   };
 
   const handleKeyDown: KeyboardEventHandler = (event) => {

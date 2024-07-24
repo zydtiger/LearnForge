@@ -76,13 +76,13 @@ export const exportSkillset = createAsyncThunk(
     } else if (extension == "svg") {
       const encoder = new TextEncoder();
       const payload = Array.from(encoder.encode(TreeSVGExport()));
-      invoke(getStorageExportEndpoint(), { filePath, payload });
+      await invoke(getStorageExportEndpoint(), { filePath, payload });
     } else if (extension == "png") {
       const payload = Array.from(await TreeImageExport("png"));
-      invoke(getStorageExportEndpoint(), { filePath, payload });
+      await invoke(getStorageExportEndpoint(), { filePath, payload });
     } else if (extension == "jpg" || extension == "jpeg") {
       const payload = Array.from(await TreeImageExport("jpeg"));
-      invoke(getStorageExportEndpoint(), { filePath, payload });
+      await invoke(getStorageExportEndpoint(), { filePath, payload });
     } else {
       dispatch(
         pushMessage({
@@ -90,7 +90,14 @@ export const exportSkillset = createAsyncThunk(
           content: `Exporting to extension .${extension} is undefined`,
         }),
       );
+      return;
     }
+    dispatch(
+      pushMessage({
+        type: "success",
+        content: `Successfully exported skillset to ${filename}!`,
+      }),
+    );
   },
 );
 
