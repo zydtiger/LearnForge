@@ -17,12 +17,17 @@ const messageSlice = createSlice({
     pushMessage(state, action: PayloadAction<ArgsProps>) {
       state.messageQueue.push(action.payload);
     },
+    dropMessage(state) {
+      state.messageQueue.shift();
+    },
   },
 });
 
-export const { pushMessage } = messageSlice.actions;
+export const { pushMessage, dropMessage } = messageSlice.actions;
 
-export const selectMessageQueue = (state: RootState) =>
-  state.message.messageQueue;
+export const selectMessageQueueSize = (state: RootState) =>
+  state.message.messageQueue.length;
+export const selectMessageQueueFirst = (state: RootState) =>
+  state.message.messageQueue[0];
 
 export default messageSlice.reducer;

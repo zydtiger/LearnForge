@@ -1,17 +1,24 @@
 import { message } from "antd";
 import { useEffect } from "react";
-import { useAppSelector } from "../redux/hooks";
-import { selectMessageQueue } from "../redux/slices/messageSlice";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import {
+  selectMessageQueueFirst,
+  selectMessageQueueSize,
+  dropMessage,
+} from "../redux/slices/messageSlice";
 
 function AppMessage() {
+  const dispatch = useAppDispatch();
   const [messageApi, contextHolder] = message.useMessage();
-  const messageQueue = useAppSelector(selectMessageQueue);
+  const messageQueueSize = useAppSelector(selectMessageQueueSize);
+  const messageQueueFirst = useAppSelector(selectMessageQueueFirst);
 
   useEffect(() => {
-    if (messageQueue.length > 0) {
-      messageApi.open(messageQueue[messageQueue.length - 1]);
+    if (messageQueueSize > 0) {
+      messageApi.open(messageQueueFirst);
+      dispatch(dropMessage());
     }
-  }, [messageQueue]);
+  }, [messageQueueSize]);
 
   return contextHolder;
 }
