@@ -7,6 +7,7 @@ import AppMenu from "./components/AppMenu";
 import AppMessage from "./components/AppMessage";
 import ManualModal from "./components/ManualModal";
 import Viewport from "./components/Viewport";
+import Settings from "./components/Settings";
 
 // redux imports
 import { useAppSelector, useAppDispatch } from "./redux/hooks";
@@ -52,6 +53,7 @@ function App() {
             isModalOpen={isManualModalOpen || isInitialBoot}
             closeModal={closeModal}
           />
+          <Settings />
           <Viewport />
         </div>
       </AppContextMenu>
