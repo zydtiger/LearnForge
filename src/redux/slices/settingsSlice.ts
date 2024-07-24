@@ -9,7 +9,7 @@ interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  isSettingsOpen: true, // ! debug
+  isSettingsOpen: false,
   globalTheme: "system",
   mdPreviewTheme: "default",
 };
