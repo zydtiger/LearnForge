@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { SkillsetRawNode } from "../../types";
 import { DefaultRootNode } from "../../types/defaults";
 import { RootState } from "../store";
-import { EditHistory } from "../../lib/editHistory";
+import { EditHistory } from "../../utils/editHistory";
 
 interface NoteState {
   noteViewNode: SkillsetRawNode; // the current node to edit in note view
