@@ -1,5 +1,5 @@
-import { KeyboardEventHandler, useEffect } from "react";
-import { FloatButton, Tooltip, Typography } from "antd";
+import { KeyboardEventHandler, useEffect, useState } from "react";
+import { Button, FloatButton, Modal, Tooltip, Typography } from "antd";
 import { CheckOutlined } from "@ant-design/icons";
 
 // markdown
@@ -36,9 +36,14 @@ function SkillNote() {
 
   const dispatch = useAppDispatch();
 
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (event.key == "Escape") {
-      dispatch(setViewMode(prevView)); // quits note view
+      if (!isSaved) {
+        setIsSaveModalOpen(true);
+      } else {
+        dispatch(setViewMode(prevView)); // quits note view
+      }
     }
   };
 
@@ -112,6 +117,31 @@ function SkillNote() {
           />
         </Tooltip>
       )}
+
+      <Modal
+        centered
+        open={isSaveModalOpen}
+        footer={
+          <>
+            <Button onClick={() => setIsSaveModalOpen(false)}>Cancel</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsSaveModalOpen(false);
+                dispatch(saveSkillset());
+                dispatch(setViewMode(prevView));
+              }}
+            >
+              Save
+            </Button>
+          </>
+        }
+      >
+        <b>Your note is not safely saved to the disk, do you want to quit?</b>
+        <br />
+        <span style={{ textDecoration: "underline" }}>Note</span>: This doesn't
+        mean your note is not saved: it is only saved in the memory.
+      </Modal>
     </div>
   );
 }
