@@ -14,21 +14,26 @@ import {
   selectViewMode,
   setViewMode,
 } from "../redux/slices/viewSlice";
+import { selectNoteNodeId } from "../redux/slices/noteSlice";
 import {
-  selectNoteViewNode,
-  selectIsNoteSaved,
+  selectSkillsetNodeById,
+  selectIsSaved,
+  selectLastSaveTime,
   selectIsUndoable,
   selectIsRedoable,
-  updateMarkdownNote,
-  updateName,
+  setSkillsetNodeById,
   undo,
   redo,
-} from "../redux/slices/noteSlice";
-import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
+} from "../redux/slices/skillsetSlice";
+import { saveSkillset } from "../redux/thunks/skillsetThunks";
 
 function SkillNote() {
-  const nodeDatum = useAppSelector(selectNoteViewNode);
-  const isNoteSaved = useAppSelector(selectIsNoteSaved);
+  const nodeId = useAppSelector(selectNoteNodeId);
+  const nodeDatum = useAppSelector((state) =>
+    selectSkillsetNodeById(state, nodeId),
+  )!;
+  const isSaved = useAppSelector(selectIsSaved);
+  const lastSaveTime = useAppSelector(selectLastSaveTime);
   const isUndoable = useAppSelector(selectIsUndoable);
   const isRedoable = useAppSelector(selectIsRedoable);
 
@@ -36,11 +41,6 @@ function SkillNote() {
   const prevView = useAppSelector(selectPrevViewBeforeNote);
 
   const dispatch = useAppDispatch();
-
-  const handleDone = () => {
-    dispatch(setSkillsetNodeById(nodeDatum));
-    dispatch(setViewMode(prevView)); // quits note view
-  };
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (event.key == "Escape") {
@@ -55,6 +55,24 @@ function SkillNote() {
     }
   }, [viewMode]);
 
+  const updateName = (val: string) => {
+    dispatch(
+      setSkillsetNodeById({
+        id: nodeId,
+        name: val,
+      }),
+    );
+  };
+
+  const updateMarkdownNote = (val: string) => {
+    dispatch(
+      setSkillsetNodeById({
+        id: nodeId,
+        mdNote: val,
+      }),
+    );
+  };
+
   return (
     <div
       onKeyDown={handleKeyDown}
@@ -64,9 +82,7 @@ function SkillNote() {
       <Typography.Title
         level={2}
         editable={{
-          onChange: (value) => {
-            dispatch(updateName(value));
-          },
+          onChange: updateName,
         }}
         style={{ top: 0, left: 0 }}
       >
@@ -83,16 +99,19 @@ function SkillNote() {
         }}
         toolbarsExclude={["image", "revoke", "next", "save", "github"]}
         modelValue={nodeDatum.mdNote || ""}
-        onChange={(val) => dispatch(updateMarkdownNote(val))}
+        onChange={updateMarkdownNote}
       />
 
       {/* Save Btn */}
-      <Tooltip title={"Done"}>
+      <Tooltip title={"Last Saved " + new Date(lastSaveTime).toLocaleString()}>
         <FloatButton
-          type={isNoteSaved ? "default" : "primary"}
+          type={isSaved ? "default" : "primary"}
           style={{ right: 20, bottom: 20 }}
           icon={<CheckOutlined />}
-          onClick={handleDone}
+          onClick={() => {
+            dispatch(saveSkillset());
+            dispatch(setViewMode(prevView)); // quits note view
+          }}
         />
       </Tooltip>
 

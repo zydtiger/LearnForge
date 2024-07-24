@@ -58,8 +58,11 @@ const skillsetSlice = createSlice({
       loadData(state, action.payload);
       history.push({ ...state.data }); // pushes in state
     },
-    setSkillsetNodeById(state, action: PayloadAction<SkillsetRawNode>) {
-      const targetNode = findNode(state.data, action.payload.id)!;
+    setSkillsetNodeById(
+      state,
+      action: PayloadAction<Partial<SkillsetRawNode>>,
+    ) {
+      const targetNode = findNode(state.data, action.payload.id!)!;
       Object.assign(targetNode, action.payload);
       history.push({ ...state.data });
       state.isSaved = false;
@@ -96,6 +99,9 @@ export const { setSkillset, setSkillsetNodeById, undo, redo } =
   skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
+export const selectSkillsetNodeById = (state: RootState, id: string) => {
+  return findNode(state.skillset.data, id);
+};
 export const selectIsInitialBoot = (state: RootState) =>
   state.skillset.isInitialBoot;
 export const selectLastSaveTime = (state: RootState) =>
