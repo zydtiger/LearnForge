@@ -1,12 +1,26 @@
 import { Button, Modal, Radio, Typography } from "antd";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import {
+  selectGlobalTheme,
+  selectMdPreviewTheme,
+  setGlobalTheme,
+  setMdPreviewTheme,
+} from "../redux/slices/settingsSlice";
 
 function Settings() {
+  const dispatch = useAppDispatch();
+  const globalTheme = useAppSelector(selectGlobalTheme);
+  const mdPreviewTheme = useAppSelector(selectMdPreviewTheme);
+
   return (
     <Modal centered width={800} open={true} footer={<Button>Quit</Button>}>
       <Typography.Title level={2}>Settings</Typography.Title>
 
       <Typography.Title level={4}>Global Theme</Typography.Title>
-      <Radio.Group onChange={(e) => console.log(e.target.value)}>
+      <Radio.Group
+        onChange={(e) => dispatch(setGlobalTheme(e.target.value))}
+        value={globalTheme}
+      >
         <Radio value="light">Light</Radio>
         <Radio value="dark">Dark</Radio>
         <Radio value="system">System</Radio>
@@ -15,7 +29,10 @@ function Settings() {
       <Typography.Title level={4} style={{ marginTop: 20 }}>
         Note Editor Preview Theme
       </Typography.Title>
-      <Radio.Group onChange={(e) => console.log(e.target.value)}>
+      <Radio.Group
+        onChange={(e) => dispatch(setMdPreviewTheme(e.target.value))}
+        value={mdPreviewTheme}
+      >
         <Radio value="default">Default</Radio>
         <Radio value="github">Github</Radio>
         <Radio value="vuepress">Vuepress</Radio>
