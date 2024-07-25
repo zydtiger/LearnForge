@@ -33,17 +33,21 @@ const settingsSlice = createSlice({
 export const { setIsSettingsOpen, setGlobalTheme, setMdPreviewTheme } =
   settingsSlice.actions;
 
+export const getSystemTheme = () => {
+  if (
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  ) {
+    return "dark";
+  }
+  return "light";
+};
+
 export const selectGlobalTheme = (state: RootState) =>
   state.settings.globalTheme;
 export const selectGlobalThemeAuto = (state: RootState) => {
   if (state.settings.globalTheme == "system") {
-    if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
-      return "dark";
-    }
-    return "light";
+    return getSystemTheme();
   }
   return state.settings.globalTheme;
 };

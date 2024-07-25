@@ -1,8 +1,8 @@
 import { Button, Modal, Radio, Typography } from "antd";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import {
+  getSystemTheme,
   selectGlobalTheme,
-  selectGlobalThemeAuto,
   selectMdPreviewTheme,
   setGlobalTheme,
   setIsSettingsOpen,
@@ -13,7 +13,7 @@ function Settings() {
   const dispatch = useAppDispatch();
   const isModalOpen = useAppSelector((state) => state.settings.isSettingsOpen);
   const globalTheme = useAppSelector(selectGlobalTheme);
-  const globalThemeAuto = useAppSelector(selectGlobalThemeAuto);
+  const systemTheme = getSystemTheme();
   const mdPreviewTheme = useAppSelector(selectMdPreviewTheme);
 
   return (
@@ -41,8 +41,7 @@ function Settings() {
         <Radio value="light">Light</Radio>
         <Radio value="dark">Dark</Radio>
         <Radio value="system">
-          System (
-          {globalThemeAuto[0].toUpperCase() + globalThemeAuto.substring(1)})
+          System ({systemTheme[0].toUpperCase() + systemTheme.substring(1)})
         </Radio>
       </Radio.Group>
 
