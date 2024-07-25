@@ -1,56 +1,10 @@
-use crate::error::Error;
-use chrono::Local;
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use crate::defs::Error;
+use crate::defs::SkillsetState;
 use std::{fs, io, path};
 use tauri::{
     plugin::{Builder, TauriPlugin},
     AppHandle, Runtime,
 };
-
-#[derive(Debug, Serialize, Deserialize)]
-struct SkillsetRawNode {
-    id: Option<String>, // uses Option so None is default value
-    name: String,
-    #[serde(rename = "progressPercent")]
-    progress_percent: f64,
-    #[serde(rename = "mdNote")]
-    md_note: Option<String>,
-    attributes: Option<HashMap<String, serde_json::Value>>,
-    children: Option<Vec<SkillsetRawNode>>,
-}
-
-impl Default for SkillsetRawNode {
-    fn default() -> Self {
-        SkillsetRawNode {
-            id: None,
-            name: "Root".into(),
-            progress_percent: 0.0,
-            md_note: None,
-            attributes: None,
-            children: None,
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct SkillsetState {
-    data: SkillsetRawNode,
-    #[serde(rename = "isInitialBoot")]
-    is_initial_boot: bool,
-    #[serde(rename = "lastSaveTime")]
-    last_save_time: String,
-}
-
-impl Default for SkillsetState {
-    fn default() -> Self {
-        SkillsetState {
-            data: SkillsetRawNode::default(),
-            is_initial_boot: true,
-            last_save_time: Local::now().to_rfc3339(), // ISO 8601 format
-        }
-    }
-}
 
 /// Resolves the path of the data file for storage.
 ///

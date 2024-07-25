@@ -1,53 +1,10 @@
-use crate::error::Error;
-use serde::{Deserialize, Serialize};
+use crate::defs::Error;
+use crate::defs::SettingsState;
 use std::{fs, io, path};
 use tauri::{
     plugin::{Builder, TauriPlugin},
     AppHandle, Runtime,
 };
-
-#[derive(Debug, Serialize, Deserialize)]
-enum GlobalTheme {
-    #[serde(rename = "light")]
-    Light,
-    #[serde(rename = "dark")]
-    Dark,
-    #[serde(rename = "system")]
-    System,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-enum PreviewTheme {
-    #[serde(rename = "default")]
-    Default,
-    #[serde(rename = "github")]
-    Github,
-    #[serde(rename = "vuepress")]
-    Vuepress,
-    #[serde(rename = "mk-cute")]
-    MkCute,
-    #[serde(rename = "smart-blue")]
-    SmartBlue,
-    #[serde(rename = "cyanosis")]
-    Cyanosis,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct SettingsState {
-    #[serde(rename = "globalTheme")]
-    global_theme: GlobalTheme,
-    #[serde(rename = "mdPreviewTheme")]
-    md_preview_theme: PreviewTheme,
-}
-
-impl Default for SettingsState {
-    fn default() -> Self {
-        Self {
-            global_theme: GlobalTheme::System,
-            md_preview_theme: PreviewTheme::Default,
-        }
-    }
-}
 
 /// Resolves the path of the settings file.
 ///
