@@ -25,6 +25,10 @@ import {
   redo,
 } from "../redux/slices/noteSlice";
 import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
+import {
+  selectGlobalThemeAuto,
+  selectMdPreviewTheme,
+} from "../redux/slices/settingsSlice";
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -34,6 +38,8 @@ function SkillNote() {
 
   const viewMode = useAppSelector(selectViewMode);
   const prevView = useAppSelector(selectPrevViewBeforeNote);
+  const globalTheme = useAppSelector(selectGlobalThemeAuto);
+  const previewTheme = useAppSelector(selectMdPreviewTheme);
 
   const dispatch = useAppDispatch();
 
@@ -75,7 +81,8 @@ function SkillNote() {
 
       {/* Editor */}
       <MdEditor
-        theme="light"
+        theme={globalTheme}
+        previewTheme={previewTheme}
         language="en-US"
         editorId="md-editor-rt"
         style={{
