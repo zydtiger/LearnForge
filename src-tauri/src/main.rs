@@ -3,6 +3,7 @@
 
 mod defs;
 mod plugins;
+mod utils;
 
 fn main() {
     tauri::Builder::default()

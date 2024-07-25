@@ -1,5 +1,6 @@
 use crate::defs::Error;
 use crate::defs::SettingsState;
+use crate::utils;
 use std::{fs, io, path};
 use tauri::{
     plugin::{Builder, TauriPlugin},
@@ -10,23 +11,10 @@ use tauri::{
 ///
 /// # Errors
 ///
-/// 1. App data directory not found
-/// 2. `create_dir_all` failed
+/// 1. Resolve app data directory failed
 ///
 fn resolve_settings_file<R: Runtime>(app_handle: AppHandle<R>) -> Result<path::PathBuf, io::Error> {
-    let app_data_dir = app_handle
-        .path_resolver()
-        .app_data_dir()
-        .ok_or(io::Error::new(
-            io::ErrorKind::NotFound,
-            "App data directory not found",
-        ))?;
-
-    if !app_data_dir.exists() {
-        fs::create_dir_all(&app_data_dir)?;
-    }
-
-    Ok(app_data_dir.join("settings.json"))
+    Ok(utils::resolve_app_data_dire(app_handle)?.join("settings.json"))
 }
 
 /// Handles reading settings file and filling settings file with default value if not exists.
