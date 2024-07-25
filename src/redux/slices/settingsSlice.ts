@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PreviewThemes } from "md-editor-rt";
 import { RootState } from "../store";
+import { fetchSettings } from "../thunks/settingsThunk";
 
 interface SettingsState {
   isSettingsOpen: boolean; // whether settings modal is open
@@ -27,6 +28,15 @@ const settingsSlice = createSlice({
     setMdPreviewTheme(state, action: PayloadAction<PreviewThemes>) {
       state.mdPreviewTheme = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchSettings.fulfilled, (state, action) => {
+        Object.assign(state, action.payload);
+      })
+      .addCase(fetchSettings.rejected, (_, action) => {
+        console.error(action.error);
+      });
   },
 });
 
