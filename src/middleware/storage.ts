@@ -3,10 +3,13 @@ import {
   getStorageWriteEndpoint,
   getStorageImportEndpoint,
   getStorageExportEndpoint,
+  getSettingsReadEndpoint,
+  getSettingsWriteEndpoint,
 } from "../constants/endpoints";
 import { invoke as tauriInvoke, tauri } from "@tauri-apps/api";
 import { DefaultRootNode } from "../types/defaults";
 import { SkillsetState } from "../redux/slices/skillsetSlice";
+import { SettingsState } from "../redux/slices/settingsSlice";
 import { TAURI_ENV } from "../constants/env";
 
 const DefaultPersistedSillset = () => ({
@@ -29,6 +32,31 @@ function writeStorage({ state }: { state: SkillsetState }) {
   localStorage.setItem(
     "skillset",
     JSON.stringify({ data, isInitialBoot, lastSaveTime }),
+  );
+}
+
+const DefaultPersistedSettings = () => ({
+  globalTheme: "system",
+  mdPreviewTheme: "default",
+});
+
+function readSettings(): Object {
+  const data = localStorage.getItem("settings");
+  if (data == null) {
+    localStorage.setItem(
+      "settings",
+      JSON.stringify(DefaultPersistedSettings()),
+    );
+    return DefaultPersistedSettings();
+  }
+  return JSON.parse(data);
+}
+
+function writeSettings({ state }: { state: SettingsState }) {
+  const { globalTheme, mdPreviewTheme } = state;
+  localStorage.setItem(
+    "settings",
+    JSON.stringify({ globalTheme, mdPreviewTheme }),
   );
 }
 
@@ -74,5 +102,9 @@ export async function invoke(endpoint: string, args?: Object) {
     const writableStream = await filePath.createWritable();
     await writableStream.write(contents);
     await writableStream.close();
+  } else if (endpoint == getSettingsReadEndpoint()) {
+    return readSettings();
+  } else if (endpoint == getSettingsWriteEndpoint()) {
+    writeSettings(args as { state: SettingsState });
   }
 }
