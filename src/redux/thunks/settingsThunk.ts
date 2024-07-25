@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { invoke } from "../../middleware/storage";
+import invoke from "../../middleware";
 import {
   getSettingsReadEndpoint,
   getSettingsWriteEndpoint,
