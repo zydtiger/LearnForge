@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { DefaultRootNode } from "../../types/defaults";
 import { nanoid } from "nanoid";
-import { EditHistory } from "../../lib/editHistory";
+import { EditHistory } from "../../utils/editHistory";
 import { findNode } from "../../lib/skillset";
 import { SkillsetRawNode } from "../../types";
 import { fetchSkillset, saveSkillset } from "../thunks/skillsetThunks";
