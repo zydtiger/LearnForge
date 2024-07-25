@@ -25,10 +25,12 @@ import {
   selectIsManualModalOpen,
   setIsManualModalOpen,
 } from "./redux/slices/viewSlice";
+import { selectGlobalThemeAuto } from "./redux/slices/settingsSlice";
 
 function App() {
   const dispatch = useAppDispatch();
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
+  const globalTheme = useAppSelector(selectGlobalThemeAuto);
 
   useEffect(() => {
     dispatch(fetchSkillset());
@@ -44,8 +46,15 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <ConfigProvider theme={{ algorithm: theme.darkAlgorithm }}>
+    <div className={globalTheme == "light" ? "app" : "app dark"}>
+      <ConfigProvider // antd
+        theme={{
+          algorithm:
+            globalTheme == "light"
+              ? theme.defaultAlgorithm
+              : theme.darkAlgorithm,
+        }}
+      >
         <AppContextMenu>
           <div className="main viewport">
             {isFirstTimeLoading && <LoadingSpin />}

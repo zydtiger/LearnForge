@@ -5,6 +5,7 @@ import {
   selectMouseCoords,
   selectNoteViewNode,
 } from "../redux/slices/noteSlice";
+import { selectGlobalThemeAuto } from "../redux/slices/settingsSlice";
 import { useRef } from "react";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeKatex from "rehype-katex";
@@ -14,6 +15,7 @@ import "../assets/css/md-viewer.css";
 function SkillNoteFloating() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
   const isHovered = useAppSelector(selectIsHovered);
+  const globalTheme = useAppSelector(selectGlobalThemeAuto);
   const mouseCoords = useAppSelector(selectMouseCoords);
 
   const mdRef = useRef(null);
@@ -36,10 +38,12 @@ function SkillNoteFloating() {
           width: 300,
           height: 200,
           boxSizing: "border-box",
-          // background: "rgba(255,255,255,0.9)",
-          // border: "1px solid black",
-          background: "rgba(10,10,10,0.9)",
-          border: "1px solid white",
+          background:
+            globalTheme == "light"
+              ? "rgba(255,255,255,0.9)"
+              : "rgba(10,10,10,0.9)",
+          border:
+            globalTheme == "light" ? "1px solid black" : "1px solid white",
           padding: 10,
         }}
       >

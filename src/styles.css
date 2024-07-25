@@ -6,12 +6,15 @@
   line-height: 24px;
   font-weight: 400;
 
-  /* color: #0f0f0f;
-  background-color: #f6f6f6; */
+  color: #0f0f0f;
+  background-color: #f6f6f6;
 
-  color: #ececec;
-  background-color: #141414;
-  color-scheme: dark;
+  /* Dark mode css */
+  & .dark {
+    color: #ececec;
+    background-color: #141414;
+    color-scheme: dark;
+  }
 
   overflow: hidden;
 
