@@ -3,6 +3,11 @@ import { readFile } from "../../../utils";
 import { PersistedSkillsetState } from "../types";
 import { DefaultPersistedSkillset } from "../types/default";
 
+/**
+ * Reads the skillset from local storage. If not exist, create default.
+ *
+ * @returns the persisted skillset state in local storage
+ */
 export function readStorage(): PersistedSkillsetState {
   const data = localStorage.getItem("skillset");
   if (data == null) {
@@ -15,6 +20,9 @@ export function readStorage(): PersistedSkillsetState {
   return JSON.parse(data);
 }
 
+/**
+ * Writes the skillset to local storage.
+ */
 export function writeStorage({ state }: { state: SkillsetState }) {
   const persistedState = {};
   // only collect needed keys
@@ -25,6 +33,12 @@ export function writeStorage({ state }: { state: SkillsetState }) {
   localStorage.setItem("skillset", JSON.stringify(persistedState));
 }
 
+/**
+ * Writes payload to the file handle.
+ *
+ * @param filePath file handle to write into
+ * @param payload contents to write to the file handle
+ */
 export async function exportStorage({
   filePath,
   payload,
@@ -41,6 +55,11 @@ export async function exportStorage({
   await writableStream.close();
 }
 
+/**
+ * Imports skillset from file and overrides current state.
+ *
+ * @param filePath file handle to read from
+ */
 export async function importStorage({
   filePath,
 }: {
