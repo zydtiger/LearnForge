@@ -1,7 +1,7 @@
-export const getStorageReadEndpoint = () => "plugin:storage|read";
-export const getStorageWriteEndpoint = () => "plugin:storage|write";
-export const getStorageExportEndpoint = () => "plugin:storage|export";
-export const getStorageImportEndpoint = () => "plugin:storage|import";
+export const getStorageReadEndpoint = () => "plugin:skillset|read";
+export const getStorageWriteEndpoint = () => "plugin:skillset|write";
+export const getStorageExportEndpoint = () => "plugin:skillset|export";
+export const getStorageImportEndpoint = () => "plugin:skillset|import";
 
-export const getSettingsReadEndpoint = () => "plugin:storage|read_settings";
-export const getSettingsWriteEndpoint = () => "plugin:storage|write_settings";
+export const getSettingsReadEndpoint = () => "plugin:settings|read";
+export const getSettingsWriteEndpoint = () => "plugin:settings|write";

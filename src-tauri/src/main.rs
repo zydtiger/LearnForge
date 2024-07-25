@@ -2,11 +2,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod error;
-mod storage;
+mod plugins;
 
 fn main() {
     tauri::Builder::default()
-        .plugin(storage::init())
+        .plugin(plugins::skillset::init())
+        .plugin(plugins::settings::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
