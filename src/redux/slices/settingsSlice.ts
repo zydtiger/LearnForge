@@ -3,9 +3,9 @@ import { PreviewThemes } from "md-editor-rt";
 import { RootState } from "../store";
 
 interface SettingsState {
-  isSettingsOpen: boolean;
-  globalTheme: "light" | "dark" | "system";
-  mdPreviewTheme: PreviewThemes;
+  isSettingsOpen: boolean; // whether settings modal is open
+  globalTheme: "light" | "dark" | "system"; // the global theme setting
+  mdPreviewTheme: PreviewThemes; // the preview theme setting for note editor
 }
 
 const initialState: SettingsState = {
