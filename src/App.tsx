@@ -26,6 +26,7 @@ import {
   setIsManualModalOpen,
 } from "./redux/slices/viewSlice";
 import { selectGlobalThemeAuto } from "./redux/slices/settingsSlice";
+import { fetchSettings } from "./redux/thunks/settingsThunk";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -35,6 +36,10 @@ function App() {
   useEffect(() => {
     dispatch(fetchSkillset());
     setInterval(() => dispatch(saveSkillset()), 10000); // saves every 10s
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchSettings());
   }, [dispatch]);
 
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
