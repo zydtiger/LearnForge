@@ -6,7 +6,6 @@ import {
   getSettingsReadEndpoint,
   getSettingsWriteEndpoint,
 } from "../constants/endpoints";
-import { invoke as tauriInvoke, tauri } from "@tauri-apps/api";
 import { DefaultRootNode } from "../types/defaults";
 import { SkillsetState } from "../redux/slices/skillsetSlice";
 import { SettingsState } from "../redux/slices/settingsSlice";
@@ -73,10 +72,11 @@ async function readFile(fileHandle: File): Promise<string> {
   });
 }
 
-export async function invoke(endpoint: string, args?: Object) {
+export async function invoke(endpoint: string, args?: Record<string, unknown>) {
   // sends to tauri backend directly
   if (TAURI_ENV) {
-    return await tauriInvoke(endpoint, args as tauri.InvokeArgs);
+    const api = await import("@tauri-apps/api");
+    return await api.invoke(endpoint, args);
   }
   // browser environment
   if (endpoint == getStorageReadEndpoint()) {
