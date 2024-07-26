@@ -48,6 +48,13 @@ const items = [
         label: "Redo",
         key: "redo",
       },
+      {
+        type: "divider",
+      },
+      {
+        label: "Settings",
+        key: "settings",
+      },
     ],
   },
   {

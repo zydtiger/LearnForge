@@ -36,6 +36,10 @@ const items: MenuProps["items"] = [
     type: "divider",
   },
   {
+    label: "Settings",
+    key: "settings",
+  },
+  {
     label: "Help",
     key: "help",
   },

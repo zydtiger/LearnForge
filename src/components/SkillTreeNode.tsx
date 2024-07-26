@@ -61,11 +61,11 @@ function SkillTreeNode({
 
       {/* Background */}
       <rect
+        className="background"
         width={width}
         height={height}
         x={-width / 2}
         y={-height / 2}
-        fill="white"
         stroke="none"
       />
 
@@ -169,12 +169,12 @@ function SkillTreeNode({
 
       {/* Border */}
       <rect
+        className="border"
         width={width}
         height={height}
         x={-width / 2}
         y={-height / 2}
         fill="none"
-        stroke="black"
       />
 
       {/* Expand / Collapse Btn */}

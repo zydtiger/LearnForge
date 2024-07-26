@@ -11,6 +11,7 @@ import {
   selectSkillset,
   setSelectedNodeId,
 } from "../redux/slices/skillsetSlice";
+import "../assets/css/tree.css";
 
 function SkillTree() {
   const dispatch = useAppDispatch();

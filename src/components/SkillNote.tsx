@@ -5,7 +5,7 @@ import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 // markdown
 import { MdEditor } from "md-editor-rt";
 import "md-editor-rt/lib/style.css";
-import "../md-editor.css";
+import "../assets/css/md-editor.css";
 
 // redux
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -25,6 +25,10 @@ import {
   redo,
 } from "../redux/slices/noteSlice";
 import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
+import {
+  selectGlobalThemeAuto,
+  selectMdPreviewTheme,
+} from "../redux/slices/settingsSlice";
 import { pushMessage } from "../redux/slices/messageSlice";
 
 function SkillNote() {
@@ -35,6 +39,8 @@ function SkillNote() {
 
   const viewMode = useAppSelector(selectViewMode);
   const prevView = useAppSelector(selectPrevViewBeforeNote);
+  const globalTheme = useAppSelector(selectGlobalThemeAuto);
+  const previewTheme = useAppSelector(selectMdPreviewTheme);
 
   const dispatch = useAppDispatch();
 
@@ -82,7 +88,8 @@ function SkillNote() {
 
       {/* Editor */}
       <MdEditor
-        theme="light"
+        theme={globalTheme}
+        previewTheme={previewTheme}
         language="en-US"
         editorId="md-editor-rt"
         style={{

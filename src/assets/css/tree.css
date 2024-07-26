@@ -1,0 +1,41 @@
+.rd3t-link {
+  stroke: black !important;
+}
+
+.rd3t-node rect.background {
+  fill: white !important;
+}
+
+.rd3t-leaf-node rect.background {
+  fill: white !important;
+}
+
+.rd3t-node rect.border {
+  stroke: black !important;
+}
+
+.rd3t-leaf-node rect.border {
+  stroke: black !important;
+}
+
+/* Dark mode css */
+
+.dark .rd3t-link {
+  stroke: #ececec !important;
+}
+
+.dark .rd3t-node rect.background {
+  fill: black !important;
+}
+
+.dark .rd3t-leaf-node rect.background {
+  fill: black !important;
+}
+
+.dark .rd3t-node rect.border {
+  stroke: #ececec !important;
+}
+
+.dark .rd3t-leaf-node rect.border {
+  stroke: #ececec !important;
+}

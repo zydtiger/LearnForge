@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ConfigProvider, theme } from "antd";
 
 // component imports
 import AppContextMenu from "./components/AppContextMenu";
@@ -7,6 +8,7 @@ import AppMenu from "./components/AppMenu";
 import AppMessage from "./components/AppMessage";
 import ManualModal from "./components/ManualModal";
 import Viewport from "./components/Viewport";
+import Settings from "./components/Settings";
 
 // redux imports
 import { useAppSelector, useAppDispatch } from "./redux/hooks";
@@ -23,14 +25,21 @@ import {
   selectIsManualModalOpen,
   setIsManualModalOpen,
 } from "./redux/slices/viewSlice";
+import { selectGlobalThemeAuto } from "./redux/slices/settingsSlice";
+import { fetchSettings } from "./redux/thunks/settingsThunk";
 
 function App() {
   const dispatch = useAppDispatch();
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
+  const globalTheme = useAppSelector(selectGlobalThemeAuto);
 
   useEffect(() => {
     dispatch(fetchSkillset());
     setInterval(() => dispatch(saveSkillset()), 10000); // saves every 10s
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchSettings());
   }, [dispatch]);
 
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
@@ -42,19 +51,29 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <AppContextMenu>
-        <div className="main viewport">
-          {isFirstTimeLoading && <LoadingSpin />}
-          <AppMenu />
-          <AppMessage />
-          <ManualModal
-            isModalOpen={isManualModalOpen || isInitialBoot}
-            closeModal={closeModal}
-          />
-          <Viewport />
-        </div>
-      </AppContextMenu>
+    <div className={globalTheme == "light" ? "app" : "app dark"}>
+      <ConfigProvider // antd
+        theme={{
+          algorithm:
+            globalTheme == "light"
+              ? theme.defaultAlgorithm
+              : theme.darkAlgorithm,
+        }}
+      >
+        <AppContextMenu>
+          <div className="main viewport">
+            {isFirstTimeLoading && <LoadingSpin />}
+            <AppMenu />
+            <AppMessage />
+            <ManualModal
+              isModalOpen={isManualModalOpen || isInitialBoot}
+              closeModal={closeModal}
+            />
+            <Settings />
+            <Viewport />
+          </div>
+        </AppContextMenu>
+      </ConfigProvider>
     </div>
   );
 }

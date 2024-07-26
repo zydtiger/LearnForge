@@ -15,16 +15,15 @@ import { undo as noteUndo, redo as noteRedo } from "../redux/slices/noteSlice";
 import { MenuProps } from "antd";
 import MenuItem from "../components/MenuItem";
 import { selectNoteViewNode } from "../redux/slices/noteSlice";
+import { setIsSettingsOpen } from "../redux/slices/settingsSlice";
 
-interface Actions {
-  [key: string]: {
-    shortcuts: string[];
-    exec: () => void;
-  };
+interface Action {
+  shortcuts: string[];
+  exec: () => void;
 }
 
 // define actions, this will automatically show in manual modal
-const actions: Actions = {
+const actions: Record<string, Action> = {
   find: {
     shortcuts: ["ctrl+f"],
     exec: () => {}, // don't do anything as default behavior is what we need
@@ -101,6 +100,10 @@ const actions: Actions = {
   help: {
     shortcuts: ["ctrl+h"],
     exec: () => store.dispatch(setIsManualModalOpen(true)),
+  },
+  settings: {
+    shortcuts: ["ctrl+,"],
+    exec: () => store.dispatch(setIsSettingsOpen(true)),
   },
 };
 
