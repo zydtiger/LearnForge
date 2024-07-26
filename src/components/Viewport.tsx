@@ -60,7 +60,7 @@ function Viewport() {
         <SkillNoteFloating />
       </div>
       <div className="note viewport" hidden={viewMode != "note"}>
-        {ports.note.Component}
+        <Freeze freeze={viewMode != "note"}>{ports.note.Component}</Freeze>
       </div>
     </>
   );

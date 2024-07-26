@@ -16,12 +16,12 @@ function SkillNoteFloating() {
   const nodeId = useAppSelector(selectNoteNodeId);
   const nodeDatum = useAppSelector((state) =>
     selectSkillsetNodeById(state, nodeId),
-  )!;
+  );
   const isHovered = useAppSelector(selectIsHovered);
   const mouseCoords = useAppSelector(selectMouseCoords);
 
   const mdRef = useRef(null);
-  const isShow = isHovered && nodeDatum.mdNote && nodeDatum.mdNote.length > 0;
+  const isShow = isHovered && nodeDatum?.mdNote && nodeDatum.mdNote.length > 0;
   const isShowMore = (() => {
     if (mdRef.current) {
       const mdDisplay = mdRef.current as HTMLElement;
