@@ -1,4 +1,4 @@
-import { Button, Modal, Radio, Typography } from "antd";
+import { Modal, Radio, Typography } from "antd";
 import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import {
   getSystemTheme,
@@ -8,6 +8,7 @@ import {
   setIsSettingsOpen,
   setMdPreviewTheme,
 } from "../redux/slices/settingsSlice";
+import { fetchSettings, saveSettings } from "../redux/thunks/settingsThunk";
 
 function Settings() {
   const dispatch = useAppDispatch();
@@ -21,15 +22,14 @@ function Settings() {
       centered
       width={800}
       open={isModalOpen}
-      onCancel={() => dispatch(setIsSettingsOpen(false))}
-      footer={
-        <Button
-          type="primary"
-          onClick={() => dispatch(setIsSettingsOpen(false))}
-        >
-          Quit
-        </Button>
-      }
+      onCancel={() => {
+        dispatch(setIsSettingsOpen(false));
+        dispatch(fetchSettings()); // reset settings to saved
+      }}
+      onOk={() => {
+        dispatch(setIsSettingsOpen(false));
+        dispatch(saveSettings());
+      }}
     >
       <Typography.Title level={2}>Settings</Typography.Title>
 

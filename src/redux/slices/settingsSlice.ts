@@ -1,17 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PreviewThemes } from "md-editor-rt";
 import { RootState } from "../store";
+import { fetchSettings } from "../thunks/settingsThunk";
 
-interface SettingsState {
-  isSettingsOpen: boolean; // whether settings modal is open
+export interface SettingsState {
   globalTheme: "light" | "dark" | "system"; // the global theme setting
   mdPreviewTheme: PreviewThemes; // the preview theme setting for note editor
+
+  // fields below should not be persisted
+  isSettingsOpen: boolean; // whether settings modal is open
 }
 
 const initialState: SettingsState = {
-  isSettingsOpen: false,
   globalTheme: "system",
   mdPreviewTheme: "default",
+  isSettingsOpen: false,
 };
 
 const settingsSlice = createSlice({
@@ -27,6 +30,15 @@ const settingsSlice = createSlice({
     setMdPreviewTheme(state, action: PayloadAction<PreviewThemes>) {
       state.mdPreviewTheme = action.payload;
     },
+  },
+  extraReducers(builder) {
+    builder
+      .addCase(fetchSettings.fulfilled, (state, action) => {
+        Object.assign(state, action.payload);
+      })
+      .addCase(fetchSettings.rejected, (_, action) => {
+        console.error(action.error);
+      });
   },
 });
 

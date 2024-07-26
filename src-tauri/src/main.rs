@@ -1,12 +1,14 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod error;
-mod storage;
+mod defs;
+mod plugins;
+mod utils;
 
 fn main() {
     tauri::Builder::default()
-        .plugin(storage::init())
+        .plugin(plugins::skillset::init())
+        .plugin(plugins::settings::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
