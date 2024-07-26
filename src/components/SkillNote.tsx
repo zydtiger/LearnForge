@@ -1,6 +1,6 @@
 import { KeyboardEventHandler, useEffect, useState } from "react";
 import { Button, FloatButton, Modal, Tooltip, Typography } from "antd";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 
 // markdown
 import { MdEditor } from "md-editor-rt";
@@ -20,6 +20,10 @@ import {
   selectIsSaved,
   selectLastSaveTime,
   setSkillsetNodeById,
+  selectIsUndoable,
+  selectIsRedoable,
+  undo,
+  redo,
 } from "../redux/slices/skillsetSlice";
 import { saveSkillset } from "../redux/thunks/skillsetThunks";
 
@@ -29,6 +33,8 @@ function SkillNote() {
     selectSkillsetNodeById(state, nodeId),
   )!;
   const isSaved = useAppSelector(selectIsSaved);
+  const isUndoable = useAppSelector(selectIsUndoable);
+  const isRedoable = useAppSelector(selectIsRedoable);
   const lastSaveTime = useAppSelector(selectLastSaveTime);
 
   const viewMode = useAppSelector(selectViewMode);
@@ -94,7 +100,7 @@ function SkillNote() {
         language="en-US"
         editorId="md-editor-rt"
         style={{
-          height: isSaved ? "calc(100vh - 140px)" : "calc(100vh - 180px)",
+          height: "calc(100vh - 180px)",
         }}
         toolbarsExclude={["image", "save", "revoke", "next", "github"]}
         modelValue={nodeDatum.mdNote || ""}
@@ -102,21 +108,35 @@ function SkillNote() {
       />
 
       {/* Save Btn */}
-      {!isSaved && (
-        <Tooltip
-          title={"Last Saved " + new Date(lastSaveTime).toLocaleString()}
-        >
-          <FloatButton
-            type={isSaved ? "default" : "primary"}
-            style={{ right: 20, bottom: 20 }}
-            icon={<CheckOutlined />}
-            onClick={() => {
-              dispatch(saveSkillset());
-              dispatch(setViewMode(prevView)); // quits note view
-            }}
-          />
-        </Tooltip>
-      )}
+      <Tooltip title={"Last Saved " + new Date(lastSaveTime).toLocaleString()}>
+        <FloatButton
+          type={isSaved ? "default" : "primary"}
+          style={{ right: 20, bottom: 20 }}
+          icon={<CheckOutlined />}
+          onClick={() => {
+            dispatch(saveSkillset());
+            dispatch(setViewMode(prevView)); // quits note view
+          }}
+        />
+      </Tooltip>
+
+      {/* Undo / Redo Btns */}
+      <Tooltip title={"Undo"}>
+        <FloatButton
+          type={isUndoable ? "primary" : "default"}
+          style={{ left: 20, bottom: 20 }}
+          icon={<UndoOutlined />}
+          onClick={() => dispatch(undo())}
+        />
+      </Tooltip>
+      <Tooltip title={"Redo"}>
+        <FloatButton
+          type={isRedoable ? "primary" : "default"}
+          style={{ left: 72, bottom: 20 }}
+          icon={<RedoOutlined />}
+          onClick={() => dispatch(redo())}
+        />
+      </Tooltip>
 
       <Modal
         centered
