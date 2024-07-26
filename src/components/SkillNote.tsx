@@ -56,7 +56,13 @@ function SkillNote() {
   useEffect(() => {
     // auto focus on the editor if note view is shown
     if (viewMode == "note") {
-      document.querySelector("textarea")?.focus();
+      const div = document.querySelector("div[contenteditable='true']")!;
+      const selection = window.getSelection()!;
+      const range = document.createRange();
+      range.selectNodeContents(div);
+      range.collapse(false);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
     }
   }, [viewMode]);
 
@@ -79,11 +85,7 @@ function SkillNote() {
   };
 
   return (
-    <div
-      onKeyDown={handleKeyDown}
-      data-color-mode="light"
-      style={{ padding: 30 }}
-    >
+    <div onKeyDown={handleKeyDown} style={{ padding: 30 }}>
       <Typography.Title
         level={2}
         editable={{
