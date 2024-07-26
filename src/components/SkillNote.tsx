@@ -52,8 +52,8 @@ function SkillNote() {
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
   const handleDone = () => {
-    dispatch(setSkillsetNodeById(nodeDatum));
     dispatch(setViewMode(prevView)); // quits note view
+    dispatch(saveSkillset());
     dispatch(
       pushMessage({
         type: "success",
@@ -67,7 +67,7 @@ function SkillNote() {
       if (!isSaved) {
         setIsSaveModalOpen(true);
       } else {
-        dispatch(setViewMode(prevView)); // quits note view
+        handleDone();
       }
     }
   };
@@ -167,8 +167,7 @@ function SkillNote() {
               type="primary"
               onClick={() => {
                 setIsSaveModalOpen(false);
-                dispatch(saveSkillset());
-                dispatch(setViewMode(prevView));
+                handleDone();
               }}
             >
               Save
