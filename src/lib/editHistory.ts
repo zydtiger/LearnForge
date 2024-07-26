@@ -198,7 +198,7 @@ export class EditHistoryOnce<T> {
    * @returns is undo-able
    */
   isUndoable(): boolean {
-    return this.historyIndex != 0;
+    return this.historyIndex > 0;
   }
 
   /**
