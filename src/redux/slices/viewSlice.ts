@@ -23,7 +23,7 @@ const viewSlice = createSlice({
     setViewMode(state, action: PayloadAction<ViewMode>) {
       if (action.payload == "note") {
         state.prevViewBeforeNote = state.viewMode;
-        history.create("note", 1000);
+        history.create("note", 1000, 5);
       } else if (state.viewMode == "note") {
         history.destroy();
       }

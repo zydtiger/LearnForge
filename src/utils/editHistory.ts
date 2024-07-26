@@ -1,4 +1,5 @@
 const MaxHistoryLength = 100;
+const DefaultSensitivity = 0;
 
 export class EditHistory<T> {
   stack: EditHistoryOnce<T>[] = [];
@@ -8,9 +9,14 @@ export class EditHistory<T> {
    * Initializes history class in stack.
    * @param name name of history to create at first
    * @param maxLength max length to keep for first history
+   * @param sensitivity no. of pushes to skip for first history
    */
-  constructor(name: string, maxLength = MaxHistoryLength) {
-    this.create(name, maxLength);
+  constructor(
+    name: string,
+    maxLength = MaxHistoryLength,
+    sensitivity = DefaultSensitivity,
+  ) {
+    this.create(name, maxLength, sensitivity);
   }
 
   /**
@@ -25,9 +31,14 @@ export class EditHistory<T> {
    * Creates a new history in stack.
    * @param name name of history to create
    * @param maxLength max length to keep
+   * @param sensitivity no. of pushes to skip
    */
-  create(name: string, maxLength = MaxHistoryLength) {
-    this.stack.push(new EditHistoryOnce<T>(name, maxLength));
+  create(
+    name: string,
+    maxLength = MaxHistoryLength,
+    sensitivity = DefaultSensitivity,
+  ) {
+    this.stack.push(new EditHistoryOnce<T>(name, maxLength, sensitivity));
     this.stackIndex++;
   }
 
@@ -116,15 +127,23 @@ export class EditHistoryOnce<T> {
   historyIndex = -1;
   history: T[] = [];
   maxLength: number;
+  sensitivity: number;
+  sensitivityCnt: number = 0;
 
   /**
    * Initializes history class.
    * @param name name of history
    * @param maxLength max length of history records
+   * @param sensitivity no. of pushes to skip
    */
-  constructor(name: string, maxLength = MaxHistoryLength) {
+  constructor(
+    name: string,
+    maxLength = MaxHistoryLength,
+    sensitivity = DefaultSensitivity,
+  ) {
     this.name = name;
     this.maxLength = maxLength;
+    this.sensitivity = sensitivity;
   }
 
   /**
@@ -132,6 +151,12 @@ export class EditHistoryOnce<T> {
    * @param state new state
    */
   push(state: T) {
+    if (this.sensitivityCnt > 0) {
+      this.sensitivityCnt--;
+      return;
+    }
+    this.sensitivityCnt = this.sensitivity;
+
     // in the middle of undo/redo chain
     if (this.historyIndex != this.length() - 1) {
       this.history.splice(this.historyIndex + 1); // discards everything after
