@@ -40,12 +40,15 @@ const generateIds = (state: SkillsetState) => {
   generateIdsRecursive(state.data, true);
 };
 
-const loadData = (state: SkillsetState, payload: SkillsetRawNode) => {
-  Object.assign(state.data, payload);
-  state.isSaved = false;
-};
+export const history = new EditHistory<Partial<SkillsetRawNode>>("skillset");
+let setOpBypassCnt = 0;
 
-export const history = new EditHistory<SkillsetRawNode>();
+const findHistoryTarget = (state: SkillsetState): SkillsetRawNode => {
+  if (history.name() == "skillset") {
+    return state.data;
+  }
+  return findNode(state.data, history.current()!.id!)!;
+};
 
 const skillsetSlice = createSlice({
   name: "skillset",
@@ -55,25 +58,38 @@ const skillsetSlice = createSlice({
     // saving to the remote side will be processed at set intervals
     // to decrease lag.
     setSkillset(state, action: PayloadAction<SkillsetRawNode>) {
-      loadData(state, action.payload);
+      Object.assign(state.data, action.payload);
+      state.isSaved = false;
       history.push({ ...state.data }); // pushes in state
     },
     setSkillsetNodeById(
       state,
       action: PayloadAction<Partial<SkillsetRawNode>>,
     ) {
+      if (setOpBypassCnt > 0) {
+        setOpBypassCnt--;
+        return;
+      }
       const targetNode = findNode(state.data, action.payload.id!)!;
+      if (history.name() == "note" && history.length() == 0) {
+        // init note history
+        history.push({ id: targetNode.id, mdNote: targetNode.mdNote });
+      }
       Object.assign(targetNode, action.payload);
-      history.push({ ...state.data });
+      history.push({ id: targetNode.id, mdNote: targetNode.mdNote });
       state.isSaved = false;
     },
     undo(state) {
-      history.undo();
-      loadData(state, history.current()!);
+      history.undo(findHistoryTarget(state));
+      if (history.name() == "note") {
+        setOpBypassCnt = 2; // one for note's own undo, one for set note contents callback
+      }
     },
     redo(state) {
-      history.redo();
-      loadData(state, history.current()!);
+      history.redo(findHistoryTarget(state));
+      if (history.name() == "note") {
+        setOpBypassCnt = 2;
+      }
     },
   },
   extraReducers(builder) {

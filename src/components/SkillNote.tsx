@@ -96,9 +96,9 @@ function SkillNote() {
         style={{
           height: isSaved ? "calc(100vh - 140px)" : "calc(100vh - 180px)",
         }}
-        toolbarsExclude={["image", "save", "github"]}
+        toolbarsExclude={["image", "save", "revoke", "next", "github"]}
         modelValue={nodeDatum.mdNote || ""}
-        onChange={updateMarkdownNote}
+        onChange={(val) => setTimeout(() => updateMarkdownNote(val))} // delays op to let undo/redo do job first
       />
 
       {/* Save Btn */}
