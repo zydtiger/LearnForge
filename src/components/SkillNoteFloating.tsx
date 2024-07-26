@@ -3,9 +3,10 @@ import { useAppSelector } from "../redux/hooks";
 import {
   selectIsHovered,
   selectMouseCoords,
-  selectNoteViewNode,
+  selectNoteNodeId,
 } from "../redux/slices/noteSlice";
 import { selectGlobalThemeAuto } from "../redux/slices/settingsSlice";
+import { selectSkillsetNodeById } from "../redux/slices/skillsetSlice";
 import { useRef } from "react";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeKatex from "rehype-katex";
@@ -13,13 +14,16 @@ import remarkMath from "remark-math";
 import "../assets/css/md-viewer.css";
 
 function SkillNoteFloating() {
-  const nodeDatum = useAppSelector(selectNoteViewNode);
+  const nodeId = useAppSelector(selectNoteNodeId);
+  const nodeDatum = useAppSelector((state) =>
+    selectSkillsetNodeById(state, nodeId),
+  );
   const isHovered = useAppSelector(selectIsHovered);
   const globalTheme = useAppSelector(selectGlobalThemeAuto);
   const mouseCoords = useAppSelector(selectMouseCoords);
 
   const mdRef = useRef(null);
-  const isShow = isHovered && nodeDatum.mdNote && nodeDatum.mdNote.length > 0;
+  const isShow = isHovered && nodeDatum?.mdNote && nodeDatum.mdNote.length > 0;
   const isShowMore = (() => {
     if (mdRef.current) {
       const mdDisplay = mdRef.current as HTMLElement;
