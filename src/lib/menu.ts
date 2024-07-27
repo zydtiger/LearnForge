@@ -11,7 +11,11 @@ import {
   selectViewMode,
   selectPrevViewBeforeNote,
 } from "../redux/slices/viewSlice";
-import { undo as noteUndo, redo as noteRedo } from "../redux/slices/noteSlice";
+import {
+  undo as noteUndo,
+  redo as noteRedo,
+  setIsNoteSaved,
+} from "../redux/slices/noteSlice";
 import { MenuProps } from "antd";
 import MenuItem from "../components/MenuItem";
 import { selectNoteViewNode } from "../redux/slices/noteSlice";
@@ -53,9 +57,8 @@ const actions: Record<string, Action> = {
       // saves note node to tree if in note
       if (viewMode == "note") {
         const newNode = selectNoteViewNode(store.getState());
-        const prevView = selectPrevViewBeforeNote(store.getState());
         store.dispatch(setSkillsetNodeById(newNode));
-        store.dispatch(setViewMode(prevView));
+        store.dispatch(setIsNoteSaved(true));
       }
 
       store.dispatch(saveSkillset());

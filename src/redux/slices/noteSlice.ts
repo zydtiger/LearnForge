@@ -30,6 +30,9 @@ const noteSlice = createSlice({
       history.push(state.noteViewNode.mdNote || "");
       state.isNoteSaved = true;
     },
+    setIsNoteSaved(state, action: PayloadAction<boolean>) {
+      state.isNoteSaved = action.payload;
+    },
     setIsHovered(state, action: PayloadAction<boolean>) {
       state.isHovered = action.payload;
     },
@@ -58,6 +61,7 @@ const noteSlice = createSlice({
 
 export const {
   setNoteViewNode,
+  setIsNoteSaved,
   setIsHovered,
   setMouseCoords,
   updateMarkdownNote,
