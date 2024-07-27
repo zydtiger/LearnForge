@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { ConfigProvider, theme } from "antd";
+import { invokeAction } from "./lib/menu";
 
 // component imports
 import AppContextMenu from "./components/AppContextMenu";
@@ -19,7 +20,6 @@ import {
 import {
   fetchSkillset,
   setNotInitialBoot,
-  saveSkillset,
 } from "./redux/thunks/skillsetThunks";
 import {
   selectIsManualModalOpen,
@@ -35,7 +35,7 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchSkillset());
-    setInterval(() => dispatch(saveSkillset()), 10000); // saves every 10s
+    setInterval(() => invokeAction("save"), 10000); // saves every 10s
   }, [dispatch]);
 
   useEffect(() => {

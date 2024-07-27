@@ -29,8 +29,7 @@ import {
   selectMdPreviewTheme,
 } from "../redux/slices/settingsSlice";
 import { pushMessage } from "../redux/slices/messageSlice";
-import { saveSkillset } from "../redux/thunks/skillsetThunks";
-import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
+import { invokeAction } from "../lib/menu";
 
 function SkillNote() {
   const nodeDatum = useAppSelector(selectNoteViewNode);
@@ -46,9 +45,8 @@ function SkillNote() {
   const dispatch = useAppDispatch();
 
   const handleDone = () => {
+    invokeAction("save");
     dispatch(setViewMode(prevView)); // quits note view
-    dispatch(setSkillsetNodeById(nodeDatum));
-    dispatch(saveSkillset());
     dispatch(
       pushMessage({
         type: "success",
