@@ -1,5 +1,5 @@
 import store from "../redux/store";
-import { undo, redo } from "../redux/slices/skillsetSlice";
+import { undo, redo, setSkillsetNodeById } from "../redux/slices/skillsetSlice";
 import {
   importSkillset,
   exportSkillset,
@@ -11,8 +11,10 @@ import {
   selectViewMode,
   selectPrevViewBeforeNote,
 } from "../redux/slices/viewSlice";
+import { undo as noteUndo, redo as noteRedo } from "../redux/slices/noteSlice";
 import { MenuProps } from "antd";
 import MenuItem from "../components/MenuItem";
+import { selectNoteViewNode } from "../redux/slices/noteSlice";
 import { setIsSettingsOpen } from "../redux/slices/settingsSlice";
 
 interface Action {
@@ -45,15 +47,43 @@ const actions: Record<string, Action> = {
   },
   save: {
     shortcuts: ["ctrl+s"],
-    exec: () => store.dispatch(saveSkillset()),
+    exec: () => {
+      const viewMode = selectViewMode(store.getState());
+
+      // saves note node to tree if in note
+      if (viewMode == "note") {
+        const newNode = selectNoteViewNode(store.getState());
+        const prevView = selectPrevViewBeforeNote(store.getState());
+        store.dispatch(setSkillsetNodeById(newNode));
+        store.dispatch(setViewMode(prevView));
+      }
+
+      store.dispatch(saveSkillset());
+    },
   },
   undo: {
     shortcuts: ["ctrl+z"],
-    exec: () => store.dispatch(undo()),
+    exec: () => {
+      const viewMode = selectViewMode(store.getState());
+
+      if (viewMode == "note") {
+        store.dispatch(noteUndo());
+      } else {
+        store.dispatch(undo());
+      }
+    },
   },
   redo: {
     shortcuts: ["ctrl+shift+z", "ctrl+y"],
-    exec: () => store.dispatch(redo()),
+    exec: () => {
+      const viewMode = selectViewMode(store.getState());
+
+      if (viewMode == "note") {
+        store.dispatch(noteRedo());
+      } else {
+        store.dispatch(redo());
+      }
+    },
   },
   reset: {
     shortcuts: ["ctrl+r"],

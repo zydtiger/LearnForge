@@ -3,7 +3,7 @@ import { setViewMode } from "../redux/slices/viewSlice";
 import {
   setIsHovered,
   setMouseCoords,
-  setNoteViewNodeId,
+  setNoteViewNode,
 } from "../redux/slices/noteSlice";
 import { selectSkillset, setSkillset } from "../redux/slices/skillsetSlice";
 import { pushMessage } from "../redux/slices/messageSlice";
@@ -149,14 +149,14 @@ function handleNodeChange(
       break;
 
     case "triggerNote":
-      store.dispatch(setNoteViewNodeId(nodeId));
+      store.dispatch(setNoteViewNode(targetNode));
       store.dispatch(setViewMode("note"));
       return; // skip store updating
 
     case "openFloatNote":
       const mouseCoords = payload!.split(":");
       const [x, y] = [Number(mouseCoords[0]), Number(mouseCoords[1])];
-      store.dispatch(setNoteViewNodeId(nodeId));
+      store.dispatch(setNoteViewNode(targetNode));
       store.dispatch(setMouseCoords([x + 10, y + 10]));
       store.dispatch(setIsHovered(true));
       return;

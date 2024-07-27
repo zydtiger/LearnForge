@@ -2,128 +2,6 @@ const MaxHistoryLength = 100;
 const DefaultSensitivity = 0;
 
 export class EditHistory<T> {
-  stack: EditHistoryOnce<T>[] = [];
-  stackIndex: number = -1;
-
-  /**
-   * Initializes history class in stack.
-   * @param name name of history to create at first
-   * @param maxLength max length to keep for first history
-   * @param sensitivity no. of pushes to skip for first history
-   */
-  constructor(
-    name: string,
-    maxLength = MaxHistoryLength,
-    sensitivity = DefaultSensitivity,
-  ) {
-    this.create(name, maxLength, sensitivity);
-  }
-
-  /**
-   * Returns name of current history.
-   * @returns string representing current name in use
-   */
-  name(): string {
-    return this.currentHistory().name;
-  }
-
-  /**
-   * Creates a new history in stack.
-   * @param name name of history to create
-   * @param maxLength max length to keep
-   * @param sensitivity no. of pushes to skip
-   */
-  create(
-    name: string,
-    maxLength = MaxHistoryLength,
-    sensitivity = DefaultSensitivity,
-  ) {
-    this.stack.push(new EditHistoryOnce<T>(name, maxLength, sensitivity));
-    this.stackIndex++;
-  }
-
-  /**
-   * Destroys topmost history in stack.
-   */
-  destroy() {
-    if (this.stackIndex >= 0) {
-      this.stack.pop();
-      this.stackIndex--;
-    }
-  }
-
-  /**
-   * Returns current history operating at.
-   * @returns topmost history in stack
-   */
-  currentHistory(): EditHistoryOnce<T> {
-    return this.stack[this.stackIndex];
-  }
-
-  /**
-   * Pushes in a new generic state.
-   * @param state new state
-   */
-  push(state: T) {
-    this.currentHistory().push(state);
-  }
-
-  /**
-   * Clears current history.
-   */
-  clear() {
-    this.currentHistory().clear();
-  }
-
-  /**
-   * Returns current history record.
-   * @returns current state or null if not exist
-   */
-  current(): T | null {
-    return this.currentHistory().current();
-  }
-
-  /**
-   * Returns current history length.
-   * @returns length
-   */
-  length(): number {
-    return this.currentHistory().length();
-  }
-
-  /**
-   * Undos current history and loads to target ref if provided.
-   */
-  undo(targetRef: T | null = null) {
-    this.currentHistory().undo(targetRef);
-  }
-
-  /**
-   * Redos current history and loads to target ref if provided.
-   */
-  redo(targetRef: T | null = null) {
-    this.currentHistory().redo(targetRef);
-  }
-
-  /**
-   * Returns whether the current history status is undo-able.
-   * @returns is undo-able
-   */
-  isUndoable(): boolean {
-    return this.currentHistory().isUndoable();
-  }
-
-  /**
-   * Returns whether the current history status is redo-able.
-   * @returns is redo-able
-   */
-  isRedoable(): boolean {
-    return this.currentHistory().isRedoable();
-  }
-}
-
-export class EditHistoryOnce<T> {
-  name: string;
   historyIndex = -1;
   history: T[] = [];
   maxLength: number;
@@ -132,16 +10,10 @@ export class EditHistoryOnce<T> {
 
   /**
    * Initializes history class.
-   * @param name name of history
    * @param maxLength max length of history records
    * @param sensitivity no. of pushes to skip
    */
-  constructor(
-    name: string,
-    maxLength = MaxHistoryLength,
-    sensitivity = DefaultSensitivity,
-  ) {
-    this.name = name;
+  constructor(maxLength = MaxHistoryLength, sensitivity = DefaultSensitivity) {
     this.maxLength = maxLength;
     this.sensitivity = sensitivity;
   }

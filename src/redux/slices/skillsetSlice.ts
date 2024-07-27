@@ -42,15 +42,7 @@ const generateIds = (state: SkillsetState) => {
   generateIdsRecursive(state.data, true);
 };
 
-export const history = new EditHistory<Partial<SkillsetRawNode>>("skillset");
-let setOpBypassCnt = 0;
-
-const findHistoryTarget = (state: SkillsetState): SkillsetRawNode => {
-  if (history.name() == "skillset") {
-    return state.data;
-  }
-  return findNode(state.data, history.current()!.id!)!;
-};
+export const history = new EditHistory<SkillsetRawNode>();
 
 const skillsetSlice = createSlice({
   name: "skillset",
@@ -64,37 +56,22 @@ const skillsetSlice = createSlice({
       state.isSaved = false;
       history.push({ ...state.data }); // pushes in state
     },
-    setSkillsetNodeById(
-      state,
-      action: PayloadAction<Partial<SkillsetRawNode>>,
-    ) {
-      if (setOpBypassCnt > 0) {
-        setOpBypassCnt--;
-        return;
-      }
-      const targetNode = findNode(state.data, action.payload.id!)!;
-      if (history.name() == "note" && history.length() == 0) {
-        // init note history
-        history.push({ id: targetNode.id, mdNote: targetNode.mdNote });
-      }
+    setSkillsetNodeById(state, action: PayloadAction<SkillsetRawNode>) {
+      const targetNode = findNode(state.data, action.payload.id)!;
       Object.assign(targetNode, action.payload);
-      history.push({ id: targetNode.id, mdNote: targetNode.mdNote });
+      history.push({ ...state.data });
       state.isSaved = false;
     },
     setSelectedNodeId(state, action: PayloadAction<SkillsetRawNode["id"]>) {
       state.selectedNodeId = action.payload;
     },
     undo(state) {
-      history.undo(findHistoryTarget(state));
-      if (history.name() == "note") {
-        setOpBypassCnt = 2; // one for note's own undo, one for set note contents callback
-      }
+      history.undo(state.data);
+      state.isSaved = false;
     },
     redo(state) {
-      history.redo(findHistoryTarget(state));
-      if (history.name() == "note") {
-        setOpBypassCnt = 2;
-      }
+      history.redo(state.data);
+      state.isSaved = false;
     },
   },
   extraReducers(builder) {
@@ -125,9 +102,6 @@ export const {
 } = skillsetSlice.actions;
 
 export const selectSkillset = (state: RootState) => state.skillset.data;
-export const selectSkillsetNodeById = (state: RootState, id: string) => {
-  return findNode(state.skillset.data, id);
-};
 export const selectIsInitialBoot = (state: RootState) =>
   state.skillset.isInitialBoot;
 export const selectLastSaveTime = (state: RootState) =>

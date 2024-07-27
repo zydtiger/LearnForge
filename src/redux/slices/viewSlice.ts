@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { history } from "./skillsetSlice";
 
 type ViewMode = "tree" | "list" | "note";
 
@@ -23,9 +22,6 @@ const viewSlice = createSlice({
     setViewMode(state, action: PayloadAction<ViewMode>) {
       if (action.payload == "note") {
         state.prevViewBeforeNote = state.viewMode;
-        history.create("note", 1000, 5);
-      } else if (state.viewMode == "note") {
-        history.destroy();
       }
       state.viewMode = action.payload;
     },

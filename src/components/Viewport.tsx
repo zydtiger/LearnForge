@@ -3,7 +3,6 @@ import {
   SisternodeOutlined,
   FormOutlined,
 } from "@ant-design/icons";
-import { Freeze } from "react-freeze";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { selectViewMode, setViewMode } from "../redux/slices/viewSlice";
 import SkillTree from "./SkillTree";
@@ -38,10 +37,10 @@ function Viewport() {
       >
         {/* Do not re-render component from scratch, simply SHOW (improves performance by 2x) */}
         <div className="tree viewport" hidden={viewMode != "tree"}>
-          <Freeze freeze={viewMode != "tree"}>{ports.tree.Component}</Freeze>
+          {ports.tree.Component}
         </div>
         <div className="list viewport" hidden={viewMode != "list"}>
-          <Freeze freeze={viewMode != "list"}>{ports.list.Component}</Freeze>
+          {ports.list.Component}
         </div>
 
         {/* Functional Btns */}

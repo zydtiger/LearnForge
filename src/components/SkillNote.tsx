@@ -1,5 +1,5 @@
-import { KeyboardEventHandler, useEffect, useState } from "react";
-import { Button, FloatButton, Modal, Tooltip, Typography } from "antd";
+import { KeyboardEventHandler, useEffect } from "react";
+import { FloatButton, Tooltip, Typography } from "antd";
 import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 
 // markdown
@@ -14,33 +14,29 @@ import {
   selectViewMode,
   setViewMode,
 } from "../redux/slices/viewSlice";
-import { selectNoteNodeId } from "../redux/slices/noteSlice";
 import {
-  selectSkillsetNodeById,
-  selectIsSaved,
-  selectLastSaveTime,
-  setSkillsetNodeById,
+  selectNoteViewNode,
+  selectIsNoteSaved,
   selectIsUndoable,
   selectIsRedoable,
+  updateMarkdownNote,
+  updateName,
   undo,
   redo,
-} from "../redux/slices/skillsetSlice";
-import { saveSkillset } from "../redux/thunks/skillsetThunks";
+} from "../redux/slices/noteSlice";
 import {
   selectGlobalThemeAuto,
   selectMdPreviewTheme,
 } from "../redux/slices/settingsSlice";
 import { pushMessage } from "../redux/slices/messageSlice";
+import { saveSkillset } from "../redux/thunks/skillsetThunks";
+import { setSkillsetNodeById } from "../redux/slices/skillsetSlice";
 
 function SkillNote() {
-  const nodeId = useAppSelector(selectNoteNodeId);
-  const nodeDatum = useAppSelector((state) =>
-    selectSkillsetNodeById(state, nodeId),
-  )!;
-  const isSaved = useAppSelector(selectIsSaved);
+  const nodeDatum = useAppSelector(selectNoteViewNode);
+  const isNoteSaved = useAppSelector(selectIsNoteSaved);
   const isUndoable = useAppSelector(selectIsUndoable);
   const isRedoable = useAppSelector(selectIsRedoable);
-  const lastSaveTime = useAppSelector(selectLastSaveTime);
 
   const viewMode = useAppSelector(selectViewMode);
   const prevView = useAppSelector(selectPrevViewBeforeNote);
@@ -49,10 +45,9 @@ function SkillNote() {
 
   const dispatch = useAppDispatch();
 
-  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-
   const handleDone = () => {
     dispatch(setViewMode(prevView)); // quits note view
+    dispatch(setSkillsetNodeById(nodeDatum));
     dispatch(saveSkillset());
     dispatch(
       pushMessage({
@@ -64,11 +59,7 @@ function SkillNote() {
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (event.key == "Escape") {
-      if (!isSaved) {
-        setIsSaveModalOpen(true);
-      } else {
-        handleDone();
-      }
+      dispatch(setViewMode(prevView)); // quits note view
     }
   };
 
@@ -85,30 +76,18 @@ function SkillNote() {
     }
   }, [viewMode]);
 
-  const updateName = (val: string) => {
-    dispatch(
-      setSkillsetNodeById({
-        id: nodeId,
-        name: val,
-      }),
-    );
-  };
-
-  const updateMarkdownNote = (val: string) => {
-    dispatch(
-      setSkillsetNodeById({
-        id: nodeId,
-        mdNote: val,
-      }),
-    );
-  };
-
   return (
-    <div onKeyDown={handleKeyDown} style={{ padding: 30 }}>
+    <div
+      onKeyDown={handleKeyDown}
+      data-color-mode="light"
+      style={{ padding: 30 }}
+    >
       <Typography.Title
         level={2}
         editable={{
-          onChange: updateName,
+          onChange: (value) => {
+            dispatch(updateName(value));
+          },
         }}
         style={{ top: 0, left: 0 }}
       >
@@ -124,15 +103,15 @@ function SkillNote() {
         style={{
           height: "calc(100vh - 180px)",
         }}
-        toolbarsExclude={["image", "save", "revoke", "next", "github"]}
+        toolbarsExclude={["image", "revoke", "next", "save", "github"]}
         modelValue={nodeDatum.mdNote || ""}
-        onChange={(val) => setTimeout(() => updateMarkdownNote(val))} // delays op to let undo/redo do job first
+        onChange={(val) => dispatch(updateMarkdownNote(val))}
       />
 
       {/* Save Btn */}
-      <Tooltip title={"Last Saved " + new Date(lastSaveTime).toLocaleString()}>
+      <Tooltip title={"Done"}>
         <FloatButton
-          type={isSaved ? "default" : "primary"}
+          type={isNoteSaved ? "default" : "primary"}
           style={{ right: 20, bottom: 20 }}
           icon={<CheckOutlined />}
           onClick={handleDone}
@@ -156,30 +135,6 @@ function SkillNote() {
           onClick={() => dispatch(redo())}
         />
       </Tooltip>
-
-      <Modal
-        centered
-        open={isSaveModalOpen}
-        footer={
-          <>
-            <Button onClick={() => setIsSaveModalOpen(false)}>Cancel</Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                setIsSaveModalOpen(false);
-                handleDone();
-              }}
-            >
-              Save
-            </Button>
-          </>
-        }
-      >
-        <b>Your note is not safely saved to the disk, do you want to quit?</b>
-        <br />
-        <span style={{ textDecoration: "underline" }}>Note</span>: This doesn't
-        mean your note is not saved: it is only saved in the memory.
-      </Modal>
     </div>
   );
 }
