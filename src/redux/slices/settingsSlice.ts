@@ -2,8 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PreviewThemes } from "md-editor-rt";
 import { RootState } from "../store";
 import { fetchSettings } from "../thunks/settingsThunk";
+import { startAutoSave, stopAutoSave } from "../../lib/autoSave";
 
 export interface SettingsState {
+  isAutoSave: boolean;
   globalTheme: "light" | "dark" | "system"; // the global theme setting
   mdPreviewTheme: PreviewThemes; // the preview theme setting for note editor
 
@@ -12,6 +14,7 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
+  isAutoSave: true,
   globalTheme: "system",
   mdPreviewTheme: "default",
   isSettingsOpen: false,
@@ -23,6 +26,14 @@ const settingsSlice = createSlice({
   reducers: {
     setIsSettingsOpen(state, action: PayloadAction<boolean>) {
       state.isSettingsOpen = action.payload;
+    },
+    setIsAutoSave(state, action: PayloadAction<boolean>) {
+      state.isAutoSave = action.payload;
+      if (state.isAutoSave) {
+        startAutoSave();
+      } else {
+        stopAutoSave();
+      }
     },
     setGlobalTheme(state, action: PayloadAction<SettingsState["globalTheme"]>) {
       state.globalTheme = action.payload;
@@ -42,8 +53,12 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { setIsSettingsOpen, setGlobalTheme, setMdPreviewTheme } =
-  settingsSlice.actions;
+export const {
+  setIsSettingsOpen,
+  setIsAutoSave,
+  setGlobalTheme,
+  setMdPreviewTheme,
+} = settingsSlice.actions;
 
 export const getSystemTheme = () => {
   if (

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { ConfigProvider, theme } from "antd";
-import { invokeAction } from "./lib/menu";
+import { startAutoSave } from "./lib/autoSave";
 
 // component imports
 import AppContextMenu from "./components/AppContextMenu";
@@ -31,15 +31,15 @@ import { fetchSettings } from "./redux/thunks/settingsThunk";
 function App() {
   const dispatch = useAppDispatch();
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
+  const isAutoSave = useAppSelector((state) => state.settings.isAutoSave);
   const globalTheme = useAppSelector(selectGlobalThemeAuto);
 
   useEffect(() => {
     dispatch(fetchSkillset());
-    setInterval(() => invokeAction("save"), 10000); // saves every 10s
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(fetchSettings());
+    if (isAutoSave) {
+      startAutoSave();
+    }
   }, [dispatch]);
 
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
