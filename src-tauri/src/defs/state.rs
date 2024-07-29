@@ -30,6 +30,8 @@ enum PreviewTheme {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SettingsState {
+    #[serde(rename = "isAutoSave")]
+    is_auto_save: bool,
     #[serde(rename = "globalTheme")]
     global_theme: GlobalTheme,
     #[serde(rename = "mdPreviewTheme")]
@@ -39,6 +41,7 @@ pub struct SettingsState {
 impl Default for SettingsState {
     fn default() -> Self {
         Self {
+            is_auto_save: true,
             global_theme: GlobalTheme::System,
             md_preview_theme: PreviewTheme::Default,
         }

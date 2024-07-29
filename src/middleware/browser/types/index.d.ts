@@ -10,6 +10,7 @@ export interface PersistedSkillsetState {
 
 /* Defines the fields in settings state that will be persisted */
 export interface PersistedSettingsState {
+  isAutoSave: boolean;
   globalTheme: "light" | "dark" | "system"; // the global theme setting
   mdPreviewTheme: PreviewThemes; // the preview theme setting for note editor
 }

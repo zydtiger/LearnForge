@@ -8,6 +8,7 @@ export const DefaultPersistedSkillset = (): PersistedSkillsetState => ({
 });
 
 export const DefaultPersistedSettings = (): PersistedSettingsState => ({
+  isAutoSave: true,
   globalTheme: "system",
   mdPreviewTheme: "default",
 });
