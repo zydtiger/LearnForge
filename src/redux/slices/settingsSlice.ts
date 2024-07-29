@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PreviewThemes } from "md-editor-rt";
 import { RootState } from "../store";
 import { fetchSettings } from "../thunks/settingsThunk";
-import { startAutoSave, stopAutoSave } from "../../lib/autoSave";
 
 export interface SettingsState {
   isAutoSave: boolean;
@@ -29,11 +28,6 @@ const settingsSlice = createSlice({
     },
     setIsAutoSave(state, action: PayloadAction<boolean>) {
       state.isAutoSave = action.payload;
-      if (state.isAutoSave) {
-        startAutoSave();
-      } else {
-        stopAutoSave();
-      }
     },
     setGlobalTheme(state, action: PayloadAction<SettingsState["globalTheme"]>) {
       state.globalTheme = action.payload;

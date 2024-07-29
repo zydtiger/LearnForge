@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { ConfigProvider, theme } from "antd";
-import { startAutoSave } from "./lib/autoSave";
+import { startAutoSave, stopAutoSave } from "./lib/autoSave";
 
 // component imports
 import AppContextMenu from "./components/AppContextMenu";
@@ -37,10 +37,15 @@ function App() {
   useEffect(() => {
     dispatch(fetchSkillset());
     dispatch(fetchSettings());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isAutoSave) {
       startAutoSave();
+    } else {
+      stopAutoSave();
     }
-  }, [dispatch]);
+  }, [isAutoSave]);
 
   const isInitialBoot = useAppSelector(selectIsInitialBoot);
   const isManualModalOpen = useAppSelector(selectIsManualModalOpen);
