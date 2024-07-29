@@ -1,5 +1,5 @@
-import { KeyboardEventHandler, useEffect } from "react";
-import { FloatButton, Tooltip, Typography } from "antd";
+import { KeyboardEventHandler, useEffect, useState } from "react";
+import { FloatButton, Tooltip, Typography, Modal, Button } from "antd";
 import { CheckOutlined, UndoOutlined, RedoOutlined } from "@ant-design/icons";
 
 // markdown
@@ -42,6 +42,8 @@ function SkillNote() {
   const globalTheme = useAppSelector(selectGlobalThemeAuto);
   const previewTheme = useAppSelector(selectMdPreviewTheme);
 
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const handleDone = () => {
@@ -57,7 +59,11 @@ function SkillNote() {
 
   const handleKeyDown: KeyboardEventHandler = (event) => {
     if (event.key == "Escape") {
-      dispatch(setViewMode(prevView)); // quits note view
+      if (!isNoteSaved) {
+        setIsSaveModalOpen(true);
+      } else {
+        dispatch(setViewMode(prevView));
+      }
     }
   };
 
@@ -133,6 +139,37 @@ function SkillNote() {
           onClick={() => dispatch(redo())}
         />
       </Tooltip>
+
+      <Modal
+        centered
+        open={isSaveModalOpen}
+        onCancel={() => setIsSaveModalOpen(false)}
+        footer={
+          <>
+            <Button onClick={() => setIsSaveModalOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                setIsSaveModalOpen(false);
+                dispatch(setViewMode(prevView));
+              }}
+            >
+              Quit
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsSaveModalOpen(false);
+                handleDone();
+              }}
+            >
+              Save
+            </Button>
+          </>
+        }
+      >
+        <b>Warning</b>: your note is not safely saved to the disk, do you want
+        to quit?
+      </Modal>
     </div>
   );
 }
