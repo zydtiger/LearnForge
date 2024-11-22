@@ -144,7 +144,7 @@ function SkillTreeNode({
             align="center"
             style={{ width: "100%", height: "100%" }}
           >
-            <DeleteBtn onClick={onNodeClick} />
+            <DeleteBtn type="primary" onClick={onNodeClick} />
           </Flex>
         </foreignObject>
       )}
@@ -162,7 +162,7 @@ function SkillTreeNode({
             align="center"
             style={{ width: "100%", height: "100%" }}
           >
-            <ClearBtn onClick={onNodeClick} />
+            <ClearBtn type="primary" onClick={onNodeClick} />
           </Flex>
         </foreignObject>
       )}
