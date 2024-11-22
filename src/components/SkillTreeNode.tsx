@@ -47,10 +47,10 @@ function SkillTreeNode({
     >
       {/* Highlight */}
       <foreignObject
-        x={-width / 2 - 8}
-        y={-height / 2 - 8}
-        width={width + 16}
-        height={height + 16}
+        x={-width / 2 - 15}
+        y={-height / 2 - 15}
+        width={width + 30}
+        height={height + 30}
       >
         <SkillTreeNodeHighlight
           width={width}
