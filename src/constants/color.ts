@@ -6,5 +6,5 @@ export const calcProgressColor = (progress: number) => {
   if (selectGlobalThemeAuto(store.getState()) == "light") {
     return progress == 100 ? green[4] : yellow[5];
   }
-  return progress == 100 ? green[7] : yellow[7];
+  return progress == 100 ? green[6] : yellow[6];
 };
