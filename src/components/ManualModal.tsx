@@ -1,6 +1,7 @@
 import { Button, Modal, Tabs, Table } from "antd";
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import packageMetainfo from "../../package.json";
 import { actions, convertToPlatformShortcuts } from "../lib/menu";
 
 interface ManualModalProps {
@@ -55,7 +56,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
   const about = `
 ## About LearnForge (FOSS)
 
-Version: 1.0.0
+Version: ${packageMetainfo.version}
 
 License: MIT
 
