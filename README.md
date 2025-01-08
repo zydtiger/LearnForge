@@ -23,6 +23,7 @@ LearnForge is a comprehensive app that empowers you to manage and track your lea
     - [Tauri (Windows)](#tauri-windows)
     - [Electron (Linux)](#electron-linux)
       - [Extras](#extras)
+    - [Electron (MacOS)](#electron-macos)
     - [Browser Only (Any Platform)](#browser-only-any-platform)
   - [Contributing](#contributing)
   - [Feedback and Issues](#feedback-and-issues)
@@ -136,7 +137,7 @@ To run LearnForge locally on your machine, follow these steps:
 
 5. **Building the App**: Once you have tested LearnForge works as expected, you may proceed to building the App yourself.
    ```
-   > yarn build:electron
+   > yarn build:electron --linux
    ```
    The script automatically builds the app to `src-electron/target/`.
 
@@ -149,6 +150,10 @@ To build the app in flatpak, you would need dependencies `flatpak` and `flatpak-
 - org.electronjs.Electron2.BaseApp
 
 In order to find out the required version, take a look at the flatpak entry of [builder config](./src-electron/electron-builder.yml).
+
+### Electron (MacOS)
+
+Every step is the same as the Linux version, except you would need to run `yarn build:electron --mac` instead when building the app.
 
 ### Browser Only (Any Platform)
 
