@@ -4,7 +4,7 @@ import Dexie, { Table } from "dexie";
 import { SkillsetRawNode } from "@/types";
 import { DefaultRootNode } from "@/types/defaults";
 
-// entry is the same as the node, but without id[] as children instead of node[]
+// entry is the same as the node, but with id[] as children instead of node[]
 export interface SkillsetRawEntry extends Omit<SkillsetRawNode, "children"> {
   children?: string[];
 }
@@ -21,7 +21,7 @@ class SkillsetDB extends Dexie {
   async getSkillset(): Promise<SkillsetRawNode> {
     const skillsetArr = await this.skillset.toArray();
 
-    // fill default value is db is empty
+    // fill default value if db is empty
     if (skillsetArr.length === 0) {
       const defaultNode = DefaultRootNode();
       await this.setSkillset(defaultNode);
@@ -43,7 +43,7 @@ const entriesToNode = (
   entries: SkillsetRawEntry[],
   index: number,
 ): SkillsetRawNode => {
-  // if there's no children, they are the same
+  // if there are no children, they are the same
   const entryChildren = entries[index].children;
   if (entryChildren === undefined) {
     return entries[index] as SkillsetRawNode;
