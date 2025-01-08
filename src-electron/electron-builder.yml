@@ -17,4 +17,9 @@ flatpak:
   artifactName: ${productName}-${version}.${ext}
   runtimeVersion: 23.08
   baseVersion: 23.08
+mac:
+  category: public.app-category.productivity
+  target:
+    - dmg
+  artifactName: ${productName}-${version}.${ext}
 npmRebuild: false
