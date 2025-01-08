@@ -12,14 +12,14 @@ linux:
     - flatpak
   category: Utility
 appImage:
-  artifactName: ${productName}-${version}.${ext}
+  artifactName: ${productName}-${version}-${arch}.${ext}
 flatpak:
-  artifactName: ${productName}-${version}.${ext}
+  artifactName: ${productName}-${version}-${arch}.${ext}
   runtimeVersion: 23.08
   baseVersion: 23.08
 mac:
   category: public.app-category.productivity
   target:
     - dmg
-  artifactName: ${productName}-${version}.${ext}
+  artifactName: ${productName}-${version}-${arch}.${ext}
 npmRebuild: false
