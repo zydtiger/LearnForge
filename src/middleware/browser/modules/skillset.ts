@@ -1,36 +1,46 @@
-import { SkillsetState } from "../../../redux/slices/skillsetSlice";
-import { readFile } from "../../../utils";
+import { SkillsetState } from "@/redux/slices/skillsetSlice";
+import { readFile } from "@/utils";
+import { skillsetDB } from "../db/skillsetData";
 import { PersistedSkillsetState } from "../types";
 import { DefaultPersistedSkillset } from "../types/default";
 
 /**
- * Reads the skillset from local storage. If not exist, create default.
+ * Reads the skillset from local storage and IndexedDB.
+ * If not exist, create default.
  *
- * @returns the persisted skillset state in local storage
+ * @returns the persisted skillset state combining localStorage and IndexedDB data
  */
-export function readStorage(): PersistedSkillsetState {
-  const data = localStorage.getItem("skillset");
-  if (data == null) {
-    localStorage.setItem(
-      "skillset",
-      JSON.stringify(DefaultPersistedSkillset()),
-    );
-    return DefaultPersistedSkillset();
+export async function readStorage(): Promise<PersistedSkillsetState> {
+  const skillsetStat = localStorage.getItem("skillset");
+
+  // if stat does not exist, create default values
+  if (skillsetStat == null) {
+    const defaultSkillset = DefaultPersistedSkillset();
+    const { data, ...stat } = defaultSkillset;
+    await skillsetDB.setSkillset(data);
+    localStorage.setItem("skillset", JSON.stringify(stat));
+    return defaultSkillset;
   }
-  return JSON.parse(data);
+
+  // combine the stat from localStorage with data from IndexedDB
+  const stat = JSON.parse(skillsetStat);
+  const data = await skillsetDB.getSkillset();
+  return { ...stat, data };
 }
 
 /**
- * Writes the skillset to local storage.
+ * Writes the skillset state to local storage and IndexedDB.
  */
-export function writeStorage({ state }: { state: SkillsetState }) {
-  const persistedState = {};
-  // only collect needed keys
-  for (const key in DefaultPersistedSkillset()) {
-    // @ts-ignore
-    persistedState[key] = state[key];
-  }
-  localStorage.setItem("skillset", JSON.stringify(persistedState));
+export async function writeStorage({ state }: { state: SkillsetState }) {
+  // only collect needed keys excluding 'data' which goes to IndexedDB
+  const skillsetStat: Omit<PersistedSkillsetState, "data"> = {
+    isInitialBoot: state.isInitialBoot,
+    lastSaveTime: state.lastSaveTime,
+  };
+
+  // store the data in IndexedDB & localStorage
+  await skillsetDB.setSkillset(state.data);
+  localStorage.setItem("skillset", JSON.stringify(skillsetStat));
 }
 
 /**
@@ -49,7 +59,9 @@ export async function exportStorage({
   const parts = filePath.name.split(".");
   const extension = parts[parts.length - 1];
   const contents =
-    extension == "lf" ? JSON.stringify(readStorage()) : new Uint8Array(payload);
+    extension == "lf"
+      ? JSON.stringify(await readStorage())
+      : new Uint8Array(payload); // binary image data
   const writableStream = await filePath.createWritable();
   await writableStream.write(contents);
   await writableStream.close();
@@ -67,5 +79,5 @@ export async function importStorage({
 }) {
   const fileHandle = await filePath[0].getFile();
   const contents = await readFile(fileHandle);
-  writeStorage({ state: JSON.parse(contents) });
+  await writeStorage({ state: JSON.parse(contents) });
 }
