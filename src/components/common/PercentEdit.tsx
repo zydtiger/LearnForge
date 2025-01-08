@@ -11,7 +11,10 @@ interface PercentEditProps {
   onChange: (event: SyntheticEvent) => void;
 }
 
-function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
+function PercentEdit({
+  defaultValue = 0,
+  onChange = () => {},
+}: PercentEditProps) {
   const [open, setOpen] = useState(false);
   const [edited, setEdited] = useState(false);
   const [value, setValue] = useState(defaultValue);
@@ -83,10 +86,5 @@ function PercentEdit({ defaultValue, onChange }: PercentEditProps) {
     </Popover>
   );
 }
-
-PercentEdit.defaultProps = {
-  defaultValue: 0,
-  onChange: () => {},
-};
 
 export default PercentEdit;

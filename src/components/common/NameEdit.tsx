@@ -8,7 +8,11 @@ interface NameEditProps {
   onChange: (event: SyntheticEvent) => void;
 }
 
-function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
+function NameEdit({
+  size = "middle",
+  defaultValue = "",
+  onChange = () => {},
+}: NameEditProps) {
   const [open, setOpen] = useState(false);
   const [edited, setEdited] = useState(false);
   const [value, setValue] = useState(defaultValue);
@@ -54,11 +58,5 @@ function NameEdit({ size, defaultValue, onChange }: NameEditProps) {
     </Popover>
   );
 }
-
-NameEdit.defaultProps = {
-  size: "middle",
-  defaultValue: "",
-  onChange: () => {},
-};
 
 export default NameEdit;

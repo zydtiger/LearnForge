@@ -7,7 +7,7 @@ interface DeleteBtnProps {
   onClick: (event: SyntheticEvent) => void;
 }
 
-function DeleteBtn({ type, onClick }: DeleteBtnProps) {
+function DeleteBtn({ type = "default", onClick = () => {} }: DeleteBtnProps) {
   return (
     <Popconfirm
       title="Delete"
@@ -23,10 +23,5 @@ function DeleteBtn({ type, onClick }: DeleteBtnProps) {
     </Popconfirm>
   );
 }
-
-DeleteBtn.defaultProps = {
-  type: "default",
-  onClick: () => {},
-};
 
 export default DeleteBtn;

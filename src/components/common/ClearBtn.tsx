@@ -7,7 +7,7 @@ interface ClearBtnProps {
   onClick: (event: SyntheticEvent) => void;
 }
 
-function ClearBtn({ type, onClick }: ClearBtnProps) {
+function ClearBtn({ type = "default", onClick = () => {} }: ClearBtnProps) {
   return (
     <Popconfirm
       title="Clear"
@@ -23,10 +23,5 @@ function ClearBtn({ type, onClick }: ClearBtnProps) {
     </Popconfirm>
   );
 }
-
-ClearBtn.defaultProps = {
-  type: "default",
-  onClick: () => {},
-};
 
 export default ClearBtn;
