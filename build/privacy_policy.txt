@@ -1,0 +1,33 @@
+Privacy Policy for LearnForge  
+
+Your privacy is of utmost importance to us. LearnForge is designed to provide a safe and secure environment for you to manage your learning goals without any concerns about data privacy. This Privacy Policy outlines how LearnForge handles your data and ensures your information remains completely private.  
+
+Data Storage and Privacy:  
+
+- Local Data Storage: All data you input into LearnForge, including your skill trees, goals, progress logs, and notes, is stored locally on your device. LearnForge does not upload, sync, or share your data with any external servers or third parties.  
+
+- No Internet Dependency: LearnForge operates entirely offline. The app does not require an internet connection to function, ensuring that your data stays on your device at all times.  
+
+- No Data Collection: LearnForge does not collect, track, or monitor any personal or usage data. We do not access or store any of your information remotely.  
+
+Security:  
+
+- Since all your data remains local to your device, you have full control over its security. We recommend using your device’s built-in security features, such as passwords, encryption, or biometric authentication, to ensure your data is protected.  
+
+No Privacy Concerns:  
+
+- LearnForge is built with privacy in mind. As there is no external data transmission or collection, there are no privacy issues whatsoever. Your information is yours alone, and LearnForge ensures it stays that way.  
+
+Open Source Transparency:  
+
+- LearnForge is open source, which means you can audit the code yourself at our GitHub repository. This transparency ensures that you can verify our commitment to privacy and security.  
+
+Changes to This Policy:  
+
+- This Privacy Policy may be updated from time to time to reflect improvements or changes in the app. However, the core principle of keeping all data local and private will always remain unchanged.  
+
+Contact Us:  
+
+- If you have any questions or concerns about this Privacy Policy, please feel free to contact us by filing an issue on our GitHub repository.  
+
+By using LearnForge, you can confidently focus on your learning goals, knowing your privacy is fully protected.
