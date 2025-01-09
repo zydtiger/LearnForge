@@ -3,8 +3,8 @@ import { ClearOutlined } from "@ant-design/icons";
 import { SyntheticEvent } from "react";
 
 interface ClearBtnProps {
-  type: ButtonProps["type"];
-  onClick: (event: SyntheticEvent) => void;
+  type?: ButtonProps["type"];
+  onClick?: (event: SyntheticEvent) => void;
 }
 
 function ClearBtn({ type = "default", onClick = () => {} }: ClearBtnProps) {

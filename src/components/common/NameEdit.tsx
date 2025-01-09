@@ -3,9 +3,9 @@ import { Flex, Popover, Input, Button, ButtonProps } from "antd";
 import { EditOutlined, CheckOutlined } from "@ant-design/icons";
 
 interface NameEditProps {
-  size: ButtonProps["size"];
-  defaultValue: string;
-  onChange: (event: SyntheticEvent) => void;
+  size?: ButtonProps["size"];
+  defaultValue?: string;
+  onChange?: (event: SyntheticEvent) => void;
 }
 
 function NameEdit({

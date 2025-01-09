@@ -7,8 +7,8 @@ import {
 } from "@ant-design/icons";
 
 interface PercentEditProps {
-  defaultValue: number;
-  onChange: (event: SyntheticEvent) => void;
+  defaultValue?: number;
+  onChange?: (event: SyntheticEvent) => void;
 }
 
 function PercentEdit({

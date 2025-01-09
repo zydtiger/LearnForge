@@ -3,8 +3,8 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { SyntheticEvent } from "react";
 
 interface DeleteBtnProps {
-  type: ButtonProps["type"];
-  onClick: (event: SyntheticEvent) => void;
+  type?: ButtonProps["type"];
+  onClick?: (event: SyntheticEvent) => void;
 }
 
 function DeleteBtn({ type = "default", onClick = () => {} }: DeleteBtnProps) {
