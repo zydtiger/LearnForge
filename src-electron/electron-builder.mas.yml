@@ -1,0 +1,8 @@
+extends: src-electron/electron-builder.yml
+mac:
+  target:
+    - mas
+  hardenedRuntime: true
+  entitlements: build/entitlements.mas.plist
+  entitlementsInherit: build/entitlements.mas.inherit.plist
+  provisioningProfile: build/LearnForge_Mac_App.provisionprofile

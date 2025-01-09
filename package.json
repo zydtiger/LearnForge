@@ -10,6 +10,7 @@
     "build": "tsc && vite build",
     "dev:electron": "vite -c src-electron/vite.config.ts",
     "build:electron": "tsc && vite build -c src-electron/vite.config.ts && electron-builder -c src-electron/electron-builder.yml",
+    "build:mas": "tsc && vite build -c src-electron/vite.config.ts && electron-builder -c src-electron/electron-builder.mas.yml --mac mas",
     "preview": "vite preview",
     "tauri": "tauri",
     "prettify": "prettier --write ."
