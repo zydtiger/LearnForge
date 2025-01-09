@@ -132,7 +132,7 @@ function convertMenuToDisplayMode(
         // show action label and shortcut together
         item.label = MenuItem({
           actionLabel: item.label,
-          shortcuts: actions[actionKey].shortcuts,
+          shortcuts: convertToPlatformShortcuts(actions[actionKey].shortcuts),
         });
       } else console.error("Action key is not defined by handler");
     }
@@ -146,9 +146,11 @@ function convertMenuToDisplayMode(
  * @returns converted shortcut, 'ctrl' for non-Mac, 'cmd' for Mac
  */
 function convertToPlatformShortcuts(shortcuts: string[]): string[] {
-  const isMacOS = window.navigator.userAgent.indexOf("Mac") != -1;
+  const isMacOS = window.navigator.userAgent.indexOf("Mac") !== -1;
   return shortcuts.map((shortcut) => {
-    return isMacOS ? shortcut.replace("ctrl", "cmd") : shortcut;
+    return isMacOS
+      ? shortcut.replace("ctrl", "⌘").replace("shift", "⇧")
+      : shortcut;
   });
 }
 

@@ -28,7 +28,7 @@ function convertShortcutsToTableData() {
       action,
       shortcuts: convertToPlatformShortcuts(actions[action].shortcuts)
         .map((elem) => elem.toUpperCase())
-        .toString(),
+        .join(", "),
     });
   }
   return data;
