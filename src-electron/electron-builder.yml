@@ -15,8 +15,8 @@ appImage:
   artifactName: ${productName}-${version}-${arch}.${ext}
 flatpak:
   artifactName: ${productName}-${version}-${arch}.${ext}
-  runtimeVersion: 23.08
-  baseVersion: 23.08
+  runtimeVersion: 24.08
+  baseVersion: 24.08
 mac:
   category: public.app-category.productivity
   target:
