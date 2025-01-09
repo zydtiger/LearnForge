@@ -18,6 +18,7 @@ flatpak:
   runtimeVersion: 24.08
   baseVersion: 24.08
 mac:
+  icon: build/icons/icon.icns # override icon path
   category: public.app-category.productivity
   target:
     - dmg

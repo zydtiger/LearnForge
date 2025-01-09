@@ -6,3 +6,4 @@ mac:
   entitlements: build/entitlements.mas.plist
   entitlementsInherit: build/entitlements.mas.inherit.plist
   provisioningProfile: build/LearnForge_Mac_App.provisionprofile
+  minimumSystemVersion: 12.0
