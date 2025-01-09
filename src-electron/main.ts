@@ -2,8 +2,16 @@
 
 import { app, BrowserWindow } from "electron";
 
+// enable sandboxing to comply with MacOS App Store requirements
+app.enableSandbox();
+
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
+    webPreferences: {
+      contextIsolation: true,
+      sandbox: true,
+    },
+
     width: 1000,
     height: 600,
     autoHideMenuBar: true,
