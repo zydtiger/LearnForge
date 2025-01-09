@@ -1,5 +1,5 @@
 <div align="center">
-  <img src=".github/learnforge.png" alt="LearnForge" width="200" height="200" />
+  <img src="build/icons/256x256.png" alt="LearnForge" width="200" height="200" />
 </div>
 <br/>
 
