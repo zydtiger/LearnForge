@@ -96,9 +96,9 @@ const createApplicationMenu = () => {
   // On macOS, add the app menu
   if (process.platform === "darwin") {
     template.unshift({
-      label: app.name,
+      label: "LearnForge",
       submenu: [
-        { role: "about" },
+        { role: "about", label: "About LearnForge" },
         { type: "separator" },
         { role: "services" },
         { type: "separator" },
@@ -106,7 +106,7 @@ const createApplicationMenu = () => {
         { role: "hideOthers" },
         { role: "unhide" },
         { type: "separator" },
-        { role: "quit" },
+        { role: "quit", label: "Quit LearnForge" },
       ],
     });
   }
