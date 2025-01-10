@@ -9,7 +9,6 @@ function LoadingSpin() {
         position: "fixed",
         width: "100vw",
         height: "100vh",
-        backgroundColor: "#f6f6f6",
       }}
     >
       <Spin size="large" />
