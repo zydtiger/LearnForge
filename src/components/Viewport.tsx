@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import {
   UnorderedListOutlined,
   SisternodeOutlined,
@@ -5,11 +6,12 @@ import {
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { selectViewMode, setViewMode } from "../redux/slices/viewSlice";
-import SkillTree from "./SkillTree";
-import SkillList from "./SkillList";
-import SkillNote from "./SkillNote";
-import SkillBtns from "./SkillBtns";
-import SkillNoteFloating from "./SkillNoteFloating";
+
+const SkillTree = lazy(() => import("./SkillTree"));
+const SkillList = lazy(() => import("./SkillList"));
+const SkillNote = lazy(() => import("./SkillNote"));
+const SkillBtns = lazy(() => import("./SkillBtns"));
+const SkillNoteFloating = lazy(() => import("./SkillNoteFloating"));
 
 function Viewport() {
   const dispatch = useAppDispatch();
@@ -17,15 +19,27 @@ function Viewport() {
   const ports = {
     tree: {
       Icon: <UnorderedListOutlined />,
-      Component: <SkillTree />,
+      Component: (
+        <Suspense fallback={null}>
+          <SkillTree />
+        </Suspense>
+      ),
     },
     list: {
       Icon: <SisternodeOutlined />,
-      Component: <SkillList />,
+      Component: (
+        <Suspense fallback={null}>
+          <SkillList />
+        </Suspense>
+      ),
     },
     note: {
       Icon: <FormOutlined />,
-      Component: <SkillNote />,
+      Component: (
+        <Suspense fallback={null}>
+          <SkillNote />
+        </Suspense>
+      ),
     },
   };
 
@@ -44,19 +58,23 @@ function Viewport() {
         </div>
 
         {/* Functional Btns */}
-        <SkillBtns
-          toggleViewBtn={{
-            tooltip:
-              "Toggle " + (viewMode == "tree" ? "List View" : "Tree View"),
-            Icon: ports[viewMode].Icon,
-          }}
-          onToggleView={() =>
-            dispatch(setViewMode(viewMode == "tree" ? "list" : "tree"))
-          }
-        />
+        <Suspense fallback={null}>
+          <SkillBtns
+            toggleViewBtn={{
+              tooltip:
+                "Toggle " + (viewMode == "tree" ? "List View" : "Tree View"),
+              Icon: ports[viewMode].Icon,
+            }}
+            onToggleView={() =>
+              dispatch(setViewMode(viewMode == "tree" ? "list" : "tree"))
+            }
+          />
+        </Suspense>
 
         {/* Floating note view */}
-        <SkillNoteFloating />
+        <Suspense fallback={null}>
+          <SkillNoteFloating />
+        </Suspense>
       </div>
       <div className="note viewport" hidden={viewMode != "note"}>
         {ports.note.Component}
