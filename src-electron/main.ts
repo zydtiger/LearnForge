@@ -1,6 +1,6 @@
 // entry point
 
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, nativeTheme } from "electron";
 
 // enable sandboxing to comply with MacOS App Store requirements
 app.enableSandbox();
@@ -16,6 +16,7 @@ const createWindow = () => {
     width: 1000,
     height: 600,
     autoHideMenuBar: true,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? "#070707" : "#f6f6f6",
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {
