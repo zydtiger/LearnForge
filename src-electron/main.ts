@@ -12,6 +12,7 @@ const createWindow = () => {
       sandbox: true,
     },
 
+    title: "LearnForge",
     width: 1000,
     height: 600,
     autoHideMenuBar: true,
