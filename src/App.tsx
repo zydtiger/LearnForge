@@ -1,15 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { ConfigProvider, theme } from "antd";
 import { startAutoSave, stopAutoSave } from "./lib/autoSave";
 
 // component imports
-import AppContextMenu from "./components/AppContextMenu";
 import LoadingSpin from "./components/LoadingSpin";
-import AppMenu from "./components/AppMenu";
 import AppMessage from "./components/AppMessage";
-import ManualModal from "./components/ManualModal";
-import Viewport from "./components/Viewport";
-import Settings from "./components/Settings";
+const AppContextMenu = lazy(() => import("./components/AppContextMenu"));
+const AppMenu = lazy(() => import("./components/AppMenu"));
+const ManualModal = lazy(() => import("./components/ManualModal"));
+const Viewport = lazy(() => import("./components/Viewport"));
+const Settings = lazy(() => import("./components/Settings"));
 
 // redux imports
 import { useAppSelector, useAppDispatch } from "./redux/hooks";
@@ -35,8 +35,9 @@ function App() {
   const globalTheme = useAppSelector(selectGlobalThemeAuto);
 
   useEffect(() => {
-    dispatch(fetchSkillset());
-    dispatch(fetchSettings());
+    dispatch(fetchSettings()).then(() => {
+      dispatch(fetchSkillset());
+    });
   }, [dispatch]);
 
   useEffect(() => {
@@ -65,19 +66,33 @@ function App() {
               : theme.darkAlgorithm,
         }}
       >
-        <AppContextMenu>
-          <div className="main viewport">
-            {isFirstTimeLoading && <LoadingSpin />}
-            <AppMenu />
-            <AppMessage />
-            <ManualModal
-              isModalOpen={isManualModalOpen || isInitialBoot}
-              closeModal={closeModal}
-            />
-            <Settings />
-            <Viewport />
-          </div>
-        </AppContextMenu>
+        <Suspense fallback={null}>
+          <AppContextMenu>
+            <div className="main viewport">
+              {isFirstTimeLoading && <LoadingSpin />}
+              <AppMessage />
+
+              <Suspense fallback={null}>
+                <AppMenu />
+              </Suspense>
+
+              <Suspense fallback={null}>
+                <ManualModal
+                  isModalOpen={isManualModalOpen || isInitialBoot}
+                  closeModal={closeModal}
+                />
+              </Suspense>
+
+              <Suspense fallback={null}>
+                <Settings />
+              </Suspense>
+
+              <Suspense fallback={null}>
+                <Viewport />
+              </Suspense>
+            </div>
+          </AppContextMenu>
+        </Suspense>
       </ConfigProvider>
     </div>
   );
