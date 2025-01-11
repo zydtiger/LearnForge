@@ -154,30 +154,37 @@ function convertToPlatformShortcuts(shortcuts: string[]): string[] {
   });
 }
 
+const shortcutMap = new Map<string, { name: string; exec: () => void }>();
+for (const name in actions) {
+  const action = actions[name];
+  for (const shortcut of action.shortcuts) {
+    if (shortcutMap.has(shortcut)) {
+      console.warn(
+        `Duplicate shortcut detected between ${name} and ${shortcutMap.get(shortcut)!.name}: ${shortcut}`,
+      );
+    }
+    shortcutMap.set(shortcut, {
+      name,
+      exec: action.exec,
+    });
+  }
+}
+
 /**
  * Binds shortcuts to events.
  */
 function bindShortcuts() {
   window.onkeydown = (event) => {
-    const modifier =
-      window.navigator.userAgent.indexOf("Mac") != -1
-        ? event.metaKey
-        : event.ctrlKey;
+    const isMacOS = window.navigator.userAgent.indexOf("Mac") != -1;
+    const modifier = isMacOS ? event.metaKey : event.ctrlKey;
+
+    // no modifier, skip
     if (!modifier) return;
-    for (const name in actions) {
-      const action = actions[name];
-      for (const shortcut of action.shortcuts) {
-        const shortcutKeys = shortcut.split("+");
-        let targetKey =
-          shortcutKeys[1] == "shift"
-            ? shortcutKeys[2].toUpperCase()
-            : shortcutKeys[1];
-        if (event.key == targetKey) {
-          event.preventDefault();
-          action.exec();
-          return;
-        }
-      }
+
+    const shortcut = `ctrl${event.shiftKey ? "+shift" : ""}+${event.key.toLowerCase()}`;
+    if (shortcutMap.has(shortcut)) {
+      event.preventDefault();
+      shortcutMap.get(shortcut)!.exec();
     }
   };
 }
