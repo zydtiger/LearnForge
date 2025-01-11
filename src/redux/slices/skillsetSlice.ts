@@ -1,22 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-import { DefaultRootNode } from "../../types/defaults";
 import { nanoid } from "nanoid";
-import { EditHistory } from "../../utils/editHistory";
-import { findNode } from "../../lib/skillset";
-import { SkillsetRawNode } from "../../types";
+import { DefaultRootNode } from "@/types/defaults";
+import { findNode } from "@/utils/skillset";
+import { SkillsetRawNode } from "@/types";
+
 import { fetchSkillset, saveSkillset } from "../thunks/skillsetThunks";
-
-export interface SkillsetState {
-  data: SkillsetRawNode; // skillset data
-  isInitialBoot: boolean; // whether to show manual modal on app opening
-  lastSaveTime: string; // ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)
-
-  // fields below should not be persisted
-  isFirstTimeLoading: boolean; // whether to show loading page
-  isSaved: boolean; // whether the current state is persisted
-  selectedNodeId: SkillsetRawNode["id"] | null; // currently selected node id by single click
-}
+import { history } from "../history";
+import { RootState, SkillsetState } from "../types";
 
 const initialState: SkillsetState = {
   data: DefaultRootNode(),
@@ -41,8 +31,6 @@ const generateIds = (state: SkillsetState) => {
   };
   generateIdsRecursive(state.data, true);
 };
-
-export const history = new EditHistory<SkillsetRawNode>();
 
 const skillsetSlice = createSlice({
   name: "skillset",

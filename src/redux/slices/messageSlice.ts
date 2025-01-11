@@ -1,10 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ArgsProps } from "antd/es/message";
-import { RootState } from "../store";
-
-interface MessageState {
-  messageQueue: ArgsProps[]; // global message queue
-}
+import { RootState, MessageState } from "../types";
 
 const initialState: MessageState = {
   messageQueue: [],

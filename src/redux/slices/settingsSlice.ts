@@ -1,16 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PreviewThemes } from "md-editor-rt";
-import { RootState } from "../store";
 import { fetchSettings } from "../thunks/settingsThunk";
-
-export interface SettingsState {
-  isAutoSave: boolean;
-  globalTheme: "light" | "dark" | "system"; // the global theme setting
-  mdPreviewTheme: PreviewThemes; // the preview theme setting for note editor
-
-  // fields below should not be persisted
-  isSettingsOpen: boolean; // whether settings modal is open
-}
+import { RootState, SettingsState } from "../types";
 
 const initialState: SettingsState = {
   isAutoSave: true,

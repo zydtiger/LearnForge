@@ -1,17 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import invoke from "../../middleware";
-import { openDialog, saveDialog } from "../../lib/dialogs";
-import { RootState } from "../store";
-import { SkillsetState, history } from "../slices/skillsetSlice";
-import { pushMessage } from "../slices/messageSlice";
+import invoke from "@/middleware";
+import { openDialog, saveDialog } from "@/lib/dialogs";
 import {
   getStorageReadEndpoint,
   getStorageWriteEndpoint,
   getStorageExportEndpoint,
   getStorageImportEndpoint,
-} from "../../constants/endpoints";
-import { TreeSVGExport, TreeImageExport } from "../../lib/export";
-import { TAURI_ENV } from "../../constants/env";
+} from "@/constants/endpoints";
+import { TAURI_ENV } from "@/constants/env";
+import { TreeSVGExport, TreeImageExport } from "@/lib/export";
+
+import { SkillsetState, RootState } from "../types";
+import { history } from "../history";
+import { pushMessage } from "../slices/messageSlice";
 
 /**
  * Fetches the skillset from backend.

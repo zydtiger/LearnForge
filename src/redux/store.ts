@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { RootState } from "./types";
+import skillsetReducer from "./slices/skillsetSlice";
 import settingsReducer from "./slices/settingsSlice";
 import viewReducer from "./slices/viewSlice";
 import messageReducer from "./slices/messageSlice";
-import skillsetReducer from "./slices/skillsetSlice";
 import noteReducer from "./slices/noteSlice";
 
-const store = configureStore({
+const store = configureStore<RootState>({
   reducer: {
     settings: settingsReducer,
     view: viewReducer,
@@ -15,7 +16,6 @@ const store = configureStore({
   },
 });
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;

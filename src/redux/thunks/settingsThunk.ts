@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import invoke from "../../middleware";
+import invoke from "@/middleware";
 import {
   getSettingsReadEndpoint,
   getSettingsWriteEndpoint,
-} from "../../constants/endpoints";
-import { RootState } from "../store";
+} from "@/constants/endpoints";
+import { RootState } from "../types";
 
 /**
  * Fetches the settings from backend.

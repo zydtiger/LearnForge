@@ -1,13 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../store";
-
-type ViewMode = "tree" | "list" | "note";
-
-interface ViewState {
-  viewMode: ViewMode; // determines the current view
-  isManualModalOpen: boolean; // whether manual modal is open
-  prevViewBeforeNote: ViewMode; // the previous view mode before note view
-}
+import { RootState, ViewMode, ViewState } from "../types";
 
 const initialState: ViewState = {
   viewMode: "tree",

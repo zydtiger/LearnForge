@@ -1,15 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { SkillsetRawNode } from "../../types";
-import { DefaultRootNode } from "../../types/defaults";
-import { RootState } from "../store";
-import { EditHistory } from "../../utils/editHistory";
-
-interface NoteState {
-  noteViewNode: SkillsetRawNode; // the current node to edit in note view
-  isNoteSaved: boolean; // whether the current note is saved into skillset tree
-  isHovered: boolean; // whether the node should display a floating note view
-  mouseCoords: [number, number]; // the mouse coordinates of floating note view
-}
+import { SkillsetRawNode } from "@/types";
+import { DefaultRootNode } from "@/types/defaults";
+import { EditHistory } from "@/utils/editHistory";
+import { RootState, NoteState } from "../types";
 
 const initialState: NoteState = {
   noteViewNode: DefaultRootNode(),
