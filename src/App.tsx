@@ -11,21 +11,32 @@ const App = () => {
   const globalTheme = useAppSelector(selectGlobalThemeAuto);
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
 
+  const appClass = {
+    light: "app",
+    dark: "app dark",
+  };
+
+  const appStyles = {
+    light: {
+      color: "#0f0f0f",
+      backgroundColor: "#f6f6f6",
+    },
+    dark: {
+      color: "#ececec",
+      backgroundColor: "#070707",
+      colorScheme: "dark",
+    },
+  };
+
+  const antdAlgo = {
+    light: theme.defaultAlgorithm,
+    dark: theme.darkAlgorithm,
+  };
+
   return (
-    <div
-      className={globalTheme == "light" ? "app" : "app dark"}
-      style={{
-        backgroundColor: globalTheme == "light" ? "#f6f6f6" : "#070707",
-      }}
-    >
-      <ConfigProvider // antd
-        theme={{
-          algorithm:
-            globalTheme == "light"
-              ? theme.defaultAlgorithm
-              : theme.darkAlgorithm,
-        }}
-      >
+    <div className={appClass[globalTheme]} style={appStyles[globalTheme]}>
+      {/* antd */}
+      <ConfigProvider theme={{ algorithm: antdAlgo[globalTheme] }}>
         {isFirstTimeLoading && <LoadingSpin />}
         <Suspense fallback={null}>
           <Contents />
