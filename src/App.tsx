@@ -12,7 +12,12 @@ const App = () => {
   const isFirstTimeLoading = useAppSelector(selectIsFirstTimeLoading);
 
   return (
-    <div className={globalTheme == "light" ? "app" : "app dark"}>
+    <div
+      className={globalTheme == "light" ? "app" : "app dark"}
+      style={{
+        backgroundColor: globalTheme == "light" ? "#f6f6f6" : "#070707",
+      }}
+    >
       <ConfigProvider // antd
         theme={{
           algorithm:

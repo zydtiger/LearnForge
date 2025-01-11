@@ -7,12 +7,10 @@
   font-weight: 400;
 
   color: #0f0f0f;
-  background-color: #f6f6f6;
 
   /* Dark mode css */
   & .dark {
     color: #ececec;
-    background-color: #070707;
     color-scheme: dark;
   }
 
