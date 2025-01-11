@@ -1,4 +1,4 @@
-import { SkillsetState } from "@/redux/slices/skillsetSlice";
+import { SkillsetState } from "@/redux/types";
 import { readFile } from "@/utils";
 import { skillsetDB } from "../db/skillsetData";
 import { PersistedSkillsetState } from "../types";

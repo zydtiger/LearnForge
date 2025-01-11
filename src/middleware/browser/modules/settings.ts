@@ -1,4 +1,4 @@
-import { SettingsState } from "../../../redux/slices/settingsSlice";
+import { SettingsState } from "@/redux/types";
 import { PersistedSettingsState } from "../types";
 import { DefaultPersistedSettings } from "../types/default";
 
